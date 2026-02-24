@@ -119,8 +119,9 @@
         start();
     }
 
-    /* ─── Tilt Cards ─── */
+    /* ─── Tilt Cards (desktop only) ─── */
     function initTiltCards() {
+        if (window.matchMedia('(hover: none)').matches) return;
         document.querySelectorAll('.tilt-card, .feature-card, .char-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
@@ -188,23 +189,12 @@
         animate();
     }
 
-    /* ─── Page Transition ─── */
+    /* ─── Page Transition (non-blocking) ─── */
     function initPageTransitions() {
         const body = document.body;
         body.classList.add('page-enter');
         setTimeout(() => body.classList.remove('page-enter'), 10);
-
-        document.querySelectorAll('a').forEach(link => {
-            const href = link.getAttribute('href');
-            if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
-            if (link.target === '_blank') return;
-
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                body.classList.add('page-exit');
-                setTimeout(() => { window.location.href = href; }, 400);
-            });
-        });
+        // No longer intercepting clicks — links work natively
     }
 
     /* ─── FAQ Accordion (in case pages use it) ─── */

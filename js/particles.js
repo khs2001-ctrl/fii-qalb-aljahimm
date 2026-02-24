@@ -168,8 +168,12 @@
 
     function init() {
         resize();
-        const count = Math.min(theme.count, Math.floor(W / 18));
-        spawnParticles(Math.min(count, 80));
+        const isMobile = W <= 768;
+        const baseCount = isMobile ? Math.floor(theme.count * 0.4) : theme.count;
+        const count = Math.min(baseCount, Math.floor(W / 18));
+        // Disable glow on mobile for performance
+        if (isMobile) theme.glow = false;
+        spawnParticles(Math.min(count, isMobile ? 25 : 80));
         draw();
     }
 
