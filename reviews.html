@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>آراء القراء | في قلب الجحيم</title>
+  <meta name="description" content="آراء وتقييمات قراء رواية في قلب الجحيم — شاركنا رأيك!">
+  <link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css"><link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .reviews-hero{min-height:30vh;display:flex;align-items:center;padding-top:var(--nav-height);text-align:center}
+    .reviews-stats{display:flex;gap:var(--sp-lg);justify-content:center;margin-top:var(--sp-md);flex-wrap:wrap}
+    .reviews-stat{text-align:center}
+    .reviews-stat-num{font-family:var(--font-en-title);font-size:clamp(28px,4vw,42px);font-weight:700;background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .reviews-stat-label{font-family:var(--font-ar-ui);font-size:12px;color:var(--text-muted)}
+
+    /* Form */
+    .review-form-card{background:var(--grad-glass);border:1px solid rgba(212,175,55,0.15);border-radius:var(--r-lg);padding:var(--sp-xl);backdrop-filter:blur(12px);margin-bottom:var(--sp-2xl);max-width:700px;margin-left:auto;margin-right:auto}
+    .review-form-card h2{font-family:var(--font-ar-title);font-size:var(--fs-h3);color:var(--text-primary);margin-bottom:var(--sp-md);text-align:center}
+
+    /* Star Rating */
+    .star-rating{display:flex;gap:6px;justify-content:center;margin-bottom:var(--sp-md);direction:ltr}
+    .star-rating .star{font-size:32px;cursor:pointer;transition:all .2s;color:rgba(212,175,55,0.2);filter:grayscale(1)}
+    .star-rating .star.active,.star-rating .star:hover{color:var(--gold);filter:none;transform:scale(1.15)}
+    .star-rating .star:hover ~ .star{color:rgba(212,175,55,0.2);filter:grayscale(1);transform:scale(1)}
+
+    /* Reviews List */
+    .reviews-list{max-width:800px;margin:0 auto}
+    .reviews-sort{display:flex;gap:var(--sp-sm);justify-content:center;margin-bottom:var(--sp-lg);flex-wrap:wrap}
+    .sort-btn{padding:8px 20px;border-radius:var(--r-full);font-family:var(--font-ar-ui);font-size:13px;color:var(--text-muted);background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.1);cursor:pointer;transition:all .2s}
+    .sort-btn.active,.sort-btn:hover{color:var(--gold);border-color:rgba(212,175,55,0.4);background:rgba(212,175,55,0.1)}
+
+    /* Review Card */
+    .review-card{background:rgba(20,20,25,0.6);border:1px solid rgba(212,175,55,0.1);border-radius:var(--r-md);padding:var(--sp-lg);margin-bottom:var(--sp-md);backdrop-filter:blur(8px);transition:border-color .3s}
+    .review-card:hover{border-color:rgba(212,175,55,0.25)}
+    .review-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--sp-sm);flex-wrap:wrap;gap:8px}
+    .review-author{display:flex;align-items:center;gap:12px}
+    .review-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--crimson),var(--gold));display:flex;align-items:center;justify-content:center;font-family:var(--font-ar-title);font-size:18px;font-weight:700;color:#fff;flex-shrink:0}
+    .review-name{font-family:var(--font-ar-title);font-size:16px;color:var(--text-primary)}
+    .review-date{font-family:var(--font-en-ui);font-size:11px;color:var(--text-muted)}
+    .review-stars{display:flex;gap:2px;font-size:16px;direction:ltr}
+    .review-stars .on{color:var(--gold)}
+    .review-stars .off{color:rgba(212,175,55,0.15)}
+    .review-text{font-family:var(--font-ar-body);font-size:var(--fs-body);color:var(--text-secondary);line-height:1.9;margin-bottom:var(--sp-md)}
+
+    /* Reactions */
+    .review-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .reaction-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:var(--r-full);font-size:13px;color:var(--text-muted);background:rgba(212,175,55,0.04);border:1px solid rgba(212,175,55,0.08);cursor:pointer;transition:all .2s;font-family:var(--font-en-ui)}
+    .reaction-btn:hover,.reaction-btn.reacted{background:rgba(212,175,55,0.12);border-color:rgba(212,175,55,0.3);color:var(--gold)}
+    .reaction-btn .emoji{font-size:16px}
+    .reply-toggle{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:var(--r-full);font-size:13px;color:var(--text-muted);background:none;border:1px solid rgba(212,175,55,0.08);cursor:pointer;transition:all .2s;font-family:var(--font-ar-ui);margin-right:auto}
+    .reply-toggle:hover{color:var(--gold);border-color:rgba(212,175,55,0.3)}
+
+    /* Replies */
+    .replies-section{margin-top:var(--sp-md);padding-top:var(--sp-sm);border-top:1px solid rgba(212,175,55,0.06)}
+    .reply-card{padding:var(--sp-sm) var(--sp-md);margin-top:var(--sp-xs);background:rgba(212,175,55,0.03);border-radius:var(--r-sm);border-right:3px solid rgba(212,175,55,0.2)}
+    .reply-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+    .reply-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,rgba(196,30,58,0.6),rgba(212,175,55,0.6));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+    .reply-name{font-family:var(--font-ar-title);font-size:13px;color:var(--gold)}
+    .reply-date{font-size:10px;color:var(--text-muted);font-family:var(--font-en-ui)}
+    .reply-text{font-family:var(--font-ar-body);font-size:14px;color:var(--text-secondary);line-height:1.7}
+
+    /* Reply Form */
+    .reply-form{display:flex;gap:8px;margin-top:var(--sp-sm);align-items:flex-end}
+    .reply-form input{flex:1}
+    .reply-form .reply-name-input{max-width:120px}
+    .reply-form button{padding:10px 20px;white-space:nowrap}
+
+    /* Empty State */
+    .empty-reviews{text-align:center;padding:var(--sp-2xl) var(--sp-lg);color:var(--text-muted)}
+    .empty-reviews .empty-icon{font-size:64px;margin-bottom:var(--sp-md);opacity:0.3}
+    .empty-reviews p{font-family:var(--font-ar-ui);font-size:16px}
+
+    /* Loading */
+    .reviews-loading{text-align:center;padding:var(--sp-xl);color:var(--gold);font-family:var(--font-ar-ui)}
+    .reviews-loading .spinner{display:inline-block;width:32px;height:32px;border:3px solid rgba(212,175,55,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:var(--sp-sm)}
+
+    /* Toast */
+    .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(145deg,#1E1E24,#141419);border:1px solid rgba(212,175,55,0.3);border-radius:var(--r-md);padding:14px 28px;font-family:var(--font-ar-ui);font-size:14px;color:var(--gold);z-index:1000;transition:transform .4s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+    .toast.show{transform:translateX(-50%) translateY(0)}
+
+    @media(max-width:768px){
+      .review-form-card{padding:var(--sp-lg)}
+      .review-header{flex-direction:column;align-items:flex-start}
+      .reply-form{flex-direction:column}
+      .reply-form .reply-name-input{max-width:100%}
+      .reviews-stats{gap:var(--sp-md)}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-effects"><canvas id="particles-canvas"></canvas><div class="fog-layer"></div></div>
+<nav class="main-nav scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">في قلب الجحيم</a>
+    <button class="mobile-menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="about-book.html">عن الكتاب</a></li>
+      <li><a href="characters.html">الشخصيات</a></li>
+      <li><a href="gallery.html">المعرض</a></li>
+      <li><a href="author.html">الكاتبة</a></li>
+      <li><a href="reviews.html" class="active">آراء القراء</a></li>
+      <li><a href="read.html" class="nav-read-btn">📖 اقرأ مقتطف</a></li>
+      <li><a href="buy.html" class="btn btn-primary btn-sm" target="_blank">اشترِ الآن</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"><a href="index.html">الرئيسية</a><a href="about-book.html">عن الكتاب</a><a href="characters.html">الشخصيات</a><a href="gallery.html">المعرض</a><a href="author.html">الكاتبة</a><a href="reviews.html">آراء القراء</a><a href="read.html">اقرأ مقتطف</a><a href="buy.html" target="_blank">اشترِ الآن</a></div>
+
+<main>
+<!-- HERO -->
+<section class="reviews-hero">
+  <div class="section-container" data-reveal>
+    <span class="section-label">آراء القراء</span>
+    <h1 style="font-family:var(--font-ar-title);font-size:var(--fs-h1);color:var(--text-primary);margin-bottom:var(--sp-sm)">ماذا قال القراء؟</h1>
+    <p style="color:var(--text-muted);font-family:var(--font-ar-ui)">شاركنا رأيك في الرواية — كل صوت يُسمع هنا</p>
+    <div class="reviews-stats" id="reviewsStats">
+      <div class="reviews-stat">
+        <div class="reviews-stat-num" id="totalReviews">0</div>
+        <div class="reviews-stat-label">رأي</div>
+      </div>
+      <div class="reviews-stat">
+        <div class="reviews-stat-num" id="avgRating">0</div>
+        <div class="reviews-stat-label">متوسط التقييم</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEW FORM -->
+<section style="padding:var(--sp-lg) 0">
+  <div class="section-container">
+    <div class="review-form-card" data-reveal>
+      <h2>✍️ أضف رأيك</h2>
+      <form id="reviewForm" onsubmit="submitReview(event)">
+        <div class="form-group">
+          <label class="form-label">اسمك</label>
+          <input type="text" id="reviewName" class="form-input" placeholder="اكتب اسمك..." required maxlength="50">
+        </div>
+        <div class="form-group">
+          <label class="form-label">تقييمك</label>
+          <div class="star-rating" id="starRating">
+            <span class="star" data-val="1" onclick="setRating(1)">⭐</span>
+            <span class="star" data-val="2" onclick="setRating(2)">⭐</span>
+            <span class="star" data-val="3" onclick="setRating(3)">⭐</span>
+            <span class="star" data-val="4" onclick="setRating(4)">⭐</span>
+            <span class="star" data-val="5" onclick="setRating(5)">⭐</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">رأيك في الرواية</label>
+          <textarea id="reviewText" class="form-textarea" placeholder="اكتب رأيك هنا..." required maxlength="1000" style="min-height:100px"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-large" style="width:100%;justify-content:center" id="submitBtn">
+          إرسال رأيك 🔥
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS LIST -->
+<section style="padding:0 0 var(--sp-2xl)">
+  <div class="section-container">
+    <div class="reviews-list" id="reviewsList">
+      <div class="reviews-loading" id="reviewsLoading">
+        <div class="spinner"></div>
+        <p>جاري تحميل الآراء...</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="main-footer"><div class="section-container">
+  <div class="footer-grid">
+    <div><h3 class="footer-logo">في قلب الجحيم</h3><p class="footer-description">رواية تحقيق جنائي</p><div class="social-links"><a href="https://www.facebook.com/hanean.hayes" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a><a href="https://www.instagram.com/hanean_saad_hayes" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/></svg></a></div></div>
+    <div><h4 class="footer-heading">الصفحات</h4><ul class="footer-links-list"><li><a href="index.html">الرئيسية</a></li><li><a href="activities.html">فعاليات</a></li><li><a href="read.html">اقرأ مقتطفاً</a></li><li><a href="buy.html">اشترِ الآن</a></li></ul></div>
+    <div><h4 class="footer-heading">المزيد</h4><ul class="footer-links-list"><li><a href="characters.html">الشخصيات</a></li><li><a href="author.html">الكاتبة</a></li><li><a href="gallery.html">المعرض</a></li></ul></div>
+    <div><h4 class="footer-heading">اشترِ الآن</h4><p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">153 جنيه فقط</p><a href="buy.html" class="btn btn-primary">اشترِ الآن 🔥</a></div>
+  </div>
+  <div class="gold-line-h"></div>
+  <div class="footer-bottom"><p class="footer-copyright">© 2026 في قلب الجحيم.</p><div class="khalid-credit"><div class="credit-icon">⚡</div><span>Built by </span><a href="https://www.instagram.com/kh23alid_hassan/?__pwa=1" target="_blank" style="color:var(--gold);text-decoration:none" class="credit-name">Khalid Hassan</a></div></div>
+</div></footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js';
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, increment, serverTimestamp, query, orderBy, onSnapshot, getDoc } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js';
+
+// ═══════════════════════════════════════════════════
+// ⚠️  ← ضع بيانات مشروعك من Firebase Console هنا
+// ═══════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+// ═══════════════════════════════════════════════════
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let currentRating = 0;
+let allReviews = [];
+
+// ── Star Rating ──
+window.setRating = function(val) {
+  currentRating = val;
+  document.querySelectorAll('#starRating .star').forEach((s, i) => {
+    s.classList.toggle('active', i < val);
+  });
+};
+
+// ── Submit Review ──
+window.submitReview = async function(e) {
+  e.preventDefault();
+  const name = document.getElementById('reviewName').value.trim();
+  const text = document.getElementById('reviewText').value.trim();
+  if (!name || !text) return;
+  if (currentRating === 0) { showToast('⭐ اختار تقييمك الأول'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'جاري الإرسال...';
+
+  try {
+    await addDoc(collection(db, 'reviews'), {
+      name,
+      text,
+      rating: currentRating,
+      timestamp: serverTimestamp(),
+      reactions: { fire: 0, heart: 0, clap: 0 }
+    });
+    document.getElementById('reviewForm').reset();
+    currentRating = 0;
+    document.querySelectorAll('#starRating .star').forEach(s => s.classList.remove('active'));
+    showToast('✅ تم إضافة رأيك بنجاح!');
+  } catch(err) {
+    console.error(err);
+    showToast('❌ حدث خطأ — تأكد من إعداد Firebase');
+  }
+  btn.disabled = false;
+  btn.textContent = 'إرسال رأيك 🔥';
+};
+
+// ── Load Reviews (Real-time) ──
+function loadReviews() {
+  const q = query(collection(db, 'reviews'), orderBy('timestamp', 'desc'));
+  onSnapshot(q, async (snapshot) => {
+    allReviews = [];
+    for (const docSnap of snapshot.docs) {
+      const data = docSnap.data();
+      // Load replies
+      const repliesSnap = await getDocs(query(collection(db, 'reviews', docSnap.id, 'replies'), orderBy('timestamp', 'asc')));
+      const replies = repliesSnap.docs.map(r => ({ id: r.id, ...r.data() }));
+      allReviews.push({ id: docSnap.id, ...data, replies });
+    }
+    renderReviews();
+    updateStats();
+  }, (err) => {
+    console.error('Firestore error:', err);
+    document.getElementById('reviewsLoading').innerHTML = '<p style="color:var(--crimson)">⚠️ تأكد من إعداد Firebase — راجع التعليمات</p>';
+  });
+}
+
+// ── Render Reviews ──
+function renderReviews() {
+  const container = document.getElementById('reviewsList');
+  if (!allReviews.length) {
+    container.innerHTML = `
+      <div class="empty-reviews" data-reveal>
+        <div class="empty-icon">📝</div>
+        <p>مفيش آراء لسه — كن أول من يشارك رأيه!</p>
+      </div>`;
+    return;
+  }
+
+  let html = '';
+  allReviews.forEach(r => {
+    const date = r.timestamp ? new Date(r.timestamp.seconds * 1000) : new Date();
+    const dateStr = date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' });
+    const initial = r.name.charAt(0);
+    const stars = renderStars(r.rating);
+    const reactions = r.reactions || { fire: 0, heart: 0, clap: 0 };
+    const userReactions = JSON.parse(localStorage.getItem('reactions_' + r.id) || '{}');
+
+    html += `
+    <div class="review-card" data-reveal>
+      <div class="review-header">
+        <div class="review-author">
+          <div class="review-avatar">${initial}</div>
+          <div>
+            <div class="review-name">${escapeHtml(r.name)}</div>
+            <div class="review-date">${dateStr}</div>
+          </div>
+        </div>
+        <div class="review-stars">${stars}</div>
+      </div>
+      <div class="review-text">${escapeHtml(r.text)}</div>
+      <div class="review-actions">
+        <button class="reaction-btn ${userReactions.fire ? 'reacted' : ''}" onclick="react('${r.id}','fire')">
+          <span class="emoji">🔥</span> <span>${reactions.fire || 0}</span>
+        </button>
+        <button class="reaction-btn ${userReactions.heart ? 'reacted' : ''}" onclick="react('${r.id}','heart')">
+          <span class="emoji">❤️</span> <span>${reactions.heart || 0}</span>
+        </button>
+        <button class="reaction-btn ${userReactions.clap ? 'reacted' : ''}" onclick="react('${r.id}','clap')">
+          <span class="emoji">👏</span> <span>${reactions.clap || 0}</span>
+        </button>
+        <button class="reply-toggle" onclick="toggleReply('${r.id}')">💬 رد (${r.replies?.length || 0})</button>
+      </div>
+      <div class="replies-section" id="replies-${r.id}" style="display:${r.replies?.length ? 'block' : 'none'}">
+        ${renderReplies(r.replies || [])}
+        <div class="reply-form" id="replyForm-${r.id}" style="display:none">
+          <input type="text" class="form-input reply-name-input" placeholder="اسمك" id="replyName-${r.id}" maxlength="30">
+          <input type="text" class="form-input" placeholder="اكتب ردك..." id="replyText-${r.id}" maxlength="500">
+          <button class="btn btn-primary btn-sm" onclick="submitReply('${r.id}')">رد</button>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+  // Re-trigger reveal
+  document.querySelectorAll('[data-reveal]:not(.revealed)').forEach(el => {
+    el.classList.add('revealed');
+  });
+}
+
+function renderStars(rating) {
+  let html = '';
+  for (let i = 1; i <= 5; i++) {
+    html += `<span class="${i <= rating ? 'on' : 'off'}">★</span>`;
+  }
+  return html;
+}
+
+function renderReplies(replies) {
+  if (!replies.length) return '';
+  return replies.map(r => {
+    const date = r.timestamp ? new Date(r.timestamp.seconds * 1000) : new Date();
+    const dateStr = date.toLocaleDateString('ar-EG', { month: 'short', day: 'numeric' });
+    return `
+    <div class="reply-card">
+      <div class="reply-header">
+        <div class="reply-avatar">${r.name?.charAt(0) || '?'}</div>
+        <span class="reply-name">${escapeHtml(r.name || 'مجهول')}</span>
+        <span class="reply-date">${dateStr}</span>
+      </div>
+      <div class="reply-text">${escapeHtml(r.text)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Reactions ──
+window.react = async function(reviewId, type) {
+  const key = 'reactions_' + reviewId;
+  const userReactions = JSON.parse(localStorage.getItem(key) || '{}');
+
+  if (userReactions[type]) {
+    showToast('عملت ريأكت ده قبل كده ✨');
+    return;
+  }
+
+  try {
+    const ref = doc(db, 'reviews', reviewId);
+    await updateDoc(ref, { [`reactions.${type}`]: increment(1) });
+    userReactions[type] = true;
+    localStorage.setItem(key, JSON.stringify(userReactions));
+  } catch(err) {
+    console.error(err);
+  }
+};
+
+// ── Toggle Reply ──
+window.toggleReply = function(reviewId) {
+  const section = document.getElementById('replies-' + reviewId);
+  const form = document.getElementById('replyForm-' + reviewId);
+  section.style.display = section.style.display === 'none' ? 'block' : 'block';
+  form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+};
+
+// ── Submit Reply ──
+window.submitReply = async function(reviewId) {
+  const name = document.getElementById('replyName-' + reviewId).value.trim() || 'مجهول';
+  const text = document.getElementById('replyText-' + reviewId).value.trim();
+  if (!text) return;
+
+  try {
+    await addDoc(collection(db, 'reviews', reviewId, 'replies'), {
+      name,
+      text,
+      timestamp: serverTimestamp()
+    });
+    document.getElementById('replyName-' + reviewId).value = '';
+    document.getElementById('replyText-' + reviewId).value = '';
+    showToast('✅ تم إضافة ردك');
+  } catch(err) {
+    console.error(err);
+    showToast('❌ خطأ في الإرسال');
+  }
+};
+
+// ── Update Stats ──
+function updateStats() {
+  const total = allReviews.length;
+  document.getElementById('totalReviews').textContent = total;
+  if (total > 0) {
+    const avg = (allReviews.reduce((s, r) => s + (r.rating || 0), 0) / total).toFixed(1);
+    document.getElementById('avgRating').textContent = avg;
+  }
+}
+
+// ── Helpers ──
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+window.showToast = showToast;
+
+// ── Init ──
+loadReviews();
+</script>
+
+<script src="js/particles.js"></script><script src="js/navigation.js"></script><script src="js/main.js"></script>
+</body></html>
