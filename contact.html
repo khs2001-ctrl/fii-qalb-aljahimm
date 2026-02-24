@@ -1,0 +1,228 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التواصل | في قلب الجحيم</title>
+  <link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css"><link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .contact-hero{min-height:35vh;display:flex;align-items:center;padding-top:var(--nav-height);text-align:center;position:relative;}
+    .contact-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:var(--sp-2xl);align-items:start}
+    .contact-info-card{padding:var(--sp-xl);background:var(--grad-glass);border:1px solid rgba(212,175,55,0.12);border-radius:var(--r-lg)}
+    .contact-method{display:flex;gap:var(--sp-md);align-items:center;padding:var(--sp-md) 0;border-bottom:1px solid rgba(212,175,55,0.08)}
+    .contact-method:last-child{border-bottom:none}
+    .contact-method-icon{width:48px;height:48px;border-radius:var(--r-md);background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+    .contact-method-label{font-family:var(--font-ar-ui);font-size:12px;color:var(--text-muted);margin-bottom:4px}
+    .contact-method-val{font-family:var(--font-ar-title);font-size:15px;color:var(--text-primary)}
+    .contact-method-val a{color:var(--gold);transition:color .2s}
+    .contact-method-val a:hover{color:var(--gold-light)}
+    .success-msg{display:none;text-align:center;padding:var(--sp-lg);background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.3);border-radius:var(--r-md);color:var(--gold);font-family:var(--font-ar-title);font-size:18px}
+    @media(max-width:768px){.contact-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="bg-effects"><canvas id="particles-canvas"></canvas><div class="fog-layer"></div></div>
+<nav class="main-nav scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">في قلب الجحيم</a>
+    <button class="mobile-menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="about-book.html">عن الكتاب</a></li>
+      <li><a href="characters.html">الشخصيات</a></li>
+      <li><a href="gallery.html">المعرض</a></li>
+      <li><a href="author.html">الكاتبة</a></li>
+      <li><a href="activities.html">فعاليات</a></li>
+      <li><a href="read.html" class="nav-read-btn">📖 اقرأ مقتطف</a></li>
+      <li><a href="buy.html" class="btn btn-primary btn-sm" target="_blank">اشترِ الآن</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"><a href="index.html">الرئيسية</a><a href="about-book.html">عن الكتاب</a><a href="characters.html">الشخصيات</a><a href="gallery.html">المعرض</a><a href="author.html">الكاتبة</a><a href="read.html">اقرأ مقتطف</a><a href="buy.html" target="_blank">اشترِ الآن</a></div>
+
+<main>
+<section class="contact-hero">
+  <div class="section-container"><div data-reveal>
+    <span class="section-label">تواصل معنا</span>
+    <h1 style="font-family:var(--font-ar-title);font-size:var(--fs-h1);color:var(--text-primary);margin-bottom:var(--sp-sm)">نسمعك دائماً</h1>
+    <p style="color:var(--text-muted);font-family:var(--font-ar-ui)">سواء كان سؤالاً عن الرواية أو رسالة للكاتبة — نحن هنا</p>
+  </div></div>
+</section>
+
+<section style="padding:var(--sp-lg) 0 var(--sp-2xl)">
+  <div class="section-container">
+    <div class="contact-grid">
+      <!-- FORM -->
+      <div data-reveal>
+        <h2 class="section-title" style="font-size:var(--fs-h2);margin-bottom:var(--sp-xl)">أرسل رسالتك</h2>
+        <form id="contactForm" onsubmit="submitForm(event)">
+          <div class="form-group">
+            <label class="form-label">الاسم الكامل</label>
+            <input type="text" id="formName" class="form-input" placeholder="اسمك هنا..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">البريد الإلكتروني</label>
+            <input type="email" id="formEmail" class="form-input" placeholder="example@email.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">الموضوع</label>
+            <select id="formSubject" class="form-input form-select" required style="cursor:pointer">
+              <option value="">اختر الموضوع</option>
+              <option>استفسار عام</option>
+              <option>سؤال عن الكتاب</option>
+              <option>تعاون إعلامي</option>
+              <option>اقتراح</option>
+              <option>دعم فني</option>
+              <option>طلب نسخة موقعة</option>
+              <option>أخرى</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">رسالتك</label>
+            <textarea id="formMessage" class="form-textarea" placeholder="اكتب رسالتك هنا..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-large" style="width:100%;justify-content:center">
+            إرسال الرسالة 📩
+          </button>
+        </form>
+        <div class="success-msg" id="successMsg">✅ تم تجهيز رسالتك! سيتم تحويلك لإنستاجرام الكاتبة لإرسالها مباشرة</div>
+      </div>
+
+      <!-- INFO -->
+      <div data-reveal="left">
+        <h2 class="section-title" style="font-size:var(--fs-h2);margin-bottom:var(--sp-xl)">معلومات التواصل</h2>
+        <div class="contact-info-card">
+          <div class="contact-method">
+            <div class="contact-method-icon">📘</div>
+            <div>
+              <div class="contact-method-label">فيسبوك</div>
+              <div class="contact-method-val"><a href="https://www.facebook.com/hanean.hayes" target="_blank">hanean.hayes</a></div>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon">📸</div>
+            <div>
+              <div class="contact-method-label">إنستاجرام</div>
+              <div class="contact-method-val"><a href="https://www.instagram.com/hanean_saad_hayes" target="_blank">hanean_saad_hayes</a></div>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon">🏛️</div>
+            <div>
+              <div class="contact-method-label">الشراء — معرض القاهرة</div>
+              <div class="contact-method-val"><a href="https://egbookfair.com" target="_blank">egbookfair.com</a></div>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon">⚡</div>
+            <div>
+              <div class="contact-method-label">الشراء — BookBuzz</div>
+              <div class="contact-method-val"><a href="https://bookbuzz.store" target="_blank">bookbuzz.store</a></div>
+            </div>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-icon">🏢</div>
+            <div>
+              <div class="contact-method-label">دار النشر</div>
+              <div class="contact-method-val" style="color:var(--text-secondary)">دار ملاذ للنشر والتوزيع</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:var(--sp-xl);padding:var(--sp-lg);background:rgba(196,30,58,0.06);border:1px solid rgba(196,30,58,0.2);border-radius:var(--r-md)">
+          <p style="font-family:var(--font-ar-ui);font-size:13px;color:var(--text-muted);line-height:1.8">⏱️ وقت الاستجابة عادةً خلال <strong style="color:var(--gold)">24-48 ساعة</strong>. للأمور العاجلة تواصل مباشرة عبر السوشيال ميديا.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div style="margin-top:var(--sp-2xl)">
+      <div class="section-header" data-reveal>
+        <span class="section-label">أسئلة متكررة</span>
+        <h2 class="section-title" style="font-size:var(--fs-h2)">الأسئلة الشائعة</h2>
+      </div>
+      <div style="max-width:700px;margin:0 auto">
+        <div class="faq-item" data-reveal>
+          <div class="faq-question" onclick="toggleFaq(this)">
+            هل الرواية مناسبة لجميع الأعمار؟
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">الرواية موجهة لعمر 16 عاماً وما فوق بسبب بعض المشاهد الجنائية والمحتوى النفسي المكثف. لا توجد محتوى غير لائق.</div>
+        </div>
+        <div class="faq-item" data-reveal>
+          <div class="faq-question" onclick="toggleFaq(this)">
+            هل ستكون هناك رواية ثانية؟
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">تتابع الكاتبة حنين سعد حايس مباشرة عبر حسابات السوشيال ميديا لمتابعة أخبار المشاريع القادمة!</div>
+        </div>
+        <div class="faq-item" data-reveal>
+          <div class="faq-question" onclick="toggleFaq(this)">
+            أين يمكنني شراء الرواية؟
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">متاحة في معرض القاهرة الدولي للكتاب (egbookfair.com) وعلى منصة BookBuzz (bookbuzz.store). انتقل لصفحة الشراء للمزيد.</div>
+        </div>
+        <div class="faq-item" data-reveal>
+          <div class="faq-question" onclick="toggleFaq(this)">
+            هل الرواية متاحة رقمياً (إلكترونياً)؟
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">حالياً الرواية متاحة بنسخة ورقية فقط. تابع الحسابات الرسمية للكاتبة لمعرفة أي تحديثات.</div>
+        </div>
+        <div class="faq-item" data-reveal>
+          <div class="faq-question" onclick="toggleFaq(this)">
+            كيف يمكنني الحصول على توقيع الكاتبة؟
+            <span class="faq-icon">+</span>
+          </div>
+          <div class="faq-answer">تابع حسابات الكاتبة على فيسبوك وإنستاجرام لمعرفة مواعيد جلسات التوقيع والأحداث القادمة. يمكنك أيضاً التواصل عبر النموذج أعلاه.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="main-footer"><div class="section-container">
+  <div class="footer-grid">
+    <div><h3 class="footer-logo">في قلب الجحيم</h3><p class="footer-description">رواية تحقيق جنائي</p><div class="social-links"><a href="https://www.facebook.com/hanean.hayes" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a><a href="https://www.instagram.com/hanean_saad_hayes" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/></svg></a></div></div>
+    <div><h4 class="footer-heading">الصفحات</h4><ul class="footer-links-list"><li><a href="index.html">الرئيسية</a></li><li><a href="activities.html">فعاليات</a></li><li><a href="read.html">اقرأ مقتطفاً</a></li><li><a href="buy.html">اشترِ الآن</a></li></ul></div>
+    <div><h4 class="footer-heading">المزيد</h4><ul class="footer-links-list"><li><a href="characters.html">الشخصيات</a></li><li><a href="author.html">الكاتبة</a></li><li><a href="gallery.html">المعرض</a></li></ul></div>
+    <div><h4 class="footer-heading">اشترِ الآن</h4><p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">153 جنيه فقط</p><a href="buy.html" class="btn btn-primary">اشترِ الآن 🔥</a></div>
+  </div>
+  <div class="gold-line-h"></div>
+  <div class="footer-bottom"><p class="footer-copyright">© 2026 في قلب الجحيم.</p><div class="khalid-credit"><div class="credit-icon">⚡</div><span>Built by </span><a href="https://www.instagram.com/kh23alid_hassan/?__pwa=1" target="_blank" style="color:var(--gold);text-decoration:none" class="credit-name">Khalid Hassan</a></div></div>
+</div></footer>
+
+<script src="js/particles.js"></script><script src="js/navigation.js"></script><script src="js/main.js"></script>
+<script>
+function toggleFaq(el) {
+  const item = el.closest('.faq-item');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+function submitForm(e) {
+  e.preventDefault();
+  const name = document.getElementById('formName').value.trim();
+  const email = document.getElementById('formEmail').value.trim();
+  const subject = document.getElementById('formSubject').value;
+  const message = document.getElementById('formMessage').value.trim();
+
+  // Build the message text
+  const fullMessage = `مرحباً، أنا ${name}\nالموضوع: ${subject}\nالإيميل: ${email}\n\n${message}`;
+
+  // Copy to clipboard so user can paste it in Instagram DM
+  navigator.clipboard.writeText(fullMessage).catch(() => {});
+
+  // Show success message
+  document.getElementById('contactForm').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+
+  // Open Instagram DM after a short delay
+  setTimeout(() => {
+    window.open('https://ig.me/m/hanean_saad_hayes', '_blank');
+  }, 1500);
+}
+</script>
+</body></html>

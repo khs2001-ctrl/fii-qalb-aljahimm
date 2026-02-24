@@ -1,0 +1,403 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فعاليات تفاعلية | في قلب الجحيم</title>
+  <link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css"><link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .act-hero{min-height:40vh;display:flex;align-items:center;padding-top:var(--nav-height);text-align:center;
+      background:url('assets/images/scenes/Foggy Night Scene.jpg') center/cover;position:relative}
+    .act-hero::before{content:'';position:absolute;inset:0;background:rgba(5,0,8,0.85)}
+    .act-hero .section-container{position:relative;z-index:1}
+
+    /* Activity cards */
+    .act-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:var(--sp-lg)}
+    .act-card{background:linear-gradient(145deg,rgba(25,25,32,0.95),rgba(15,15,20,0.9));border:1px solid rgba(212,175,55,0.12);
+      border-radius:var(--r-xl);padding:var(--sp-xl);transition:all .3s;position:relative;overflow:hidden;cursor:default}
+    .act-card:hover{border-color:rgba(212,175,55,0.4);transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 30px rgba(212,175,55,0.08)}
+    .act-card-icon{width:64px;height:64px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;
+      font-size:28px;margin-bottom:var(--sp-md);background:linear-gradient(135deg,rgba(196,30,58,0.15),rgba(212,175,55,0.1));
+      border:1px solid rgba(212,175,55,0.15)}
+    .act-card-title{font-family:var(--font-ar-title);font-size:var(--fs-h4);color:var(--text-primary);margin-bottom:8px}
+    .act-card-desc{font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:var(--sp-md);font-family:var(--font-ar-ui)}
+    .act-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:var(--r-full);
+      font-family:var(--font-ar-ui);font-size:13px;cursor:pointer;transition:all .2s;border:none}
+    .act-btn-primary{background:linear-gradient(135deg,var(--crimson),var(--crimson-dark));color:#fff;box-shadow:0 4px 15px rgba(196,30,58,0.3)}
+    .act-btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(196,30,58,0.4)}
+    .act-btn-gold{background:rgba(212,175,55,0.12);color:var(--gold);border:1px solid rgba(212,175,55,0.3)}
+    .act-btn-gold:hover{background:rgba(212,175,55,0.2)}
+
+    /* Quiz */
+    .quiz-area{display:none;margin-top:var(--sp-md);padding:var(--sp-lg);background:rgba(0,0,0,0.3);border-radius:var(--r-md);border:1px solid rgba(212,175,55,0.1)}
+    .quiz-area.show{display:block;animation:fadeIn .4s ease}
+    .quiz-q{font-family:var(--font-ar-title);font-size:18px;color:var(--text-primary);margin-bottom:var(--sp-md)}
+    .quiz-opt{display:block;width:100%;text-align:right;padding:12px 16px;margin-bottom:8px;border-radius:var(--r-sm);
+      background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.1);color:var(--text-secondary);
+      font-family:var(--font-ar-ui);font-size:14px;cursor:pointer;transition:all .2s}
+    .quiz-opt:hover{background:rgba(212,175,55,0.12);border-color:rgba(212,175,55,0.3)}
+    .quiz-opt.correct{background:rgba(40,180,80,0.2)!important;border-color:#28B450!important;color:#28B450}
+    .quiz-opt.wrong{background:rgba(196,30,58,0.2)!important;border-color:var(--crimson)!important;color:var(--crimson)}
+    .quiz-result{margin-top:var(--sp-md);font-family:var(--font-ar-ui);font-size:14px;text-align:center;padding:12px;border-radius:var(--r-sm)}
+
+    /* Mystery Revealing */
+    .mystery-reveal{position:relative;width:100%;height:200px;border-radius:var(--r-md);overflow:hidden;cursor:pointer;margin-top:var(--sp-md)}
+    .mystery-img{width:100%;height:100%;object-fit:cover;filter:blur(15px) brightness(0.3);transition:filter 1s ease}
+    .mystery-reveal.revealed .mystery-img{filter:blur(0) brightness(1)}
+    .mystery-prompt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      color:var(--gold);font-family:var(--font-ar-title);font-size:20px;transition:opacity .5s;background:rgba(0,0,0,0.4)}
+    .mystery-reveal.revealed .mystery-prompt{opacity:0;pointer-events:none}
+
+    /* Suspect Board */
+    .suspect-board{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:var(--sp-md)}
+    .suspect-pin{text-align:center;cursor:pointer;transition:all .3s;padding:12px;border-radius:var(--r-md);
+      border:2px solid transparent;background:rgba(0,0,0,0.2)}
+    .suspect-pin:hover{border-color:rgba(196,30,58,0.4);background:rgba(196,30,58,0.08)}
+    .suspect-pin.pinned{border-color:var(--crimson)!important;box-shadow:0 0 20px rgba(196,30,58,0.3)}
+    .suspect-pin img{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid rgba(212,175,55,0.2);margin-bottom:8px}
+    .suspect-pin .pin-name{font-family:var(--font-ar-ui);font-size:12px;color:var(--text-secondary)}
+    .suspect-pin .pin-label{font-size:10px;color:var(--crimson);margin-top:4px;opacity:0;transition:opacity .2s}
+    .suspect-pin.pinned .pin-label{opacity:1}
+
+    /* Torch */
+    .torch-area{position:relative;width:100%;height:250px;border-radius:var(--r-md);overflow:hidden;cursor:none;margin-top:var(--sp-md);background:#030005}
+    .torch-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+    .torch-mask{position:absolute;inset:0;background:#030005;
+      -webkit-mask:radial-gradient(circle 60px at var(--mx) var(--my),transparent 0%,black 100%);
+      mask:radial-gradient(circle 60px at var(--mx) var(--my),transparent 0%,black 100%)}
+
+    /* Atmosphere Player */
+    .atmo-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:var(--sp-md)}
+    .atmo-btn{padding:10px 20px;border-radius:var(--r-full);font-family:var(--font-ar-ui);font-size:13px;
+      background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.15);color:var(--text-muted);cursor:pointer;transition:all .2s}
+    .atmo-btn:hover,.atmo-btn.active{background:rgba(212,175,55,0.15);border-color:var(--gold);color:var(--gold)}
+
+    /* Countdown */
+    .countdown-display{display:flex;gap:var(--sp-md);justify-content:center;margin-top:var(--sp-md)}
+    .cd-unit{text-align:center}
+    .cd-val{font-family:var(--font-en-title);font-size:clamp(28px,4vw,48px);color:var(--gold);display:block;
+      text-shadow:0 0 20px rgba(212,175,55,0.4)}
+    .cd-label{font-family:var(--font-ar-ui);font-size:11px;color:var(--text-muted)}
+
+    /* 3D Card Flip */
+    .flip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:var(--sp-md)}
+    .flip-card{perspective:800px;height:100px;cursor:pointer}
+    .flip-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+    .flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+    .flip-front,.flip-back{position:absolute;inset:0;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
+      backface-visibility:hidden;border:1px solid rgba(212,175,55,0.15)}
+    .flip-front{background:linear-gradient(135deg,rgba(196,30,58,0.15),rgba(20,20,25,0.9));font-size:24px}
+    .flip-back{background:linear-gradient(135deg,rgba(212,175,55,0.1),rgba(20,20,25,0.9));transform:rotateY(180deg);font-size:28px}
+    .flip-card.matched{opacity:0.3;pointer-events:none}
+
+    @media(max-width:768px){.act-grid{grid-template-columns:1fr}.suspect-board{grid-template-columns:repeat(3,1fr)}.flip-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:480px){.flip-grid{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+<div class="bg-effects"><canvas id="particles-canvas"></canvas><div class="fog-layer"></div></div>
+<nav class="main-nav scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">في قلب الجحيم</a>
+    <button class="mobile-menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="about-book.html">عن الكتاب</a></li>
+      <li><a href="characters.html">الشخصيات</a></li>
+      <li><a href="gallery.html">المعرض</a></li>
+      <li><a href="author.html">الكاتبة</a></li>
+      <li><a href="activities.html">فعاليات</a></li>
+      <li><a href="read.html" class="nav-read-btn">📖 اقرأ مقتطف</a></li>
+      <li><a href="buy.html" class="btn btn-primary btn-sm" target="_blank">اشترِ الآن</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"><a href="index.html">الرئيسية</a><a href="about-book.html">عن الكتاب</a><a href="characters.html">الشخصيات</a><a href="gallery.html">المعرض</a><a href="author.html">الكاتبة</a><a href="read.html">اقرأ مقتطف</a><a href="buy.html" target="_blank">اشترِ الآن</a></div>
+
+<main>
+<section class="act-hero">
+  <div class="section-container"><div data-reveal>
+    <span class="section-label">🎮 تفاعل مع الرواية</span>
+    <h1 style="font-family:var(--font-ar-title);font-size:var(--fs-h1);color:var(--text-primary);margin-bottom:var(--sp-sm)">فعاليات في قلب الجحيم</h1>
+    <p style="color:var(--text-muted);font-family:var(--font-ar-ui)">ألعاب، ألغاز، وتجارب تفاعلية من أجواء الرواية — عِش التشويق بنفسك!</p>
+  </div></div>
+</section>
+
+<section style="padding:var(--sp-2xl) 0">
+<div class="section-container">
+<div class="act-grid">
+
+  <!-- 1. QUIZ -->
+  <div class="act-card" data-reveal>
+    <div class="act-card-icon">🧠</div>
+    <div class="act-card-title">اختبر معلوماتك عن الرواية</div>
+    <div class="act-card-desc">هل تعرف قرية الجُب كما تعرفها سينين؟ اختبر نفسك في 5 أسئلة من أحداث الرواية!</div>
+    <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ اضغط "ابدأ الاختبار" ثم اختر الإجابة الصحيحة من بين 4 خيارات</div>
+    <button class="act-btn act-btn-primary" onclick="startQuiz()">ابدأ الاختبار 🔥</button>
+    <div class="quiz-area" id="quizArea"></div>
+  </div>
+
+  <!-- 2. MYSTERY REVEAL -->
+  <div class="act-card" data-reveal>
+    <div class="act-card-icon">🔍</div>
+    <div class="act-card-title">اكشف المشهد المخفي</div>
+    <div class="act-card-desc">اضغط لإزالة الضباب عن مشهد سري من أحداث الرواية... هل تجرؤ؟</div>
+    <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ اضغط على الصورة الضبابية لإزالة الغموض وكشف المشهد السري</div>
+    <div class="mystery-reveal" id="mysteryReveal" onclick="revealMystery()">
+      <img src="assets/images/scenes/Secret Meeting.jpg" alt="مشهد مخفي" class="mystery-img">
+      <div class="mystery-prompt"><span>🔒</span><span>اضغط لكشف المشهد</span></div>
+    </div>
+  </div>
+
+  <div class="act-card" data-reveal>
+    <div class="act-card-icon">�️</div>
+    <div class="act-card-title">خريطة الأدلة</div>
+    <div class="act-card-desc">وصّل كل دليل بالمكان الصحيح في القرية — هل ستكتشف الروابط الخفية؟</div>
+    <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ اضغط على دليل ثم اختر المكان المناسب له. وصّل كل الأدلة لتكشف السر!</div>
+    <button class="act-btn act-btn-primary" onclick="startEvidence()" id="evidBtn">ابدأ التحقيق �</button>
+    <div id="evidenceArea" style="margin-top:var(--sp-md)"></div>
+  </div>
+
+  <!-- 4. TORCH EXPLORE -->
+  <div class="act-card" data-reveal>
+    <div class="act-card-icon">🔦</div>
+    <div class="act-card-title">استكشف بالمصباح</div>
+    <div class="act-card-desc">حرّك الماوس فوق الصورة المظلمة لتكشف المشهد بضوء المصباح اليدوي — تماماً كسينين في البئر!</div>
+    <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ حرّك الماوس فوق المنطقة السوداء لتكشف الصورة بضوء المصباح</div>
+    <div class="torch-area" id="torchArea" onmousemove="moveTorch(event)">
+      <img src="assets/images/scenes/Night Investigation.jpg" class="torch-img" alt="البحث في الظلام">
+      <div class="torch-mask" id="torchMask"></div>
+    </div>
+  </div>
+
+  <!-- 5. WORD SCRAMBLE -->
+  <div class="act-card" data-reveal>
+    <div class="act-card-icon">🔤</div>
+    <div class="act-card-title">فكّ الشفرة</div>
+    <div class="act-card-desc">كلمات مشفّرة من الرواية — أعد ترتيب الحروف لتكتشف الكلمة الصحيحة!</div>
+    <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ اضغط "ابدأ التحدي" ثم اكتب الكلمة الصحيحة باستخدام التلميح المعطى</div>
+    <button class="act-btn act-btn-primary" onclick="startScramble()" id="scrBtn">ابدأ التحدي 🔓</button>
+    <div id="scrambleArea" style="margin-top:var(--sp-md)"></div>
+  </div>
+
+  <!-- 6. ATMOSPHERE -->
+  <div class="act-card" data-reveal>
+    <div class="act-card-icon">🎧</div>
+    <div class="act-card-title">أجواء الرواية البصرية</div>
+    <div class="act-card-desc">اختر الجو المناسب واستمتع بتجربة بصرية تغمرك في عالم الجُب المظلم.</div>
+    <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ اضغط على أي زر لتغيير الجو البصري في المساحة أدناه</div>
+    <div class="atmo-btns" id="atmobtns">
+      <button class="atmo-btn" onclick="setAtmo(this,'storm')">⛈️ عاصفة</button>
+      <button class="atmo-btn" onclick="setAtmo(this,'night')">🌙 ليل القرية</button>
+      <button class="atmo-btn" onclick="setAtmo(this,'forest')">🌲 الغابة</button>
+      <button class="atmo-btn" onclick="setAtmo(this,'mystery')">🔮 غموض</button>
+    </div>
+    <div id="atmoVisual" style="margin-top:var(--sp-md);height:120px;border-radius:var(--r-md);overflow:hidden;position:relative;background:#050008">
+      <canvas id="atmoCanvas" style="width:100%;height:100%"></canvas>
+    </div>
+  </div>
+
+</div>
+</div>
+</section>
+</main>
+
+<footer class="main-footer"><div class="section-container">
+  <div class="footer-grid">
+    <div><h3 class="footer-logo">في قلب الجحيم</h3><p class="footer-description">رواية تحقيق جنائي</p></div>
+    <div><h4 class="footer-heading">الصفحات</h4><ul class="footer-links-list"><li><a href="index.html">الرئيسية</a></li><li><a href="read.html">اقرأ مقتطفاً</a></li><li><a href="buy.html">اشترِ الآن</a></li></ul></div>
+    <div><h4 class="footer-heading">المزيد</h4><ul class="footer-links-list"><li><a href="author.html">الكاتبة</a></li><li><a href="characters.html">الشخصيات</a></li><li><a href="contact.html">التواصل</a></li></ul></div>
+    <div><h4 class="footer-heading">تواصل</h4><div class="social-links"><a href="https://www.facebook.com/hanean.hayes" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div></div>
+  </div>
+  <div class="gold-line-h"></div>
+  <div class="footer-bottom"><p class="footer-copyright">© 2026 في قلب الجحيم.</p><div class="khalid-credit"><div class="credit-icon">⚡</div><span>Built by </span><a href="https://www.instagram.com/kh23alid_hassan/?__pwa=1" target="_blank" style="color:var(--gold);text-decoration:none" class="credit-name">Khalid Hassan</a></div></div>
+</div></footer>
+
+<script src="js/particles.js"></script><script src="js/navigation.js"></script><script src="js/main.js"></script>
+<script>
+// ══ QUIZ ══
+const quizData=[
+  {q:'ما اسم القرية التي تدور فيها الأحداث؟',opts:['قرية الصحراء','قرية الجُب','قرية النيل','قرية الظلام'],ans:1},
+  {q:'ما اسم الشجرة الغامضة في وسط القرية؟',opts:['شجرة الأمل','شجرة الخلود','شجرة العهد','شجرة الموت'],ans:2},
+  {q:'ما مهنة سينين؟',opts:['صحفية','طبيبة','محققة جنائية','محامية'],ans:2},
+  {q:'ما اسم مساعد سينين في التحقيق؟',opts:['مالك','سيف','أحمد','خالد'],ans:1},
+  {q:'أين وجدت سينين الجثة؟',opts:['في الغابة','في القصر','في البئر','في الكهف'],ans:2}
+];
+let qIdx=0,score=0;
+function startQuiz(){qIdx=0;score=0;showQ();}
+function showQ(){
+  const area=document.getElementById('quizArea');
+  if(qIdx>=quizData.length){area.innerHTML='<div class="quiz-result" style="color:var(--gold)">🎉 نتيجتك: '+score+'/'+quizData.length+'<br><button class="act-btn act-btn-gold" onclick="startQuiz()" style="margin-top:12px">أعد المحاولة</button></div>';area.classList.add('show');return;}
+  const d=quizData[qIdx];
+  let h='<div class="quiz-q">'+(qIdx+1)+'. '+d.q+'</div>';
+  d.opts.forEach((o,i)=>{h+='<button class="quiz-opt" onclick="answerQ(this,'+i+','+d.ans+')">'+o+'</button>';});
+  area.innerHTML=h;area.classList.add('show');
+}
+function answerQ(el,i,correct){
+  document.querySelectorAll('.quiz-opt').forEach(b=>b.style.pointerEvents='none');
+  if(i===correct){el.classList.add('correct');score++;}else{el.classList.add('wrong');document.querySelectorAll('.quiz-opt')[correct].classList.add('correct');}
+  setTimeout(()=>{qIdx++;showQ();},1200);
+}
+
+// ══ MYSTERY REVEAL ══
+function revealMystery(){document.getElementById('mysteryReveal').classList.add('revealed');}
+
+// ══ EVIDENCE MAP ══
+const evidenceData=[
+  {clue:'🗡️ خنجر قديم ملطخ بالدم',locations:['البئر','شجرة العهد','البيت الملعون','الكهف'],correct:0},
+  {clue:'📜 مخطوطة بلغة غير معروفة',locations:['مكتبة د. سامر','منزل الشيخ','السوق','الجبل'],correct:1},
+  {clue:'🕯️ شمعة سوداء ذائبة',locations:['غرفة سينين','البيت الملعون','المسجد','الغابة'],correct:1},
+  {clue:'🦴 عظام مجهولة المصدر',locations:['شجرة العهد','البئر','الكهف','المقبرة'],correct:2},
+  {clue:'💍 خاتم ذهبي محفور عليه رموز',locations:['جثة الضحية','منزل العجوز','صندوق الشيخ','نهر القرية'],correct:0}
+];
+let evidIdx=0,evidScore=0;
+function startEvidence(){evidIdx=0;evidScore=0;showEvidence();}
+function showEvidence(){
+  const area=document.getElementById('evidenceArea');
+  if(evidIdx>=evidenceData.length){
+    let pct=Math.round(evidScore/evidenceData.length*100);
+    let msg=pct>=80?'🏆 محقق محترف! كشفت معظم الأدلة':pct>=60?'🔍 لا بأس! لكن بعض الأدلة فاتتك':'🔮 تحتاج قراءة الرواية لتفهم القرية أكثر!';
+    area.innerHTML='<div style="text-align:center;padding:20px;background:rgba(212,175,55,0.08);border-radius:12px;border:1px solid rgba(212,175,55,0.2)">'
+      +'<div style="font-family:var(--font-ar-title);font-size:24px;color:var(--gold);margin-bottom:8px">'+msg+'</div>'
+      +'<div style="font-family:var(--font-ar-ui);font-size:16px;color:var(--text-muted);margin-bottom:16px">نتيجتك: '+evidScore+'/'+evidenceData.length+' ('+pct+'%)</div>'
+      +'<button class="act-btn act-btn-gold" onclick="startEvidence()">أعد المحاولة</button></div>';
+    return;
+  }
+  const d=evidenceData[evidIdx];
+  let h='<div style="padding:20px;background:rgba(0,0,0,0.3);border-radius:12px;border:1px solid rgba(212,175,55,0.1)">';
+  h+='<div style="font-family:var(--font-ar-ui);font-size:12px;color:var(--text-muted);margin-bottom:8px">الدليل '+(evidIdx+1)+'/'+evidenceData.length+'</div>';
+  h+='<div style="font-family:var(--font-ar-title);font-size:22px;color:var(--crimson);text-align:center;margin:16px 0">'+d.clue+'</div>';
+  h+='<div style="font-family:var(--font-ar-ui);font-size:14px;color:var(--gold);text-align:center;margin-bottom:16px">أين وُجد هذا الدليل؟</div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+  d.locations.forEach((loc,i)=>{
+    h+='<button onclick="pickEvidence(this,'+i+','+d.correct+')" style="padding:12px;border-radius:8px;background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.15);color:var(--text-secondary);font-family:var(--font-ar-ui);font-size:14px;cursor:pointer;transition:all .2s">'+loc+'</button>';
+  });
+  h+='</div><div id="evidFeedback" style="margin-top:12px;text-align:center;font-family:var(--font-ar-ui);font-size:14px"></div></div>';
+  area.innerHTML=h;
+}
+function pickEvidence(el,i,correct){
+  document.querySelectorAll('#evidenceArea button[onclick^="pickEvidence"]').forEach(b=>b.style.pointerEvents='none');
+  if(i===correct){
+    el.style.background='rgba(40,180,80,0.2)';el.style.borderColor='#28B450';el.style.color='#28B450';
+    evidScore++;
+    document.getElementById('evidFeedback').innerHTML='<span style="color:#28B450">✅ صحيح! دليل مهم</span>';
+  }else{
+    el.style.background='rgba(196,30,58,0.2)';el.style.borderColor='var(--crimson)';el.style.color='var(--crimson)';
+    const btns=document.querySelectorAll('#evidenceArea button[onclick^="pickEvidence"]');
+    btns[correct].style.background='rgba(40,180,80,0.2)';btns[correct].style.borderColor='#28B450';btns[correct].style.color='#28B450';
+    document.getElementById('evidFeedback').innerHTML='<span style="color:var(--crimson)">❌ المكان الصحيح: '+evidenceData[evidIdx].locations[correct]+'</span>';
+  }
+  setTimeout(()=>{evidIdx++;showEvidence();},1500);
+}
+
+// ══ TORCH ══
+function moveTorch(e){
+  const r=document.getElementById('torchArea').getBoundingClientRect();
+  const x=e.clientX-r.left, y=e.clientY-r.top;
+  document.getElementById('torchMask').style.setProperty('--mx',x+'px');
+  document.getElementById('torchMask').style.setProperty('--my',y+'px');
+}
+
+// ══ WORD SCRAMBLE GAME ══
+const scrambleWords=[
+  {word:'سينين',hint:'اسم المحققة الرئيسية'},
+  {word:'الجُب',hint:'اسم القرية الغامضة'},
+  {word:'شجرة',hint:'ما يحرسه الشيخ سالم'},
+  {word:'البئر',hint:'المكان الذي وجدت فيه الجثة'},
+  {word:'مالك',hint:'الشخصية الأكثر غموضاً'},
+  {word:'سيف',hint:'اسم المحقق المساعد'}
+];
+let scrIdx=0,scrScore=0;
+function shuffle(s){return s.split('').sort(()=>Math.random()-0.5).join('');}
+function startScramble(){scrIdx=0;scrScore=0;showScramble();}
+function showScramble(){
+  const area=document.getElementById('scrambleArea');
+  if(scrIdx>=scrambleWords.length){
+    area.innerHTML='<div style="text-align:center;padding:20px;background:rgba(212,175,55,0.08);border-radius:12px;border:1px solid rgba(212,175,55,0.2)"><div style="font-family:var(--font-ar-title);font-size:24px;color:var(--gold);margin-bottom:8px">🎉 أحسنت!</div><div style="font-family:var(--font-ar-ui);font-size:14px;color:var(--text-muted);margin-bottom:16px">نتيجتك: '+scrScore+'/'+scrambleWords.length+'</div><button class="act-btn act-btn-gold" onclick="startScramble()">أعد المحاولة</button></div>';
+    return;
+  }
+  const w=scrambleWords[scrIdx];
+  let scrambled=shuffle(w.word);
+  while(scrambled===w.word) scrambled=shuffle(w.word);
+  area.innerHTML='<div style="padding:20px;background:rgba(0,0,0,0.3);border-radius:12px;border:1px solid rgba(212,175,55,0.1)">'
+    +'<div style="font-family:var(--font-ar-ui);font-size:12px;color:var(--text-muted);margin-bottom:8px">السؤال '+(scrIdx+1)+'/'+scrambleWords.length+'</div>'
+    +'<div style="font-family:var(--font-ar-title);font-size:36px;color:var(--crimson);letter-spacing:12px;text-align:center;margin:16px 0">'+scrambled+'</div>'
+    +'<div style="font-family:var(--font-ar-ui);font-size:13px;color:var(--gold);text-align:center;margin-bottom:16px">💡 '+w.hint+'</div>'
+    +'<div style="display:flex;gap:8px;justify-content:center"><input type="text" id="scrInput" placeholder="اكتب الكلمة الصحيحة" style="padding:10px 16px;border-radius:8px;background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.2);color:var(--text-primary);font-family:var(--font-ar-ui);font-size:14px;text-align:center;width:160px;direction:rtl">'
+    +'<button class="act-btn act-btn-primary" onclick="checkScramble()">تحقق</button></div>'
+    +'<div id="scrFeedback" style="margin-top:12px;text-align:center;font-family:var(--font-ar-ui);font-size:14px"></div></div>';
+  document.getElementById('scrInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkScramble();});
+  document.getElementById('scrInput').focus();
+}
+function checkScramble(){
+  const inp=document.getElementById('scrInput').value.trim();
+  const fb=document.getElementById('scrFeedback');
+  if(inp===scrambleWords[scrIdx].word){
+    scrScore++;fb.innerHTML='<span style="color:#28B450">✅ صحيح!</span>';
+  }else{
+    fb.innerHTML='<span style="color:var(--crimson)">❌ الإجابة: '+scrambleWords[scrIdx].word+'</span>';
+  }
+  setTimeout(()=>{scrIdx++;showScramble();},1200);
+}
+
+// ══ ATMOSPHERE VISUAL ══
+let atmoAnim;
+function setAtmo(btn,type){
+  document.querySelectorAll('.atmo-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  cancelAnimationFrame(atmoAnim);
+  const c=document.getElementById('atmoCanvas');
+  c.width=c.offsetWidth;c.height=c.offsetHeight;
+  const ctx=c.getContext('2d');
+  const W=c.width,H=c.height;
+  let pts=[];
+  function rnd(a,b){return Math.random()*(b-a)+a;}
+
+  if(type==='storm'){
+    for(let i=0;i<40;i++) pts.push({x:rnd(0,W),y:rnd(0,H),l:rnd(8,25),s:rnd(4,10),o:rnd(0.1,0.4)});
+    (function draw(){
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle='rgba(5,0,8,0.15)';ctx.fillRect(0,0,W,H);
+      for(let p of pts){p.y+=p.s;if(p.y>H){p.y=-p.l;p.x=rnd(0,W);}
+        ctx.save();ctx.globalAlpha=p.o;ctx.strokeStyle='#8899BB';ctx.lineWidth=1;
+        ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x-2,p.y+p.l);ctx.stroke();ctx.restore();
+      }
+      if(Math.random()>0.97){ctx.fillStyle='rgba(200,200,255,0.08)';ctx.fillRect(0,0,W,H);}
+      atmoAnim=requestAnimationFrame(draw);
+    })();
+  } else if(type==='night'){
+    for(let i=0;i<50;i++) pts.push({x:rnd(0,W),y:rnd(0,H),s:rnd(0.5,2),b:rnd(0.2,1),d:rnd(0.005,0.02)});
+    (function draw(){
+      ctx.clearRect(0,0,W,H);
+      for(let p of pts){p.b+=p.d;if(p.b>1||p.b<0.2)p.d*=-1;
+        ctx.save();ctx.globalAlpha=p.b*0.6;ctx.fillStyle='#FFF8DC';
+        ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fill();ctx.restore();
+      }
+      atmoAnim=requestAnimationFrame(draw);
+    })();
+  } else if(type==='forest'){
+    for(let i=0;i<20;i++) pts.push({x:rnd(0,W),y:rnd(0,H),s:rnd(20,60),o:rnd(0.02,0.06),d:rnd(0.0005,0.002)});
+    (function draw(){
+      ctx.clearRect(0,0,W,H);
+      for(let p of pts){p.o+=p.d;if(p.o>0.06||p.o<0.01)p.d*=-1;
+        ctx.save();ctx.globalAlpha=p.o;ctx.fillStyle='#1A3A1A';
+        ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fill();ctx.restore();
+      }
+      atmoAnim=requestAnimationFrame(draw);
+    })();
+  } else if(type==='mystery'){
+    for(let i=0;i<15;i++) pts.push({x:rnd(0,W),y:H+rnd(0,30),s:rnd(3,8),vx:rnd(-0.3,0.3),vy:rnd(-0.5,-1.5),o:rnd(0.2,0.5)});
+    (function draw(){
+      ctx.clearRect(0,0,W,H);
+      for(let p of pts){p.y+=p.vy;p.x+=p.vx;p.o-=0.002;
+        if(p.o<=0||p.y<0){p.y=H+10;p.x=rnd(0,W);p.o=rnd(0.2,0.5);}
+        ctx.save();ctx.globalAlpha=p.o;ctx.fillStyle='#8B00FF';
+        ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fill();
+        ctx.shadowBlur=15;ctx.shadowColor='#8B00FF';ctx.fill();ctx.restore();
+      }
+      atmoAnim=requestAnimationFrame(draw);
+    })();
+  }
+}
+</script>
+</body></html>

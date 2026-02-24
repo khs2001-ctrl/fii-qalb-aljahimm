@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عن الكتاب | في قلب الجحيم</title>
+  <link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css"><link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .about-hero{min-height:45vh;display:flex;align-items:center;padding-top:var(--nav-height);position:relative;overflow:hidden;text-align:center;}
+    .setting-card{padding:0;background:var(--grad-glass);border:1px solid rgba(212,175,55,0.1);border-radius:var(--r-md);transition:all var(--t-normal);cursor:pointer;overflow:hidden;}
+    .setting-card:hover{border-color:rgba(212,175,55,0.4);transform:translateY(-6px);box-shadow:var(--shadow-xl);}
+    .setting-card-img{width:100%;height:160px;object-fit:cover;transition:transform var(--t-slow);}
+    .setting-card:hover .setting-card-img{transform:scale(1.06);}
+    .setting-card-body{padding:var(--sp-md);}
+    .setting-icon{font-size:32px;margin-bottom:var(--sp-sm);}
+    .setting-name{font-family:var(--font-ar-title);font-size:var(--fs-h4);color:var(--text-primary);margin-bottom:8px;}
+    .setting-desc{font-size:13px;color:var(--text-muted);line-height:1.7;}
+    .theme-hex{width:120px;height:120px;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);display:flex;align-items:center;justify-content:center;margin:0 auto var(--sp-md);font-size:40px;transition:transform var(--t-normal);}
+    .theme-card:hover .theme-hex{transform:rotate(15deg) scale(1.08);}
+    .theme-card{text-align:center;padding:var(--sp-lg);}
+    .theme-name{font-family:var(--font-ar-title);font-size:var(--fs-h4);color:var(--text-primary);margin-bottom:6px;}
+    .theme-desc{font-size:13px;color:var(--text-muted);}
+  </style>
+</head>
+<body>
+<div class="bg-effects"><canvas id="particles-canvas"></canvas><div class="fog-layer"></div></div>
+<nav class="main-nav scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">في قلب الجحيم</a>
+    <button class="mobile-menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="about-book.html">عن الكتاب</a></li>
+      <li><a href="characters.html">الشخصيات</a></li>
+      <li><a href="gallery.html">المعرض</a></li>
+      <li><a href="author.html">الكاتبة</a></li>
+      <li><a href="activities.html">فعاليات</a></li>
+      <li><a href="read.html" class="nav-read-btn">📖 اقرأ مقتطف</a></li>
+      <li><a href="buy.html" class="btn btn-primary btn-sm" target="_blank">اشترِ الآن</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"><a href="index.html">الرئيسية</a><a href="about-book.html">عن الكتاب</a><a href="characters.html">الشخصيات</a><a href="gallery.html">المعرض</a><a href="author.html">الكاتبة</a><a href="read.html">اقرأ مقتطف</a><a href="buy.html" target="_blank">اشترِ الآن</a></div>
+
+<main>
+<!-- HERO -->
+<section class="about-hero">
+  <div class="section-container"><div data-reveal>
+    <span class="section-label">تفاصيل الرواية</span>
+    <h1 style="font-family:var(--font-ar-title);font-size:var(--fs-h1);color:var(--text-primary);line-height:1.2;margin-bottom:var(--sp-md)">في قلب الجحيم</h1>
+    <p style="font-family:var(--font-quote);font-size:22px;color:var(--gold);font-style:italic">«قرية لا يدخلها إلا الضالون»</p>
+  </div></div>
+</section>
+
+<!-- BOOK OVERVIEW -->
+<section style="padding:var(--sp-2xl) 0">
+  <div class="section-container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2xl);align-items:start">
+      <div data-reveal>
+        <span class="section-label">ملخص الرواية</span>
+        <h2 class="section-title" style="font-size:var(--fs-h2)">القصة</h2>
+        <p style="font-family:var(--font-ar-body);font-size:var(--fs-body);color:var(--text-secondary);line-height:1.9;margin-bottom:var(--sp-md)">في قرية نائية تُعرف بـ«الجُب» تتوالى الجرائم في صمت مخيف. فتيات يختفين بلا أثر، ودماء تظهر على جدران المنازل القديمة، والسكان يتهامسون ب«اللعنة» التي تسكن المكان منذ أجيال.</p>
+        <p style="font-family:var(--font-ar-body);font-size:var(--fs-body);color:var(--text-secondary);line-height:1.9;margin-bottom:var(--sp-md)">حين يرفض الجميع الاقتراب من القضية خوفاً، تأتي <strong style="color:var(--gold)">سينين</strong> — محققة جنائية شابة لا تؤمن بالخرافة ولا تعرف كلمة «لا أستطيع». تدخل القرية بملفاتها وعقلها التحليلي لتكتشف أن المعادلة أعقد بكثير مما تصورت.</p>
+        <p style="font-family:var(--font-ar-body);font-size:var(--fs-body);color:var(--text-secondary);line-height:1.9;margin-bottom:var(--sp-lg)">رحلة تحقيق مبنية على الأدلة الجنائية، تتكشف فيها حقيقة مذهلة: أن الخرافة والخوف يمكن أن يكونا أقوى سلاح يستخدمه القاتل.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <span class="badge">📚 250+ صفحة</span>
+          <span class="badge">🎭 تحقيق جنائي</span>
+          <span class="badge">🌑 رعب نفسي</span>
+          <span class="badge">🔍 غموض</span>
+        </div>
+      </div>
+      <div data-reveal="left">
+        <h3 style="font-family:var(--font-ar-title);font-size:var(--fs-h3);color:var(--text-primary);margin-bottom:var(--sp-lg)">معلومات الكتاب</h3>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(212,175,55,0.08);">
+            <span style="font-family:var(--font-ar-ui);font-size:13px;color:var(--text-muted)">العنوان</span>
+            <span style="font-family:var(--font-ar-title);font-size:14px;color:var(--gold)">في قلب الجحيم</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(212,175,55,0.08);">
+            <span style="font-family:var(--font-ar-ui);font-size:13px;color:var(--text-muted)">الكاتبة</span>
+            <span style="font-family:var(--font-ar-ui);font-size:14px;color:var(--text-secondary)">حنين سعد حايس</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(212,175,55,0.08);">
+            <span style="font-family:var(--font-ar-ui);font-size:13px;color:var(--text-muted)">دار النشر</span>
+            <span style="font-family:var(--font-ar-ui);font-size:14px;color:var(--text-secondary)">دار ملاذ للنشر والتوزيع</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(212,175,55,0.08);">
+            <span style="font-family:var(--font-ar-ui);font-size:13px;color:var(--text-muted)">سنة الإصدار</span>
+            <span style="font-family:var(--font-ar-ui);font-size:14px;color:var(--text-secondary)">2026</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(212,175,55,0.08);">
+            <span style="font-family:var(--font-ar-ui);font-size:13px;color:var(--text-muted)">النوع الأدبي</span>
+            <span style="font-family:var(--font-ar-ui);font-size:14px;color:var(--text-secondary)">تحقيق جنائي / غموض / رعب نفسي</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(212,175,55,0.08);">
+            <span style="font-family:var(--font-ar-ui);font-size:13px;color:var(--text-muted)">عدد الصفحات</span>
+            <span style="font-family:var(--font-ar-ui);font-size:14px;color:var(--text-secondary)">+250 صفحة</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:14px 0;">
+            <span style="font-family:var(--font-ar-ui);font-size:13px;color:var(--text-muted)">السعر</span>
+            <span style="font-family:var(--font-en-title);font-size:18px;color:var(--gold)">153 جنيه مصري</span>
+          </div>
+        </div>
+        <a href="buy.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:var(--sp-lg)">اشترِ الآن 🔥</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATIONS -->
+<section style="padding:var(--sp-2xl) 0;background:radial-gradient(ellipse 80% 60% at 50% 50%, rgba(196,30,58,0.06) 0%, transparent 70%)">
+  <div class="section-container">
+    <div class="section-header" data-reveal>
+      <span class="section-label">إعدادات القصة</span>
+      <h2 class="section-title" style="font-size:var(--fs-h2)">أماكن لا تُنسى</h2>
+      <div class="title-decoration"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-md)">
+      <div class="setting-card" data-reveal>
+        <img src="assets/images/scenes/The Village at Night.jpeg" alt="قرية الجُب" class="setting-card-img" loading="lazy">
+        <div class="setting-card-body">
+          <div class="setting-icon">🏘️</div>
+          <div class="setting-name">قرية الجُب</div>
+          <div class="setting-desc">القرية الغامضة المحاطة بالأسرار. مدخلها بوابة حجرية قديمة لا يدخلها الغرباء طوعاً.</div>
+        </div>
+      </div>
+      <div class="setting-card" data-reveal>
+        <img src="assets/images/scenes/Al-Omdas House.jpg" alt="بيت العمدة" class="setting-card-img" loading="lazy">
+        <div class="setting-card-body">
+          <div class="setting-icon">🏚️</div>
+          <div class="setting-name">بيت العمدة</div>
+          <div class="setting-desc">القصر القديم الذي يحكم منه العمدة محمود. جدرانه تعرف أسراراً لا تريد الكشف عنها.</div>
+        </div>
+      </div>
+      <div class="setting-card" data-reveal>
+        <img src="assets/images/scenes/the tree.jpeg" alt="شجرة العهد" class="setting-card-img" loading="lazy">
+        <div class="setting-card-body">
+          <div class="setting-icon">🌳</div>
+          <div class="setting-name">شجرة العهد</div>
+          <div class="setting-desc">شجرة عملاقة في وسط القرية. يقسم السكان أنها «شاهدة على الموت» منذ مئات السنين.</div>
+        </div>
+      </div>
+      <div class="setting-card" data-reveal>
+        <img src="assets/images/scenes/The Black Mountain.jpg" alt="الجبل الأسود" class="setting-card-img" loading="lazy">
+        <div class="setting-card-body">
+          <div class="setting-icon">🌑</div>
+          <div class="setting-name">الجبل الأسود</div>
+          <div class="setting-desc">الجبل الذي يطل على القرية. في أعماقه كهف يسميه السكان «مقبرة الأحياء».</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- THEMES -->
+<section style="padding:var(--sp-2xl) 0">
+  <div class="section-container">
+    <div class="section-header" data-reveal>
+      <span class="section-label">أعمق ما في الرواية</span>
+      <h2 class="section-title" style="font-size:var(--fs-h2)">المواضيع الكبرى</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-md)">
+      <div class="theme-card card" data-reveal>
+        <div class="theme-hex" style="background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(212,175,55,0.1))">⚖️</div>
+        <div class="theme-name">العدالة vs الانتقام</div>
+        <div class="theme-desc">هل تستحق الحقيقة الثمن الذي تكلفه؟</div>
+      </div>
+      <div class="theme-card card" data-reveal>
+        <div class="theme-hex" style="background:linear-gradient(135deg,rgba(196,30,58,0.2),rgba(196,30,58,0.1))">🔥</div>
+        <div class="theme-name">الخوف والشجاعة</div>
+        <div class="theme-desc">الخوف ليس العدو الحقيقي — الجبن هو.</div>
+      </div>
+      <div class="theme-card card" data-reveal>
+        <div class="theme-hex" style="background:linear-gradient(135deg,rgba(74,144,164,0.2),rgba(74,144,164,0.1))">🎭</div>
+        <div class="theme-name">الحقيقة والخداع</div>
+        <div class="theme-desc">كل شيء مرئي، لكن الحقيقة مخبأة بين السطور.</div>
+      </div>
+      <div class="theme-card card" data-reveal>
+        <div class="theme-hex" style="background:linear-gradient(135deg,rgba(139,69,19,0.2),rgba(139,69,19,0.1))">🌙</div>
+        <div class="theme-name">الخرافة كسلاح</div>
+        <div class="theme-desc">كيف يستخدم القاتل الخوف الديني لإخفاء جرائمه.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding:var(--sp-2xl) 0;text-align:center">
+  <div class="section-container"><div data-reveal>
+    <h2 class="section-title" style="font-size:var(--fs-h2)">جاهز لدخول الجُب؟</h2>
+    <p style="color:var(--text-muted);font-family:var(--font-ar-ui);margin-bottom:var(--sp-xl)">اقرأ مقتطفاً مجانياً أو احصل على نسختك الكاملة الآن</p>
+    <div style="display:flex;gap:var(--sp-md);justify-content:center;flex-wrap:wrap">
+      <a href="read.html" class="btn btn-outline btn-large">📖 اقرأ مقتطفاً</a>
+      <a href="buy.html" class="btn btn-primary btn-large">🔥 اشترِ الآن</a>
+    </div>
+  </div></div>
+</section>
+</main>
+
+<footer class="main-footer"><div class="section-container">
+  <div class="footer-grid">
+    <div><h3 class="footer-logo">في قلب الجحيم</h3><p class="footer-description">رواية تحقيق جنائي — حنين سعد حايس</p></div>
+    <div><h4 class="footer-heading">الصفحات</h4><ul class="footer-links-list"><li><a href="index.html">الرئيسية</a></li><li><a href="characters.html">الشخصيات</a></li><li><a href="activities.html">فعاليات</a></li><li><a href="read.html">اقرأ مقتطفاً</a></li><li><a href="buy.html">اشترِ</a></li></ul></div>
+    <div><h4 class="footer-heading">المزيد</h4><ul class="footer-links-list"><li><a href="author.html">الكاتبة</a></li><li><a href="gallery.html">المعرض</a></li><li><a href="contact.html">التواصل</a></li></ul></div>
+    <div><h4 class="footer-heading">تواصل</h4><div class="social-links"><a href="https://www.facebook.com/hanean.hayes" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a><a href="https://www.instagram.com/hanean_saad_hayes" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/></svg></a></div></div>
+  </div>
+  <div class="gold-line-h"></div>
+  <div class="footer-bottom"><p class="footer-copyright">© 2026 في قلب الجحيم.</p><div class="khalid-credit"><div class="credit-icon">⚡</div><span>Built by </span><a href="https://www.instagram.com/kh23alid_hassan/?__pwa=1" target="_blank" style="color:var(--gold);text-decoration:none" class="credit-name">Khalid Hassan</a></div></div>
+</div></footer>
+<script src="js/particles.js"></script><script src="js/navigation.js"></script><script src="js/main.js"></script>
+</body></html>

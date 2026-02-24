@@ -1,0 +1,241 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اشترِ الآن | في قلب الجحيم</title>
+  <link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css"><link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .buy-page{position:relative;min-height:100vh;overflow:hidden}
+    .buy-bg{position:fixed;inset:0;z-index:-2}
+    .buy-bg::before{content:'';position:absolute;inset:0;background:url('assets/images/scenes/the tree.jpeg') center/cover;filter:blur(8px) brightness(0.15);transform:scale(1.1)}
+    .buy-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 30%,#050008 80%)}
+    
+    /* Animated blood rain */
+    .blood-rain{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+    .blood-drop{position:absolute;width:2px;background:linear-gradient(to bottom,transparent,rgba(196,30,58,0.6),transparent);
+      animation:bloodFall linear infinite}
+    @keyframes bloodFall{0%{transform:translateY(-100vh)}100%{transform:translateY(100vh)}}
+    
+    /* Hero */
+    .buy-hero{padding:calc(var(--nav-height) + 60px) 0 40px;text-align:center}
+    .buy-badge{display:inline-block;padding:8px 24px;background:rgba(196,30,58,0.12);border:1px solid rgba(196,30,58,0.3);
+      border-radius:var(--r-full);font-family:var(--font-ar-ui);font-size:12px;color:var(--crimson);margin-bottom:var(--sp-md);
+      animation:pulse 2s ease infinite}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(196,30,58,0.3)}50%{box-shadow:0 0 20px 8px rgba(196,30,58,0.15)}}
+    .buy-title{font-family:var(--font-ar-title);font-size:clamp(36px,6vw,64px);color:transparent;
+      background:linear-gradient(135deg,#C41E3A,#FF4060,#D4AF37,#C41E3A);background-size:300%;
+      -webkit-background-clip:text;background-clip:text;animation:shimmer 4s ease infinite;line-height:1.3;margin-bottom:var(--sp-sm)}
+    @keyframes shimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .buy-subtitle{font-family:var(--font-ar-ui);font-size:18px;color:var(--text-muted);max-width:600px;margin:0 auto var(--sp-xl);line-height:1.8}
+
+    /* 3D Book */
+    .book-3d-wrap{perspective:1200px;display:flex;justify-content:center;margin:var(--sp-xl) auto}
+    .book-3d{width:220px;height:320px;position:relative;transform-style:preserve-3d;
+      animation:bookFloat 4s ease-in-out infinite;cursor:pointer;transition:transform .3s}
+    .book-3d:hover{transform:rotateY(-25deg) rotateX(5deg)}
+    @keyframes bookFloat{0%,100%{transform:rotateY(-15deg) translateY(0)}50%{transform:rotateY(-15deg) translateY(-15px)}}
+    .book-3d img{width:100%;height:100%;object-fit:cover;border-radius:4px;
+      box-shadow:8px 8px 30px rgba(0,0,0,0.6),-2px -2px 10px rgba(196,30,58,0.2)}
+    .book-3d::after{content:'';position:absolute;left:-3px;top:2px;bottom:2px;width:30px;
+      background:linear-gradient(to right,#2A1A10,#3D2615,#2A1A10);transform:rotateY(90deg) translateX(-15px);
+      transform-origin:left;border-radius:0 3px 3px 0}
+
+    /* Price */
+    .price-mega{text-align:center;margin:var(--sp-xl) 0}
+    .price-old-tag{font-family:var(--font-ar-ui);font-size:16px;color:var(--text-muted);text-decoration:line-through;margin-bottom:4px}
+    .price-now{font-family:var(--font-en-title);font-size:clamp(56px,8vw,80px);color:var(--gold);
+      text-shadow:0 0 30px rgba(212,175,55,0.4);line-height:1}
+    .price-currency{font-family:var(--font-ar-ui);font-size:14px;color:var(--text-muted);margin-top:4px}
+    
+    /* CTA Button */
+    .buy-cta{display:inline-flex;align-items:center;gap:12px;padding:18px 48px;
+      background:linear-gradient(135deg,var(--crimson),#FF2040);color:#fff;
+      font-family:var(--font-ar-title);font-size:22px;border:none;border-radius:var(--r-full);
+      cursor:pointer;transition:all .3s;text-decoration:none;
+      box-shadow:0 8px 30px rgba(196,30,58,0.4),0 0 60px rgba(196,30,58,0.15);
+      animation:ctaPulse 2.5s ease infinite;position:relative;overflow:hidden}
+    .buy-cta::before{content:'';position:absolute;inset:-50%;background:linear-gradient(45deg,transparent,rgba(255,255,255,0.1),transparent);
+      transform:rotate(45deg);animation:ctaSweep 3s ease infinite}
+    @keyframes ctaSweep{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(100%) rotate(45deg)}}
+    @keyframes ctaPulse{0%,100%{box-shadow:0 8px 30px rgba(196,30,58,0.4),0 0 60px rgba(196,30,58,0.15)}
+      50%{box-shadow:0 12px 40px rgba(196,30,58,0.6),0 0 80px rgba(196,30,58,0.25)}}
+    .buy-cta:hover{transform:scale(1.05) translateY(-4px);box-shadow:0 15px 50px rgba(196,30,58,0.5)}
+
+    /* Reasons */
+    .reasons{max-width:900px;margin:var(--sp-2xl) auto;padding:0 var(--sp-md)}
+    .reasons-title{font-family:var(--font-ar-title);font-size:var(--fs-h2);color:var(--text-primary);text-align:center;margin-bottom:var(--sp-xl)}
+    .reason-card{display:flex;gap:var(--sp-lg);align-items:flex-start;padding:var(--sp-lg);margin-bottom:var(--sp-md);
+      background:linear-gradient(135deg,rgba(20,20,28,0.8),rgba(10,10,15,0.9));border-radius:var(--r-xl);
+      border:1px solid rgba(212,175,55,0.08);transition:all .3s;backdrop-filter:blur(10px)}
+    .reason-card:hover{border-color:rgba(196,30,58,0.3);transform:translateX(-8px);
+      box-shadow:8px 0 30px rgba(196,30,58,0.1)}
+    .reason-num{min-width:50px;height:50px;display:flex;align-items:center;justify-content:center;
+      font-family:var(--font-en-title);font-size:22px;color:var(--crimson);
+      background:rgba(196,30,58,0.08);border-radius:var(--r-md);border:1px solid rgba(196,30,58,0.2);
+      text-shadow:0 0 10px rgba(196,30,58,0.3)}
+    .reason-text h3{font-family:var(--font-ar-title);font-size:18px;color:var(--text-primary);margin-bottom:6px}
+    .reason-text p{font-family:var(--font-ar-ui);font-size:13px;color:var(--text-muted);line-height:1.7}
+
+    /* Testimonial */
+    .review-strip{display:flex;gap:var(--sp-md);overflow-x:auto;padding:var(--sp-md) 0;max-width:900px;margin:var(--sp-xl) auto}
+    .review-card{min-width:280px;padding:var(--sp-lg);background:rgba(15,15,20,0.8);border-radius:var(--r-lg);
+      border:1px solid rgba(212,175,55,0.08)}
+    .review-stars{color:var(--gold);margin-bottom:8px}
+    .review-text{font-family:var(--font-ar-ui);font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:12px;font-style:italic}
+    .review-name{font-family:var(--font-ar-ui);font-size:12px;color:var(--text-muted)}
+
+    /* Bottom CTA */
+    .final-cta{text-align:center;padding:var(--sp-2xl) 0;position:relative}
+    .final-cta::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:1px;
+      background:linear-gradient(90deg,transparent,var(--crimson),transparent)}
+    
+    @media(max-width:768px){.reason-card{flex-direction:column;text-align:center;align-items:center}}
+  </style>
+</head>
+<body>
+<div class="buy-bg"></div>
+<div class="blood-rain" id="bloodRain"></div>
+<div class="bg-effects"><canvas id="particles-canvas"></canvas></div>
+
+<nav class="main-nav scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">في قلب الجحيم</a>
+    <button class="mobile-menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="about-book.html">عن الكتاب</a></li>
+      <li><a href="characters.html">الشخصيات</a></li>
+      <li><a href="gallery.html">المعرض</a></li>
+      <li><a href="author.html">الكاتبة</a></li>
+      <li><a href="activities.html">فعاليات</a></li>
+      <li><a href="read.html" class="nav-read-btn">📖 اقرأ مقتطف</a></li>
+      <li><a href="buy.html" class="btn btn-primary btn-sm active" target="_blank">اشترِ الآن</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"><a href="index.html">الرئيسية</a><a href="about-book.html">عن الكتاب</a><a href="characters.html">الشخصيات</a><a href="gallery.html">المعرض</a><a href="author.html">الكاتبة</a><a href="activities.html">فعاليات</a><a href="read.html">اقرأ مقتطف</a><a href="buy.html" target="_blank">اشترِ الآن</a></div>
+
+<main class="buy-page">
+
+<section class="buy-hero">
+  <div class="section-container" data-reveal>
+    <div class="buy-badge">🔥 متاحة الآن في عصير الكتب</div>
+    <h1 class="buy-title">في قلب الجحيم</h1>
+    <p class="buy-subtitle">رواية ستأخذك إلى عالم لم تعرفه من قبل — قرية مسكونة بالأسرار، وشجرة تحرس الموت، ومحققة لا تعرف الخوف</p>
+    
+    <div class="book-3d-wrap">
+      <div class="book-3d">
+        <img src="assets/images/book-cover/Main Book Cover Image.jpeg" alt="غلاف في قلب الجحيم" loading="lazy">
+      </div>
+    </div>
+
+    <div class="price-mega">
+      <div class="price-old-tag">السعر القديم: 180 جنيه</div>
+      <div class="price-now">153</div>
+      <div class="price-currency">جنيه مصري فقط</div>
+    </div>
+
+    <a href="buy.html" class="buy-cta" target="_blank">
+      🔥 اشترِ نسختك الآن
+    </a>
+  </div>
+</section>
+
+<section class="reasons" data-reveal>
+  <h2 class="reasons-title">لماذا يجب أن تقرأ هذه الرواية؟</h2>
+  
+  <div class="reason-card" data-reveal>
+    <div class="reason-num">01</div>
+    <div class="reason-text">
+      <h3>🩸 أحداث لن تستطيع توقعها</h3>
+      <p>كل فصل يقلب الموازين. حين تظن أنك فهمت القاتل... تكتشف أنك كنت تنظر في الاتجاه الخاطئ</p>
+    </div>
+  </div>
+  <div class="reason-card" data-reveal>
+    <div class="reason-num">02</div>
+    <div class="reason-text">
+      <h3>🌳 عالم مبني بعناية مخيفة</h3>
+      <p>قرية الجُب ليست مجرد خلفية — إنها شخصية حية. شجرة العهد، البئر القديمة، الجبل الأسود... كل مكان يحمل سراً</p>
+    </div>
+  </div>
+  <div class="reason-card" data-reveal>
+    <div class="reason-num">03</div>
+    <div class="reason-text">
+      <h3>🔍 شخصيات مكتوبة بعمق</h3>
+      <p>سينين المحققة التي تواجه ماضيها. سيف المساعد الوفي الذي يخفي شيئاً. الشيخ سالم الذي يعرف أكثر مما يقول</p>
+    </div>
+  </div>
+  <div class="reason-card" data-reveal>
+    <div class="reason-num">04</div>
+    <div class="reason-text">
+      <h3>😱 رعب نفسي حقيقي</h3>
+      <p>ليس رعباً رخيصاً — بل خوف يتسلل إلى عقلك. ستجد نفسك تنظر خلفك وأنت تقرأ في الليل</p>
+    </div>
+  </div>
+  <div class="reason-card" data-reveal>
+    <div class="reason-num">05</div>
+    <div class="reason-text">
+      <h3>📖 أسلوب سردي سينمائي</h3>
+      <p>مكتوبة بأسلوب يجعلك تشعر وكأنك تشاهد فيلماً — كل مشهد مرسوم بعناية وكل حوار ينبض بالحياة</p>
+    </div>
+  </div>
+</section>
+
+<section class="review-strip">
+  <div class="review-card" data-reveal>
+    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+    <div class="review-text">"قرأتها في ليلة واحدة ولم أستطع التوقف. النهاية صدمتني تماماً!"</div>
+    <div class="review-name">— قارئ من معرض القاهرة</div>
+  </div>
+  <div class="review-card" data-reveal>
+    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+    <div class="review-text">"أفضل رواية تشويق عربية قرأتها. الأجواء مرعبة والحبكة محكمة."</div>
+    <div class="review-name">— متابع على فيسبوك</div>
+  </div>
+  <div class="review-card" data-reveal>
+    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+    <div class="review-text">"حنين كاتبة موهوبة. شجرة العهد ستظل في ذهني لسنوات."</div>
+    <div class="review-name">— زائر حفل التوقيع</div>
+  </div>
+</section>
+
+<section class="final-cta" data-reveal>
+  <h2 style="font-family:var(--font-ar-title);font-size:var(--fs-h2);color:var(--text-primary);margin-bottom:var(--sp-sm)">هل أنت مستعد للدخول إلى الجحيم؟</h2>
+  <p style="font-family:var(--font-ar-ui);color:var(--text-muted);margin-bottom:var(--sp-xl)">لا تفوّت فرصتك — الرواية متاحة الآن على أسير الكتب</p>
+  <a href="buy.html" class="buy-cta" target="_blank">
+    🛒 اطلبها الآن — 153 جنيه فقط
+  </a>
+</section>
+
+</main>
+
+<footer class="main-footer"><div class="section-container">
+  <div class="footer-grid">
+    <div><h3 class="footer-logo">في قلب الجحيم</h3><p class="footer-description">رواية تحقيق جنائي</p></div>
+    <div><h4 class="footer-heading">الصفحات</h4><ul class="footer-links-list"><li><a href="index.html">الرئيسية</a></li><li><a href="read.html">اقرأ مقتطفاً</a></li><li><a href="activities.html">فعاليات</a></li></ul></div>
+    <div><h4 class="footer-heading">المزيد</h4><ul class="footer-links-list"><li><a href="author.html">الكاتبة</a></li><li><a href="characters.html">الشخصيات</a></li><li><a href="contact.html">التواصل</a></li></ul></div>
+    <div><h4 class="footer-heading">تواصل</h4><div class="social-links"><a href="https://www.facebook.com/hanean.hayes" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div></div>
+  </div>
+  <div class="gold-line-h"></div>
+  <div class="footer-bottom"><p class="footer-copyright">© 2026 في قلب الجحيم.</p><div class="khalid-credit"><div class="credit-icon">⚡</div><span>Built by </span><a href="https://www.instagram.com/kh23alid_hassan/?__pwa=1" target="_blank" style="color:var(--gold);text-decoration:none" class="credit-name">Khalid Hassan</a></div></div>
+</div></footer>
+
+<script src="js/particles.js"></script><script src="js/navigation.js"></script><script src="js/main.js"></script>
+<script>
+// Blood rain animation
+(function(){
+  const rain=document.getElementById('bloodRain');
+  for(let i=0;i<30;i++){
+    const drop=document.createElement('div');
+    drop.className='blood-drop';
+    drop.style.left=Math.random()*100+'%';
+    drop.style.height=(Math.random()*80+40)+'px';
+    drop.style.animationDuration=(Math.random()*3+2)+'s';
+    drop.style.animationDelay=Math.random()*4+'s';
+    drop.style.opacity=Math.random()*0.4+0.1;
+    rain.appendChild(drop);
+  }
+})();
+</script>
+</body></html>

@@ -1,0 +1,449 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الشخصيات | في قلب الجحيم</title>
+  <meta name="description" content="خريطة الشخصيات الغامضة في رواية في قلب الجحيم — اكتشفهم بدون حرق أحداث">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .chars-hero { min-height: 40vh; display:flex; align-items:center; padding-top:var(--nav-height); text-align:center; position:relative; overflow:hidden; }
+    .chars-hero::before { content:''; position:absolute;inset:0; background:radial-gradient(ellipse 80% 60% at 50% 60%, rgba(196,30,58,0.1) 0%, transparent 70%); }
+
+    /* ── Tree Shadow BG ── */
+    .chars-bg-tree {
+      position: fixed; inset:0; pointer-events:none; z-index:-1; opacity:0.04;
+      background: url('assets/images/scenes/Ancient Alahd Symbols.jpg') center/cover no-repeat;
+      animation: treeSway 30s ease-in-out infinite alternate;
+    }
+    @keyframes treeSway { 0%{transform: scale(1.05) translateX(0);} 100%{transform: scale(1.1) translateX(20px);} }
+
+    /* Mystery Map */
+    .mystery-map { position: relative; min-height: 600px; display: flex; align-items: center; justify-content: center; margin: var(--sp-2xl) 0; }
+    .map-web { position: absolute; inset: 0; pointer-events: none; }
+    .map-web svg { width: 100%; height: 100%; }
+
+    /* Character Node */
+    .char-node { position: absolute; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: all var(--t-normal); z-index: 10; }
+    .char-node:hover { transform: scale(1.1); }
+    .char-avatar {
+      width: 90px; height: 90px; border-radius: 50%;
+      background: linear-gradient(145deg, #1E1E2A, #141419);
+      border: 2px solid rgba(212,175,55,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px; position: relative; overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5); transition: all var(--t-normal);
+    }
+    .char-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .char-avatar::after {
+      content:''; position:absolute; inset:-4px; border-radius:50%;
+      border:2px solid transparent;
+      background:conic-gradient(var(--gold), transparent 60%, var(--gold)) border-box;
+      -webkit-mask:linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite:destination-out; mask-composite:exclude;
+      opacity:0; transition:opacity var(--t-normal);
+    }
+    .char-node:hover .char-avatar::after { opacity:1; }
+    .char-node:hover .char-avatar {
+      border-color:var(--gold);
+      box-shadow:0 0 30px rgba(212,175,55,0.4), 0 12px 40px rgba(0,0,0,0.6);
+    }
+
+    .char-node[data-role="hero"] .char-avatar { border-color: rgba(212,175,55,0.6); }
+    .char-node[data-role="villain"] .char-avatar { border-color: rgba(196,30,58,0.5); }
+    .char-node[data-role="suspect"] .char-avatar { border-color: rgba(74,144,164,0.4); }
+    .char-node[data-role="ally"] .char-avatar { border-color: rgba(100,180,120,0.4); }
+
+    .char-label { margin-top:10px; font-family:var(--font-ar-title); font-size:14px; color:var(--text-primary); text-align:center; white-space:nowrap; }
+    .char-role-badge { font-size:10px; font-family:var(--font-ar-ui); color:var(--text-muted); margin-top:3px; letter-spacing:1px; }
+    .mystery-badge { position:absolute; top:-6px; right:-6px; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; border:2px solid var(--bg-primary); z-index:2; }
+
+    /* Character Cards Grid */
+    .chars-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--sp-md); margin-top:var(--sp-2xl); }
+    .char-card {
+      background:var(--grad-glass); border:1px solid rgba(212,175,55,0.1);
+      border-radius:var(--r-lg); overflow:hidden; transition:all var(--t-normal); cursor:pointer;
+      transform-style:preserve-3d; perspective:800px;
+    }
+    .char-card:hover {
+      border-color:rgba(212,175,55,0.35); transform:translateY(-8px) rotateX(2deg);
+      box-shadow:var(--shadow-xl), 0 0 30px rgba(212,175,55,0.1);
+    }
+    .char-card-visual { height:240px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+    .char-card-visual img { width:100%; height:100%; object-fit:cover; transition:transform var(--t-slow); }
+    .char-card:hover .char-card-visual img { transform:scale(1.08); }
+
+    .char-card[data-role="hero"] .char-card-visual { background:linear-gradient(135deg, #0A0A15, #1A1A2A); }
+    .char-card[data-role="villain"] .char-card-visual { background:linear-gradient(135deg, #120008, #200010); }
+    .char-card[data-role="suspect"] .char-card-visual { background:linear-gradient(135deg, #051015, #0A1A20); }
+    .char-card[data-role="ally"] .char-card-visual { background:linear-gradient(135deg, #050F05, #0A1A10); }
+
+    .char-reveal-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(10,10,15,0.95) 0%, transparent 60%); }
+    .char-card-body { padding:var(--sp-lg); }
+    .char-card-title { font-family:var(--font-ar-title); font-size:var(--fs-h4); color:var(--text-primary); margin-bottom:6px; }
+    .char-role-tag { display:inline-block; padding:3px 12px; border-radius:var(--r-full); font-size:11px; font-family:var(--font-ar-ui); margin-bottom:12px; }
+    .char-card[data-role="hero"] .char-role-tag { background:rgba(212,175,55,0.15); color:var(--gold); }
+    .char-card[data-role="villain"] .char-role-tag { background:rgba(196,30,58,0.15); color:var(--crimson); }
+    .char-card[data-role="suspect"] .char-role-tag { background:rgba(74,144,164,0.15); color:var(--ice); }
+    .char-card[data-role="ally"] .char-role-tag { background:rgba(100,180,120,0.15); color:#78C88C; }
+
+    .char-card-desc { font-family:var(--font-ar-body); font-size:13px; color:var(--text-muted); line-height:1.7; margin-bottom:16px; }
+
+    .mystery-meter { margin-top:12px; display:flex; align-items:center; gap:8px; }
+    .mystery-label { font-size:11px; color:var(--text-muted); font-family:var(--font-ar-ui); }
+    .mystery-track { flex:1; height:4px; background:rgba(255,255,255,0.05); border-radius:2px; overflow:hidden; }
+    .mystery-level { height:100%; border-radius:2px; transition:width 1s ease; }
+
+    /* Character Modal */
+    .char-modal-img { width:120px; height:120px; border-radius:50%; overflow:hidden; margin:0 auto 20px; border:3px solid rgba(212,175,55,0.3); box-shadow:0 0 30px rgba(212,175,55,0.2); }
+    .char-modal-img img { width:100%; height:100%; object-fit:cover; }
+    .char-modal-name { font-family:var(--font-ar-title); font-size:28px; color:var(--gold); margin-bottom:8px; text-align:center; }
+    .char-modal-role { font-size:13px; color:var(--text-muted); font-family:var(--font-ar-ui); margin-bottom:20px; text-align:center; }
+    .char-modal-desc { font-family:var(--font-ar-body); font-size:15px; color:var(--text-secondary); line-height:1.9; margin-bottom:20px; }
+    .char-relations { border-top:1px solid rgba(212,175,55,0.1); padding-top:16px; margin-top:16px; }
+    .char-relations h4 { font-family:var(--font-ar-title); font-size:14px; color:var(--gold); margin-bottom:12px; }
+    .relation-item { display:flex; gap:8px; font-size:13px; color:var(--text-muted); font-family:var(--font-ar-ui); margin-bottom:8px; align-items:center; }
+    .relation-item::before { content:'↔'; color:var(--gold); }
+
+    @media (max-width: 768px) { .chars-grid { grid-template-columns: 1fr 1fr; } .mystery-map { min-height: 400px; } }
+    @media (max-width: 480px) { .chars-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<!-- Tree shadow background -->
+<div class="chars-bg-tree"></div>
+<div class="bg-effects"><canvas id="particles-canvas"></canvas><div class="fog-layer"></div></div>
+
+<!-- Navigation -->
+<nav class="main-nav scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">في قلب الجحيم</a>
+    <button class="mobile-menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="about-book.html">عن الكتاب</a></li>
+      <li><a href="characters.html">الشخصيات</a></li>
+      <li><a href="gallery.html">المعرض</a></li>
+      <li><a href="author.html">الكاتبة</a></li>
+      <li><a href="activities.html">فعاليات</a></li>
+      <li><a href="read.html" class="nav-read-btn">📖 اقرأ مقتطف</a></li>
+      <li><a href="buy.html" class="btn btn-primary btn-sm" target="_blank">اشترِ الآن</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"><a href="index.html">الرئيسية</a><a href="about-book.html">عن الكتاب</a><a href="characters.html">الشخصيات</a><a href="gallery.html">المعرض</a><a href="author.html">الكاتبة</a><a href="read.html">اقرأ مقتطف</a><a href="buy.html" target="_blank">اشترِ الآن</a></div>
+
+<main>
+
+<!-- HERO -->
+<section class="chars-hero">
+  <div class="section-container">
+    <div data-reveal>
+      <span class="section-label">خريطة الغموض</span>
+      <h1 style="font-family:var(--font-ar-title);font-size:var(--fs-h1);color:var(--text-primary);margin-bottom:var(--sp-md)">
+        شخصيات لا تُعرف حقيقتها
+      </h1>
+      <p style="font-family:var(--font-ar-body);font-size:var(--fs-body);color:var(--text-muted);max-width:600px;margin:0 auto">
+        كل شخصية تخفي وجهاً مختلفاً — تعرف عليهم دون أن تعرف من القاتل. هل تستطيع اكتشاف الحقيقة قبل أن تقرأ الرواية؟
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- MYSTERY MAP -->
+<section style="padding:var(--sp-lg) 0 var(--sp-2xl);">
+  <div class="section-container">
+    <div class="section-header" data-reveal>
+      <span class="section-label">خريطة العلاقات</span>
+      <h2 class="section-title" style="font-size:var(--fs-h2)">العلاقات المعقدة</h2>
+      <p class="section-subtitle">انقر على أي شخصية لاكتشاف المزيد</p>
+    </div>
+
+    <!-- Visual Map -->
+    <div class="mystery-map" data-reveal>
+      <svg class="map-web" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0">
+        <line x1="400" y1="250" x2="200" y2="80" stroke="rgba(212,175,55,0.2)" stroke-dasharray="6 4"/>
+        <line x1="400" y1="250" x2="600" y2="80" stroke="rgba(100,180,120,0.2)" stroke-dasharray="6 4"/>
+        <line x1="400" y1="250" x2="120" y2="350" stroke="rgba(196,30,58,0.2)" stroke-dasharray="6 4"/>
+        <line x1="400" y1="250" x2="680" y2="350" stroke="rgba(74,144,164,0.2)" stroke-dasharray="4 6"/>
+        <line x1="400" y1="250" x2="400" y2="430" stroke="rgba(212,175,55,0.15)" stroke-dasharray="3 8"/>
+        <line x1="200" y1="80" x2="600" y2="80" stroke="rgba(255,255,255,0.05)" stroke-dasharray="2 8"/>
+        <line x1="120" y1="350" x2="680" y2="350" stroke="rgba(255,255,255,0.05)" stroke-dasharray="2 8"/>
+      </svg>
+
+      <!-- Center: سينين -->
+      <div class="char-node" data-role="hero" data-char="sinin" style="left:50%;top:50%;transform:translate(-50%,-50%)" onclick="openModal('sinin')">
+        <div class="char-avatar" style="width:110px;height:110px">
+          <img src="assets/images/characters/sineen– The Investigator.jpg" alt="سينين" loading="lazy">
+          <div class="mystery-badge" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark))">⭐</div>
+        </div>
+        <div class="char-label">سينين</div>
+        <div class="char-role-badge">المحققة الرئيسية</div>
+      </div>
+
+      <!-- Top Left: سيف -->
+      <div class="char-node" data-role="ally" data-char="saif" style="left:22%;top:15%;transform:translate(-50%,-50%)" onclick="openModal('saif')">
+        <div class="char-avatar">
+          <img src="assets/images/characters/saif– The Assistant.jpg" alt="سيف" loading="lazy">
+          <div class="mystery-badge" style="background:rgba(100,180,120,0.8)">🤝</div>
+        </div>
+        <div class="char-label">سيف</div>
+        <div class="char-role-badge">المحقق المساعد</div>
+      </div>
+
+      <!-- Top Right: الشيخ سالم -->
+      <div class="char-node" data-role="suspect" data-char="salem" style="left:75%;top:15%;transform:translate(-50%,-50%)" onclick="openModal('salem')">
+        <div class="char-avatar">
+          <img src="assets/images/characters/The Mysterious Sheikh.jpg" alt="الشيخ سالم" loading="lazy">
+          <div class="mystery-badge" style="background:rgba(74,144,164,0.8)">❓</div>
+        </div>
+        <div class="char-label">الشيخ سالم</div>
+        <div class="char-role-badge">حارس الأسرار القديمة</div>
+      </div>
+
+      <!-- Bottom Left: الدكتور سامر -->
+      <div class="char-node" data-role="suspect" data-char="samer" style="left:14%;top:68%;transform:translate(-50%,-50%)" onclick="openModal('samer')">
+        <div class="char-avatar">
+          <img src="assets/images/characters/Dr. Samer– The Historian.jpg" alt="الدكتور سامر" loading="lazy">
+          <div class="mystery-badge" style="background:rgba(74,144,164,0.6)">📜</div>
+        </div>
+        <div class="char-label">الدكتور سامر</div>
+        <div class="char-role-badge">المؤرخ الغامض</div>
+      </div>
+
+      <!-- Bottom Right: العمدة -->
+      <div class="char-node" data-role="villain" data-char="elder" style="left:84%;top:68%;transform:translate(-50%,-50%)" onclick="openModal('elder')">
+        <div class="char-avatar">
+          <img src="assets/images/characters/The_Shadow.jpg" alt="الأكبر الغامض" loading="lazy">
+          <div class="mystery-badge" style="background:rgba(196,30,58,0.8)">⚠️</div>
+        </div>
+        <div class="char-label">الأكبر الغامض</div>
+        <div class="char-role-badge">يعرف أكثر مما يقول</div>
+      </div>
+
+      <!-- Bottom Center: سكان القرية -->
+      <div class="char-node" data-role="suspect" data-char="people" style="left:50%;top:88%;transform:translate(-50%,-50%)" onclick="openModal('people')">
+        <div class="char-avatar">
+          <img src="assets/images/characters/Old_village_man.jpeg" alt="سكان الجُب" loading="lazy">
+          <div class="mystery-badge" style="background:rgba(212,175,55,0.5)">🤫</div>
+        </div>
+        <div class="char-label">سكان الجُب</div>
+        <div class="char-role-badge">جميعهم مشتبه بهم</div>
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="section-header" data-reveal style="margin-top:var(--sp-2xl)">
+      <span class="section-label">ملفات الشخصيات</span>
+      <h2 class="section-title" style="font-size:var(--fs-h2)">اعرفهم أكثر... لكن ليس كثيراً</h2>
+    </div>
+
+    <div class="chars-grid">
+      <!-- سينين -->
+      <div class="char-card" data-role="hero" data-reveal onclick="openModal('sinin')">
+        <div class="char-card-visual">
+          <img src="assets/images/characters/sineen– The Investigator.jpg" alt="سينين" loading="lazy">
+          <div class="char-reveal-overlay"></div>
+        </div>
+        <div class="char-card-body">
+          <div class="char-role-tag">البطلة</div>
+          <h3 class="char-card-title">سينين</h3>
+          <p class="char-card-desc">المحققة الجنائية التي لا تعرف الخوف. وحدة التحقيق الخاصة أرسلتها لكشف غموض اختفاء فتيات الجُب. عقل تحليلي حاد وإرادة لا تنكسر — لكن الجُب سيختبر حدودها.</p>
+          <div class="mystery-meter">
+            <span class="mystery-label">الغموض:</span>
+            <div class="mystery-track"><div class="mystery-level" style="width:30%;background:linear-gradient(90deg,var(--gold),var(--gold-light))"></div></div>
+            <span class="mystery-label">●○○○○</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- سيف -->
+      <div class="char-card" data-role="ally" data-reveal onclick="openModal('saif')">
+        <div class="char-card-visual">
+          <img src="assets/images/characters/saif– The Assistant.jpg" alt="سيف" loading="lazy">
+          <div class="char-reveal-overlay"></div>
+        </div>
+        <div class="char-card-body">
+          <div class="char-role-tag">المساعد</div>
+          <h3 class="char-card-title">سيف</h3>
+          <p class="char-card-desc">المساعد الذي لا يترك سينين وحدها أبداً. يقظ وحاد الملاحظة، يرصد التفاصيل التي يغفل عنها الجميع ويسجلها بصمت. ولاؤه لسينين مطلق — لكن في الجُب الولاء له ثمن.</p>
+          <div class="mystery-meter">
+            <span class="mystery-label">الغموض:</span>
+            <div class="mystery-track"><div class="mystery-level" style="width:20%;background:linear-gradient(90deg,#78C88C,#4A9A60)"></div></div>
+            <span class="mystery-label">●○○○○</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- الشيخ سالم -->
+      <div class="char-card" data-role="suspect" data-reveal onclick="openModal('salem')">
+        <div class="char-card-visual">
+          <img src="assets/images/characters/The Mysterious Sheikh.jpg" alt="الشيخ سالم" loading="lazy">
+          <div class="char-reveal-overlay"></div>
+        </div>
+        <div class="char-card-body">
+          <div class="char-role-tag">مشتبه به</div>
+          <h3 class="char-card-title">الشيخ سالم</h3>
+          <p class="char-card-desc">الشيخ الغامض الذي يحرس أسرار شجرة العهد منذ عقود. يعرف تاريخ كل عائلة. تحذيراته لسينين ليست مجرد خرافات — بل تحمل حقيقة مخيفة.</p>
+          <div class="mystery-meter">
+            <span class="mystery-label">الغموض:</span>
+            <div class="mystery-track"><div class="mystery-level" style="width:80%;background:linear-gradient(90deg,var(--ice),#6AB8CC)"></div></div>
+            <span class="mystery-label">●●●●○</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- الدكتور سامر -->
+      <div class="char-card" data-role="suspect" data-reveal onclick="openModal('samer')">
+        <div class="char-card-visual">
+          <img src="assets/images/characters/Dr. Samer– The Historian.jpg" alt="الدكتور سامر" loading="lazy">
+          <div class="char-reveal-overlay"></div>
+        </div>
+        <div class="char-card-body">
+          <div class="char-role-tag">شاهد غامض</div>
+          <h3 class="char-card-title">الدكتور سامر</h3>
+          <p class="char-card-desc">المؤرخ الغامض المتخصص في الأساطير وتاريخ القرى. جاء للجُب بحثاً عن شجرة العهد، لكن توقيت وصوله يثير كل الشكوك. هل يبحث عن التاريخ فعلاً؟</p>
+          <div class="mystery-meter">
+            <span class="mystery-label">الغموض:</span>
+            <div class="mystery-track"><div class="mystery-level" style="width:65%;background:linear-gradient(90deg,var(--ice),var(--copper))"></div></div>
+            <span class="mystery-label">●●●○○</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- الأكبر الغامض -->
+      <div class="char-card" data-role="villain" data-reveal onclick="openModal('elder')">
+        <div class="char-card-visual">
+          <img src="assets/images/characters/The_Shadow.jpg" alt="الأكبر الغامض" loading="lazy">
+          <div class="char-reveal-overlay"></div>
+        </div>
+        <div class="char-card-body">
+          <div class="char-role-tag">الشخصية المحورية</div>
+          <h3 class="char-card-title">الأكبر الغامض</h3>
+          <p class="char-card-desc">الشيخ الغامض الذي يظهر ويختفي كالظل. لا أحد يعرف من أين جاء. يعلم بكل شيء يحدث في القرية — وكأنه كان هنا دائماً.</p>
+          <div class="mystery-meter">
+            <span class="mystery-label">الغموض:</span>
+            <div class="mystery-track"><div class="mystery-level" style="width:95%;background:linear-gradient(90deg,var(--crimson),#FF4060)"></div></div>
+            <span class="mystery-label">●●●●●</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ؟ -->
+      <div class="char-card" data-role="suspect" data-reveal>
+        <div class="char-card-visual" style="background: linear-gradient(135deg, #0A0A0F, #1A1A26) !important;">
+          <div style="font-size:80px;opacity:0.2;filter:blur(2px)">❓</div>
+          <div class="char-reveal-overlay"></div>
+        </div>
+        <div class="char-card-body">
+          <div class="char-role-tag" style="background:rgba(212,175,55,0.08);color:var(--text-muted)">مجهول</div>
+          <h3 class="char-card-title" style="color:var(--text-muted)">شخصية مخفية</h3>
+          <p class="char-card-desc" style="filter:blur(3px)">هذه الشخصية لا يمكن الكشف عنها دون حرق أحداث الرواية. اقرأها لتعرف.</p>
+          <div style="margin-top:12px">
+            <a href="read.html" class="btn btn-ghost btn-sm" style="width:100%;justify-content:center">اقرأ مقتطفاً 🔍</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- Modals -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="section-container">
+    <div class="footer-grid">
+      <div><h3 class="footer-logo">في قلب الجحيم</h3><p class="footer-description">رواية تحقيق جنائي</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/hanean.hayes" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="https://www.instagram.com/hanean_saad_hayes" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.5"/></svg></a>
+        </div>
+      </div>
+      <div><h4 class="footer-heading">الصفحات</h4><ul class="footer-links-list"><li><a href="index.html">الرئيسية</a></li><li><a href="about-book.html">عن الكتاب</a></li><li><a href="activities.html">فعاليات</a></li><li><a href="read.html">اقرأ مقتطفاً</a></li><li><a href="buy.html">اشترِ الآن</a></li></ul></div>
+      <div><h4 class="footer-heading">المزيد</h4><ul class="footer-links-list"><li><a href="author.html">الكاتبة</a></li><li><a href="gallery.html">المعرض</a></li><li><a href="contact.html">التواصل</a></li></ul></div>
+      <div><h4 class="footer-heading">اشترِ الرواية</h4><p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">جاهز لمعرفة الحقيقة؟</p><a href="buy.html" class="btn btn-primary">اشترِ الآن 🔥</a></div>
+    </div>
+    <div class="gold-line-h"></div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">© 2026 في قلب الجحيم.</p>
+      <div class="khalid-credit"><div class="credit-icon">⚡</div><span>Built by </span><a href="https://www.instagram.com/kh23alid_hassan/?__pwa=1" target="_blank" style="color:var(--gold);text-decoration:none" class="credit-name">Khalid Hassan</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/particles.js"></script>
+<script src="js/navigation.js"></script>
+<script src="js/main.js"></script>
+<script>
+const charData = {
+  sinin: {
+    img:'assets/images/characters/sineen– The Investigator.jpg', name:'سينين', role:'المحققة الرئيسية',
+    desc:'محققة جنائية بوحدة التحقيق الخاصة. وُصفت دائماً بأنها «موضوعية بشكل غير طبيعي» — لكن الجُب سيكشف أن للموضوعية حدوداً حتى عند أكثر العقول باردة.',
+    relations:['سيف — العلاقة: شريك التحقيق والساعد الأيمن','الشيخ سالم — العلاقة: التحذيرات حول شجرة العهد','الأكبر الغامض — العلاقة: لقاء غير متوقع عند البئر']
+  },
+  saif: {
+    img:'assets/images/characters/saif– The Assistant.jpg', name:'سيف', role:'المحقق المساعد',
+    desc:'الذراع اليمنى لسينين في التحقيق. هادئ الطباع وحاد الملاحظة. يراقب ما لا تراه عيونها ويسجل التفاصيل التي يفوّتها الجميع. ولاؤه لسينين مطلق — لكن هل يكفي الولاء في قرية مثل الجُب؟',
+    relations:['سينين — العلاقة: شريك تحقيق وداعم مخلص','الشيخ سالم — العلاقة: ارتياب متبادل','سكان القرية — العلاقة: يحاول كسب ثقتهم']
+  },
+  salem: {
+    img:'assets/images/characters/The Mysterious Sheikh.jpg', name:'الشيخ سالم', role:'حارس شجرة العهد',
+    desc:'شيخ القرية القديم الذي يحرس أسرار شجرة العهد منذ عقود. يعرف تاريخ كل عائلة وكل حادثة. يحذر سينين من الاقتراب أكثر — تحذيراته ليست مجرد خرافات.',
+    relations:['سينين — العلاقة: يحذرها من البحث عن الحقيقة','شجرة العهد — العلاقة: الحارس الوحيد','الأكبر الغامض — العلاقة: ماذا يعرف عنه؟']
+  },
+  samer: {
+    img:'assets/images/characters/Dr. Samer– The Historian.jpg', name:'الدكتور سامر', role:'المؤرخ الغامض',
+    desc:'أكاديمي متخصص في تاريخ القرى المهجورة والأساطير الشعبية. جاء إلى قرية الجُب لدراسة شجرة العهد وأسطورتها — لكن توقيت وصوله المتزامن مع الجرائم يثير الشكوك.',
+    relations:['سينين — العلاقة: يقدم معلومات تاريخية مفيدة','الشيخ سالم — العلاقة: صراع حول تفسير الأساطير','شجرة العهد — العلاقة: موضوع بحثه الرئيسي']
+  },
+  elder: {
+    img:'assets/images/characters/The_Shadow.jpg', name:'الأكبر الغامض', role:'الغموض المتجسد',
+    desc:'لا أحد يعرف من أين جاء أو متى. يظهر في اللحظات الحرجة ويختفي قبل أن تستطيع تحديد أفعاله. والغريب أنه يبدو عالماً بكل شيء يحدث في القرية.',
+    relations:['سينين — رآها عند البئر ولم يهرب','الضحايا — الجميع يلمح إلى صلة','الشيخ سالم — علاقة قديمة ومعقدة']
+  },
+  people: {
+    img:'assets/images/characters/Old_village_man.jpeg', name:'سكان الجُب', role:'مشتبه بهم جماعيون',
+    desc:'قرية كاملة تصمت بشكل موحّد. هل يحمون أحدهم؟ هل يخافون اللعنة فعلاً؟ أم أن الصمت الجماعي هو نفسه الجريمة؟',
+    relations:['سينين — يتعاملون معها بارتياب مصطنع','الشيخ سالم — يطيعونه طاعة عمياء']
+  }
+};
+
+function openModal(charId) {
+  const c = charData[charId]; if(!c) return;
+  const html = `
+    <div class="char-modal-img"><img src="${c.img}" alt="${c.name}"></div>
+    <div class="char-modal-name">${c.name}</div>
+    <div class="char-modal-role">${c.role}</div>
+    <p class="char-modal-desc">${c.desc}</p>
+    <div class="char-relations">
+      <h4>العلاقات</h4>
+      ${c.relations.map(r=>`<div class="relation-item">${r}</div>`).join('')}
+    </div>
+    <div style="margin-top:20px;text-align:center">
+      <a href="read.html" class="btn btn-outline btn-sm">اقرأ مقتطفاً لتعرف أكثر</a>
+    </div>
+  `;
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>

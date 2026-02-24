@@ -1,0 +1,599 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="في قلب الجحيم - رواية تحقيق جنائي غامضة للكاتبة حنين سعد حايس. قرية مهجورة، جرائم غامضة، ومحققة ترفض الخوف.">
+  <meta name="keywords" content="في قلب الجحيم, رواية, تحقيق جنائي, غموض, رعب نفسي, حنين سعد حايس, دار ملاذ">
+  <meta property="og:title" content="في قلب الجحيم | رواية تحقيق جنائي">
+  <meta property="og:description" content="رواية تحقيق جنائي غامضة في قرية مهجورة تتوالى فيها الجرائم">
+  <meta property="og:image" content="assets/images/book-cover/Main Book Cover Image.jpeg">
+  <meta property="og:type" content="book">
+  <title>في قلب الجحيم | رواية تحقيق جنائي — حنين سعد حايس</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    /* ── Intro Gate ── */
+    .intro-gate {
+      position: fixed; inset: 0;
+      z-index: 9999;
+      background: #050008;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+      transition: opacity 1.2s cubic-bezier(0.4,0,0.2,1), transform 1.2s cubic-bezier(0.4,0,0.2,1);
+    }
+    .intro-gate.dismissed {
+      opacity: 0;
+      transform: scale(1.15);
+      pointer-events: none;
+    }
+    .intro-gate-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 60%, rgba(196,30,58,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 30% 30%, rgba(212,175,55,0.06) 0%, transparent 60%);
+    }
+    .intro-gate canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .intro-gate-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      animation: introFadeIn 2s ease-out;
+    }
+    @keyframes introFadeIn { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+    .intro-gate-title {
+      font-family: var(--font-ar-title);
+      font-size: clamp(36px, 8vw, 80px);
+      font-weight: 900;
+      background: linear-gradient(135deg, #8B0000 0%, #C41E3A 30%, #D4AF37 60%, #C41E3A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(196,30,58,0.6)) drop-shadow(0 0 80px rgba(212,175,55,0.3));
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .intro-gate-sub {
+      font-family: var(--font-quote);
+      font-size: clamp(14px, 2vw, 20px);
+      color: rgba(212,175,55,0.6);
+      margin-bottom: 60px;
+      font-style: italic;
+    }
+    .intro-gate-btn {
+      position: relative;
+      font-family: var(--font-ar-title);
+      font-size: clamp(16px, 2.5vw, 22px);
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(145deg, #8B0000, #C41E3A);
+      border: 2px solid rgba(212,175,55,0.5);
+      padding: 20px 60px;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow:
+        0 8px 0 #5a0012,
+        0 15px 40px rgba(196,30,58,0.5),
+        0 0 60px rgba(196,30,58,0.2),
+        inset 0 2px 0 rgba(255,255,255,0.1);
+      transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      overflow: hidden;
+      animation: btnPulse 3s ease-in-out infinite;
+    }
+    @keyframes btnPulse {
+      0%,100% { box-shadow: 0 8px 0 #5a0012, 0 15px 40px rgba(196,30,58,0.5), 0 0 60px rgba(196,30,58,0.2), inset 0 2px 0 rgba(255,255,255,0.1); }
+      50% { box-shadow: 0 8px 0 #5a0012, 0 15px 40px rgba(196,30,58,0.7), 0 0 100px rgba(196,30,58,0.35), inset 0 2px 0 rgba(255,255,255,0.1); }
+    }
+    .intro-gate-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 0 #5a0012, 0 20px 50px rgba(196,30,58,0.7), 0 0 80px rgba(212,175,55,0.3), inset 0 2px 0 rgba(255,255,255,0.15);
+      border-color: var(--gold);
+    }
+    .intro-gate-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 3px 0 #5a0012, 0 5px 15px rgba(196,30,58,0.3);
+    }
+    .intro-gate-btn::before {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      transform: skewX(-15deg);
+      animation: btnShine 4s ease-in-out infinite;
+    }
+    @keyframes btnShine { 0%,100% { left: -100%; } 50% { left: 150%; } }
+
+    /* ── Blood-Elegant H1 Typography ── */
+    .hero-title .title-main {
+      display: block;
+      color: #e8e4e0;
+      text-shadow:
+        0 0 10px rgba(196,30,58,0.3),
+        0 2px 4px rgba(0,0,0,0.5);
+    }
+    .hero-title .title-accent {
+      display: block;
+      background: linear-gradient(135deg, #8B0000 0%, #C41E3A 25%, #D4AF37 50%, #C41E3A 75%, #8B0000 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: bloodShimmer 6s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px rgba(196,30,58,0.5)) drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+    }
+    @keyframes bloodShimmer {
+      0%,100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ INTRO GATE ═══ -->
+<div class="intro-gate" id="introGate">
+  <div class="intro-gate-bg"></div>
+  <canvas id="intro-particles"></canvas>
+  <div class="intro-gate-content">
+    <div class="intro-gate-title">في قلب الجحيم</div>
+    <div class="intro-gate-sub">حيث تموت الحقيقة... وتولد الأسرار</div>
+    <button class="intro-gate-btn" id="introBtn" onclick="dismissIntro()">
+      🔥 ابدأ الرحلة إلى الجحيم
+    </button>
+  </div>
+</div>
+
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen" style="display:none">
+  <div class="loading-book">في قلب الجحيم</div>
+  <div class="loading-bar"><div class="loading-fill"></div></div>
+</div>
+
+<!-- Background Effects -->
+<div class="bg-effects">
+  <canvas id="particles-canvas"></canvas>
+  <div class="fog-layer"></div>
+  <div class="fog-layer fog-2"></div>
+</div>
+
+<!-- Navigation -->
+<nav class="main-nav" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">في قلب الجحيم</a>
+    <button class="mobile-menu-toggle" id="menuToggle" aria-label="فتح القائمة">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active">الرئيسية</a></li>
+      <li><a href="about-book.html">عن الكتاب</a></li>
+      <li><a href="characters.html">الشخصيات</a></li>
+      <li><a href="gallery.html">المعرض</a></li>
+      <li><a href="author.html">الكاتبة</a></li>
+      <li><a href="contact.html">التواصل</a></li>
+      <li><a href="activities.html">فعاليات</a></li><li><a href="read.html" class="nav-read-btn">📖 اقرأ مقتطف</a></li>
+      <li><a href="buy.html" class="btn btn-primary btn-sm">اشترِ الآن</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"><a href="index.html">الرئيسية</a><a href="about-book.html">عن الكتاب</a><a href="characters.html">الشخصيات</a><a href="gallery.html">المعرض</a><a href="author.html">الكاتبة</a><a href="read.html">اقرأ مقتطف</a><a href="buy.html" target="_blank">اشترِ الآن</a></div>
+
+<main>
+
+<!-- ═══════════════════════════════════════ HERO ═══ -->
+<section class="hero" id="hero" style="background-image:url('assets/images/marketing/Website Main Banner.jpg');background-size:cover;background-position:center;">
+  <div class="hero-bg-image" style="background:rgba(10,10,15,0.75)"></div>
+  <div class="mist-layer"></div>
+  <div class="section-container">
+    <div class="hero-grid">
+
+      <!-- Content -->
+      <div class="hero-content">
+        <div class="hero-eyebrow" data-reveal>رواية تحقيق جنائي • دار ملاذ للنشر</div>
+        <h1 class="hero-title">
+          <span class="title-main" data-reveal>في قلب</span>
+          <span class="title-accent" data-reveal>الجحيم</span>
+        </h1>
+        <p class="hero-subtitle" data-reveal>حيث تموت الحقيقة وتولد الأسرار</p>
+        <p class="hero-author" data-reveal>حنين سعد حايس</p>
+
+        <div class="hero-badges" data-reveal>
+          <span class="badge"><span class="badge-dot"></span>معرض القاهرة 2026</span>
+          <span class="badge">🏆 إصدار جديد</span>
+          <span class="badge">⭐ 4.8/5 تقييم</span>
+        </div>
+
+        <div class="hero-buttons" data-reveal>
+          <a href="buy.html" class="btn btn-primary btn-large">
+            <span>🔥 اشترِ الآن</span>
+          </a>
+          <a href="read.html" class="btn btn-outline btn-large">
+            <span>📖 اقرأ مقتطفاً</span>
+          </a>
+        </div>
+
+        <div class="hero-meta" data-reveal>
+          <div class="meta-item">
+            <span class="meta-val">250+</span>
+            <span class="meta-key">صفحة مشوقة</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val">15+</span>
+            <span class="meta-key">فصلاً مثيراً</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val">4.8</span>
+            <span class="meta-key">تقييم القراء</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book Visual -->
+      <div class="hero-visual" data-reveal>
+        <div class="book-3d-wrapper">
+          <div class="book-3d book-float">
+            <div class="book-face">
+              <img src="assets/images/book-cover/Main Book Cover Image.jpeg" alt="غلاف رواية في قلب الجحيم" loading="lazy">
+            </div>
+            <div class="book-spine"></div>
+            <div class="book-shadow-floor"></div>
+            <div class="book-glow-effect"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span class="scroll-text">اسحب للأسفل</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ ABOUT ═══ -->
+<section class="about-section" id="about">
+  <div class="section-container">
+    <div class="about-grid">
+      <div class="about-content">
+        <span class="section-label" data-reveal>عن الرواية</span>
+        <h2 class="section-title" style="font-size:var(--fs-h2)" data-reveal>قرية لا يدخلها إلا الضالون</h2>
+        <div class="about-text" data-reveal>
+          <p>في قرية نائية تُعرف بـ<strong>«الجُب»</strong>، تتوالى الجرائم في غموض مخيف. فتيات يختفين بلا أثر، ودماء تظهر على جدران المنازل القديمة، والسكان يتهامسون بـ«اللعنة» التي تسيطر على المكان.</p>
+          <p>يرفض الجميع الاقتراب من القضية خوفاً مما حدث للضحايا. لكن محققة شابة تُدعى <strong>سينين</strong> ترفض الخوف وتصر على دخول القرية لكشف الحقيقة — الحقيقة التي قد تكلفها حياتها.</p>
+          <p>في رحلة تحقيق دقيقة مبنية على الأدلة والتحليل، تتكشف حقيقة مذهلة عن كيف يمكن للخرافة والخوف أن يكونا أفضل سلاح لإخفاء الجرائم الأكثر بشاعة.</p>
+        </div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:24px;" data-reveal>
+          <a href="about-book.html" class="btn btn-outline">اكتشف أكثر</a>
+          <a href="read.html" class="btn btn-ghost">اقرأ مقتطفاً</a>
+        </div>
+      </div>
+      <div class="about-visual" data-reveal="left">
+        <div class="image-frame">
+          <img src="assets/images/scenes/The Village at Night.jpeg" alt="قرية الجُب في الليل" style="height:480px;object-fit:cover;" loading="lazy">
+          <div class="frame-glow"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card" data-reveal>
+        <span class="stat-number" data-count="250">0</span>
+        <span class="stat-label">صفحة من التشويق</span>
+      </div>
+      <div class="stat-card" data-reveal>
+        <span class="stat-number" data-count="15">0</span>
+        <span class="stat-label">فصلاً مثيراً</span>
+      </div>
+      <div class="stat-card" data-reveal>
+        <span class="stat-number" data-count="48" data-decimal="0.1">0</span>
+        <span class="stat-label">تقييم من 5</span>
+      </div>
+      <div class="stat-card" data-reveal>
+        <span class="stat-number" data-count="2026">0</span>
+        <span class="stat-label">سنة الإصدار</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ FEATURES ═══ -->
+<section class="features-section" id="features">
+  <div class="section-container">
+    <div class="section-header" data-reveal>
+      <span class="section-label">ما يميزها</span>
+      <h2 class="section-title" style="font-size:var(--fs-h2)">تجربة قراءة لن تنساها</h2>
+      <div class="title-decoration"></div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card" data-reveal>
+        <div class="feature-icon-wrap">🔍</div>
+        <h3 class="feature-title">أسلوب تحقيقي دقيق</h3>
+        <p class="feature-desc">تحليل منطقي دقيق للأدلة والوقائع، يأخذك في رحلة استكشافية خطوة بخطوة لكشف الحقيقة المخفية وراء اللعنة.</p>
+      </div>
+      <div class="feature-card" data-reveal>
+        <div class="feature-icon-wrap">🌑</div>
+        <h3 class="feature-title">أجواء مشحونة بالغموض</h3>
+        <p class="feature-desc">تبني الكاتبة أجواء مرعبة ببراعة استثنائية — ستشعر وكأنك تعيش داخل القرية الملعونة وتسمع خطوات شيء مجهول.</p>
+      </div>
+      <div class="feature-card" data-reveal>
+        <div class="feature-icon-wrap">🎭</div>
+        <h3 class="feature-title">شخصيات متعددة الأوجه</h3>
+        <p class="feature-desc">شخصيات معقدة لا تستطيع الحكم عليها — كل واحد منهم يخفي سراً، وكل واحد منهم قد يكون القاتل.</p>
+      </div>
+      <div class="feature-card" data-reveal>
+        <div class="feature-icon-wrap">⚡</div>
+        <h3 class="feature-title">نهاية صادمة لا تُتوقع</h3>
+        <p class="feature-desc">نهاية ستفاجئك تماماً وتجعلك تعيد التفكير في كل ما قرأته. لا أحد يستطيع توقعها قبل الصفحة الأخيرة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ EVENTS PREVIEW ═══ -->
+<section class="events-preview" id="scenes">
+  <div class="section-container">
+    <div class="section-header" data-reveal>
+      <span class="section-label">لمحة من الرواية</span>
+      <h2 class="section-title" style="font-size:var(--fs-h2)">أبرز مشاهد الرواية</h2>
+      <p class="section-subtitle">ستة مشاهد ستبقى في ذاكرتك إلى الأبد</p>
+      <div class="title-decoration"></div>
+    </div>
+    <div class="events-grid">
+      <div class="event-card" data-reveal onclick="window.location='read.html'">
+        <img src="assets/images/scenes/The Village at Night.jpeg" alt="قرية الجُب في الليل" loading="lazy">
+        <div class="event-overlay">
+          <div class="event-number">01</div>
+          <div class="event-title">دخول قرية الجُب</div>
+          <div class="event-quote">«الجُب... قرية لا يخرج منها أحد»</div>
+        </div>
+      </div>
+      <div class="event-card" data-reveal onclick="window.location='read.html'">
+        <img src="assets/images/scenes/The Abandoned Mansion.jpg" alt="بيت العمدة المهجور" loading="lazy">
+        <div class="event-overlay">
+          <div class="event-number">02</div>
+          <div class="event-title">القصر المهجور والظلال</div>
+          <div class="event-quote">«الجدران تتكلم إذا عرفت كيف تسمعها»</div>
+        </div>
+      </div>
+      <div class="event-card" data-reveal onclick="window.location='read.html'">
+        <img src="assets/images/scenes/the tree.jpeg" alt="شجرة العهد" loading="lazy">
+        <div class="event-overlay">
+          <div class="event-number">03</div>
+          <div class="event-title">شجرة العهد ورموزها القديمة</div>
+          <div class="event-quote">«شاهدة على الموت منذ قرون»</div>
+        </div>
+      </div>
+      <div class="event-card" data-reveal onclick="window.location='read.html'">
+        <img src="assets/images/scenes/The Well.jpg" alt="البئر والجثة" loading="lazy">
+        <div class="event-overlay">
+          <div class="event-number">04</div>
+          <div class="event-title">اكتشاف الجثة في البئر</div>
+          <div class="event-quote">«جثة معلقة في أعماق الظلام»</div>
+        </div>
+      </div>
+      <div class="event-card" data-reveal onclick="window.location='read.html'">
+        <img src="assets/images/events/Night Investigation.jpg" alt="تحقيق ليلي" loading="lazy">
+        <div class="event-overlay">
+          <div class="event-number">05</div>
+          <div class="event-title">التحقيق في عتمة الليل</div>
+          <div class="event-quote">«الظلام يحمل أجوبة لمن يجرؤ على السؤال»</div>
+        </div>
+      </div>
+      <div class="event-card" data-reveal onclick="window.location='read.html'">
+        <img src="assets/images/events/Heshams House Crime Scene.jpg" alt="مسرح الجريمة" loading="lazy">
+        <div class="event-overlay">
+          <div class="event-number">06</div>
+          <div class="event-title">مسرح الجريمة — بيت هشام</div>
+          <div class="event-quote">«كل دليل يقود لمكان أعمق في الجحيم»</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:var(--sp-xl)">
+      <a href="read.html" class="btn btn-outline btn-large">📖 اقرأ المشهد الكامل</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ QUOTES ═══ -->
+<section class="quotes-section" id="quotes">
+  <div class="section-container">
+    <div class="section-header" data-reveal>
+      <span class="section-label">من الرواية</span>
+      <h2 class="section-title" style="font-size:var(--fs-h2)">كلمات تسكن القلب</h2>
+    </div>
+    <div class="quotes-slider">
+      <div class="quote-slide active">
+        <div class="quote-block">
+          <div class="q-mark">"</div>
+          <blockquote>لم تكن القرية مجرد مكانٍ على الخريطة...<br>كانت لعنةً حيّة تتنفس الخوف وتُطعم على الأسرار</blockquote>
+          <cite>— في قلب الجحيم</cite>
+        </div>
+      </div>
+      <div class="quote-slide">
+        <div class="quote-block">
+          <div class="q-mark">"</div>
+          <blockquote>كل جريمة تحمل في طياتها سراً<br>أعمق من ظلام الليل نفسه</blockquote>
+          <cite>— في قلب الجحيم</cite>
+        </div>
+      </div>
+      <div class="quote-slide">
+        <div class="quote-block">
+          <div class="q-mark">"</div>
+          <blockquote>سينين نظرت إلى الظلام...<br>وكان الظلام ينظر إليها</blockquote>
+          <cite>— في قلب الجحيم</cite>
+        </div>
+      </div>
+      <div class="quote-slide">
+        <div class="quote-block">
+          <div class="q-mark">"</div>
+          <blockquote>الحقيقة لا تموت أبداً...<br>لكنها أحياناً تحتاج من يجرؤ على كشفها</blockquote>
+          <cite>— في قلب الجحيم</cite>
+        </div>
+      </div>
+    </div>
+    <div class="quotes-nav" id="quotesNav">
+      <button class="quote-dot active" data-slide="0"></button>
+      <button class="quote-dot" data-slide="1"></button>
+      <button class="quote-dot" data-slide="2"></button>
+      <button class="quote-dot" data-slide="3"></button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ AUTHOR SNIPPET ═══ -->
+<section style="padding:var(--sp-2xl) 0;">
+  <div class="section-container">
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:var(--sp-2xl);align-items:center;">
+      <div data-reveal style="text-align:center;">
+        <div style="width:200px;height:200px;border-radius:50%;overflow:hidden;border:3px solid rgba(212,175,55,0.4);box-shadow:0 0 40px rgba(212,175,55,0.2);margin:0 auto 24px;">
+          <img src="assets/images/marketing/Author Portrait.jpeg" alt="حنين سعد حايس" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+        </div>
+        <a href="author.html" class="btn btn-ghost btn-sm">عن الكاتبة</a>
+      </div>
+      <div data-reveal>
+        <span class="section-label">الكاتبة</span>
+        <h2 class="section-title" style="font-size:var(--fs-h2);margin-bottom:var(--sp-md)">حنين سعد حايس</h2>
+        <p style="font-family:var(--font-ar-body);font-size:var(--fs-body);color:var(--text-secondary);line-height:1.9;margin-bottom:var(--sp-lg)">
+          صوت أدبي جديد في الثامنة عشرة من عمرها، تأبى أن تكون مجرد اسم على غلاف. في أروقة الأدب الجنائي العربي حيث ندر الصوت الشاب الجريء، جاءت حنين بروايتها الأولى لتثبت أن العمر ليس حاجزاً أمام العقل المتوقد والقلم الجريء.
+        </p>
+        <div style="display:flex;gap:12px;">
+          <a href="https://www.facebook.com/hanean.hayes" target="_blank" class="social-link" aria-label="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/hanean_saad_hayes" target="_blank" class="social-link" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════ CTA ═══ -->
+<section class="cta-section" id="cta">
+  <div class="section-container">
+    <div data-reveal>
+      <span class="cta-eyebrow">✦ لا تفوت التجربة ✦</span>
+      <h2 class="cta-title">احصل على نسختك الآن</h2>
+      <p class="cta-sub">متاحة الآن على أسير الكتب — الرواية الأكثر إثارة لعام 2026</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:var(--sp-lg)">
+        <div style="padding:8px 20px;background:rgba(196,30,58,0.1);border:1px solid rgba(196,30,58,0.2);border-radius:var(--r-full);font-family:var(--font-ar-ui);font-size:12px;color:var(--crimson)">🩸 رعب نفسي حقيقي</div>
+        <div style="padding:8px 20px;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.15);border-radius:var(--r-full);font-family:var(--font-ar-ui);font-size:12px;color:var(--gold)">📖 +300 صفحة من التشويق</div>
+        <div style="padding:8px 20px;background:rgba(196,30,58,0.1);border:1px solid rgba(196,30,58,0.2);border-radius:var(--r-full);font-family:var(--font-ar-ui);font-size:12px;color:var(--crimson)">⭐ تقييمات مذهلة</div>
+      </div>
+      <div class="cta-btns">
+        <a href="buy.html" class="btn btn-primary btn-large" target="_blank" style="font-size:18px;padding:16px 40px;box-shadow:0 8px 30px rgba(196,30,58,0.4),0 0 60px rgba(196,30,58,0.15);animation:ctaPulse 2.5s ease infinite">🔥 اشترِ الآن — 153 جنيه فقط</a>
+        <a href="read.html" class="btn btn-outline btn-large">📖 اقرأ مقتطفاً مجاناً</a>
+        <a href="buy.html" class="btn btn-outline btn-large" style="border-color:rgba(196,30,58,0.3);color:var(--crimson)">🩸 لماذا يجب أن تقرأها؟</a>
+      </div>
+      <style>@keyframes ctaPulse{0%,100%{box-shadow:0 8px 30px rgba(196,30,58,0.4),0 0 60px rgba(196,30,58,0.15)}50%{box-shadow:0 12px 40px rgba(196,30,58,0.6),0 0 80px rgba(196,30,58,0.25)}}</style>
+      <div class="cta-book" style="margin-top:var(--sp-xl)">
+        <img src="assets/images/book-cover/Main Book Cover Image.jpeg" class="cta-book-img" alt="غلاف الكتاب" loading="lazy">
+        <img src="assets/images/book-cover/Book cover for the sales section.jpeg" class="cta-book-img" alt="نسخة المبيعات" style="transform:rotate(-3deg)" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════ FOOTER ═══ -->
+<footer class="main-footer">
+  <div class="section-container">
+    <div class="footer-grid">
+      <div>
+        <h3 class="footer-logo">في قلب الجحيم</h3>
+        <p class="footer-description">رواية تحقيق جنائي غامضة تأخذك في رحلة إلى أعماق الظلام حيث تموت الحقيقة وتولد الأسرار.</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/hanean.hayes" target="_blank" class="social-link" aria-label="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/hanean_saad_hayes" target="_blank" class="social-link" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-heading">روابط سريعة</h4>
+        <ul class="footer-links-list">
+          <li><a href="index.html">الرئيسية</a></li>
+          <li><a href="about-book.html">عن الكتاب</a></li>
+          <li><a href="characters.html">الشخصيات</a></li>
+          <li><a href="activities.html">فعاليات</a></li><li><a href="read.html">اقرأ مقتطفاً</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">المزيد</h4>
+        <ul class="footer-links-list">
+          <li><a href="author.html">الكاتبة</a></li>
+          <li><a href="gallery.html">المعرض</a></li>
+          <li><a href="buy.html">اشترِ الآن</a></li>
+          <li><a href="contact.html">التواصل</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">ابقَ على تواصل</h4>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.7">اشترك لتصلك آخر الأخبار عن الرواية والكاتبة.</p>
+        <form class="newsletter-form" onsubmit="return false;">
+          <input type="email" placeholder="بريدك الإلكتروني" dir="rtl">
+          <button class="btn btn-primary" type="submit">اشترك</button>
+        </form>
+      </div>
+    </div>
+    <div class="gold-line-h"></div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">© 2026 في قلب الجحيم — حنين سعد حايس. جميع الحقوق محفوظة.</p>
+      <div class="khalid-credit" id="khalidCredit">
+        <div class="credit-icon">⚡</div>
+        <span>Designed & Built by </span>
+        <a href="https://www.instagram.com/kh23alid_hassan/?__pwa=1" target="_blank" style="color:var(--gold);text-decoration:none" class="credit-name">Khalid Hassan</a>
+        <span>• Code & Design Architect</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Intro Gate Particles ── */
+(function(){
+  const c = document.getElementById('intro-particles');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  let W,H,pts=[];
+  function resize(){ W=c.width=window.innerWidth; H=c.height=window.innerHeight; }
+  function rnd(a,b){ return Math.random()*(b-a)+a; }
+  function mkP(){ return { x:rnd(0,W), y:rnd(0,H), vx:rnd(-0.2,0.2), vy:rnd(-0.5,-0.1), s:rnd(1,2.5), l:0, ml:rnd(100,250), c:Math.random()>0.6?'#C41E3A':'#D4AF37', o:0 }; }
+  function init(){ resize(); pts=[]; for(let i=0;i<50;i++){const p=mkP();p.l=rnd(0,p.ml);pts.push(p);} draw(); }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=pts.length-1;i>=0;i--){
+      const p=pts[i]; p.l++; p.x+=p.vx; p.y+=p.vy;
+      if(p.l<20) p.o=p.l/20; else if(p.l>p.ml-30) p.o=(p.ml-p.l)/30; else p.o=0.5;
+      if(p.l>=p.ml){pts[i]=mkP();continue;}
+      ctx.save(); ctx.globalAlpha=p.o*0.6; ctx.fillStyle=p.c;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); ctx.restore();
+    }
+    if(document.getElementById('introGate')&&!document.getElementById('introGate').classList.contains('dismissed'))
+      requestAnimationFrame(draw);
+  }
+  init();
+  window.addEventListener('resize',()=>{resize();});
+})();
+
+/* ── Dismiss Intro ── */
+function dismissIntro(){
+  const gate = document.getElementById('introGate');
+  gate.classList.add('dismissed');
+  // Show loading screen
+  const loader = document.getElementById('loadingScreen');
+  if(loader) loader.style.display = '';
+  setTimeout(()=>{ gate.style.display='none'; },1300);
+}
+</script>
+<script src="js/particles.js"></script>
+<script src="js/navigation.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

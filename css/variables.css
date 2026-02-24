@@ -1,0 +1,132 @@
+/* ============================================
+   في قلب الجحيم - Design System Variables
+   Designed by: Khalid Hassan | Feb 2026
+============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;700;900&family=Noto+Naskh+Arabic:wght@400;600;700&family=Noto+Sans+Arabic:wght@400;500;600&family=Cinzel:wght@400;700;900&family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&family=Amiri:wght@400;700&display=swap');
+
+:root {
+  /* ─── Base Colors ─── */
+  --bg-primary:   #0A0A0F;
+  --bg-secondary: #141419;
+  --bg-tertiary:  #1E1E24;
+  --bg-glass:     rgba(20,20,25,0.7);
+
+  /* ─── Accent Colors ─── */
+  --gold:         #D4AF37;
+  --gold-light:   #F0D060;
+  --gold-dark:    #B8860B;
+  --crimson:      #C41E3A;
+  --crimson-dark: #8B0000;
+  --copper:       #8B4513;
+  --ice:          #4A90A4;
+  --smoke:        rgba(212,175,55,0.15);
+
+  /* ─── Text Colors ─── */
+  --text-primary:   #FFFFFF;
+  --text-secondary: #C8C8C8;
+  --text-muted:     #6B6B6B;
+  --text-gold:      #D4AF37;
+
+  /* ─── Gradients ─── */
+  --grad-main:   linear-gradient(135deg, #0A0A0F 0%, #1E1E24 50%, #141419 100%);
+  --grad-gold:   linear-gradient(135deg, #D4AF37 0%, #C41E3A 100%);
+  --grad-dark:   radial-gradient(ellipse at center, #1E1E24 0%, #0A0A0F 100%);
+  --grad-hero:   linear-gradient(180deg, transparent 0%, #0A0A0F 100%);
+  --grad-glass:  linear-gradient(145deg, rgba(30,30,36,0.8), rgba(10,10,15,0.6));
+
+  /* ─── Typography ─── */
+  --font-ar-title: 'Noto Kufi Arabic', sans-serif;
+  --font-ar-body:  'Noto Naskh Arabic', serif;
+  --font-ar-ui:    'Noto Sans Arabic', sans-serif;
+  --font-en-title: 'Cinzel', serif;
+  --font-en-body:  'Playfair Display', serif;
+  --font-en-ui:    'Inter', sans-serif;
+  --font-quote:    'Amiri', serif;
+
+  /* ─── Font Sizes ─── */
+  --fs-hero: clamp(48px, 9vw, 96px);
+  --fs-h1:   clamp(36px, 6vw, 72px);
+  --fs-h2:   clamp(28px, 4vw, 48px);
+  --fs-h3:   clamp(22px, 3vw, 32px);
+  --fs-h4:   clamp(18px, 2vw, 24px);
+  --fs-body: clamp(16px, 1.5vw, 18px);
+  --fs-sm:   14px;
+  --fs-xs:   12px;
+
+  /* ─── Spacing ─── */
+  --sp-xs: 8px;
+  --sp-sm: 16px;
+  --sp-md: 24px;
+  --sp-lg: 48px;
+  --sp-xl: 80px;
+  --sp-2xl: 120px;
+  --sp-3xl: 160px;
+
+  /* ─── Border Radius ─── */
+  --r-sm:   8px;
+  --r-md:   16px;
+  --r-lg:   24px;
+  --r-xl:   32px;
+  --r-full: 9999px;
+
+  /* ─── Shadows ─── */
+  --shadow-sm:     0 2px 8px rgba(0,0,0,0.4);
+  --shadow-md:     0 8px 32px rgba(0,0,0,0.5);
+  --shadow-lg:     0 20px 60px rgba(0,0,0,0.6);
+  --shadow-xl:     0 40px 100px rgba(0,0,0,0.7);
+  --shadow-gold:   0 0 25px rgba(212,175,55,0.35);
+  --shadow-glow:   0 0 60px rgba(212,175,55,0.2), 0 0 120px rgba(196,30,58,0.1);
+  --shadow-book:   0 40px 80px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.15);
+  --shadow-inset:  inset 0 2px 0 rgba(255,255,255,0.08);
+
+  /* ─── Transitions ─── */
+  --t-fast:   200ms cubic-bezier(0.4,0,0.2,1);
+  --t-normal: 400ms cubic-bezier(0.4,0,0.2,1);
+  --t-slow:   800ms cubic-bezier(0.16,1,0.3,1);
+  --t-bounce: 600ms cubic-bezier(0.34,1.56,0.64,1);
+
+  /* ─── Z-index ─── */
+  --z-bg:     -1;
+  --z-base:    1;
+  --z-card:    10;
+  --z-nav:     100;
+  --z-modal:   200;
+  --z-overlay: 300;
+  --z-tooltip: 400;
+
+  /* ─── Layout ─── */
+  --max-width:  1440px;
+  --content-w:  1200px;
+  --nav-height: 80px;
+}
+
+/* ─── Reading Mode Themes ─── */
+[data-read-mode="dark"] {
+  --rm-bg:       #0A0A0F;
+  --rm-surface:  #141419;
+  --rm-text:     #E8E4D8;
+  --rm-accent:   #D4AF37;
+  --rm-border:   rgba(212,175,55,0.2);
+}
+[data-read-mode="light"] {
+  --rm-bg:       #F5F0E8;
+  --rm-surface:  #FFFFFF;
+  --rm-text:     #2C2C2C;
+  --rm-accent:   #8B4513;
+  --rm-border:   rgba(139,69,19,0.3);
+}
+[data-read-mode="creamy"] {
+  --rm-bg:       #FDF6E3;
+  --rm-surface:  #FAF0D0;
+  --rm-text:     #4A3728;
+  --rm-accent:   #C41E3A;
+  --rm-border:   rgba(196,30,58,0.25);
+}
+[data-read-mode="night"] {
+  --rm-bg:       #080005;
+  --rm-surface:  #120008;
+  --rm-text:     #E8C4B0;
+  --rm-accent:   #C41E3A;
+  --rm-border:   rgba(196,30,58,0.3);
+}

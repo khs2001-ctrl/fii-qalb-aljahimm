@@ -1,0 +1,743 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اقرأ مقتطفاً | في قلب الجحيم</title>
+  <meta name="description" content="اقرأ مقتطفات مختارة من رواية في قلب الجحيم — تجربة قراءة فريدة بأوضاع متعددة">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    /* ── Reader Specific ── */
+    body { background: var(--rm-bg, #0A0A0F); transition: background 0.5s ease, color 0.5s ease; }
+
+    .reader-nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 60px;
+      background: rgba(10,10,15,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(212,175,55,0.15);
+      z-index: 100;
+      display: flex; align-items: center;
+    }
+    .reader-nav-inner {
+      max-width: 900px; margin: 0 auto; padding: 0 24px;
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+    }
+    .reader-back {
+      font-family: var(--font-ar-ui); font-size: 13px;
+      color: var(--text-muted);
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s;
+    }
+    .reader-back:hover { color: var(--gold); }
+    .reader-title-nav {
+      font-family: var(--font-ar-title);
+      font-size: 15px; color: var(--gold);
+      text-align: center; flex: 1;
+    }
+
+    /* Mode Switcher */
+    .mode-switcher {
+      display: flex; gap: 6px; align-items: center;
+    }
+    .mode-btn {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .mode-btn[data-mode="dark"]   { background: #0A0A0F; border-color: #555; }
+    .mode-btn[data-mode="light"]  { background: #F5F0E8; border-color: #bbb; }
+    .mode-btn[data-mode="creamy"] { background: #FDF6E3; border-color: #d4b896; }
+    .mode-btn[data-mode="night"]  { background: #080005; border-color: #C41E3A; }
+    .mode-btn.active { border-color: var(--gold) !important; box-shadow: 0 0 10px rgba(212,175,55,0.5); transform: scale(1.15); }
+    .mode-label {
+      font-family: var(--font-ar-ui); font-size: 11px;
+      color: inherit; white-space: nowrap;
+      margin-right: 2px;
+    }
+
+    /* Vertical Mode Sidebar */
+    .mode-bar {
+      position: fixed; top: 50%; right: 12px; transform: translateY(-50%);
+      z-index: 99; display: flex; flex-direction: column; gap: 6px; padding: 10px 6px;
+      background: rgba(10,10,15,0.85); backdrop-filter: blur(20px);
+      border: 1px solid rgba(212,175,55,0.1); border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5), inset 0 0 30px rgba(212,175,55,0.02);
+    }
+    .mode-pill {
+      display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 8px;
+      border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer; transition: all 0.3s; font-size: 13px;
+      font-family: var(--font-ar-ui); background: transparent;
+      color: var(--text-muted); position: relative; width: 52px;
+    }
+    .mode-pill:hover { border-color: rgba(212,175,55,0.3); color: var(--text-primary); background: rgba(212,175,55,0.06); }
+    .mode-pill.active { border-color: var(--gold) !important; color: var(--gold) !important;
+      background: rgba(212,175,55,0.08) !important; box-shadow: 0 0 12px rgba(212,175,55,0.15), inset 0 0 8px rgba(212,175,55,0.05); }
+    .mode-pill.active::before { content: ''; position: absolute; left: -6px; top: 50%; transform: translateY(-50%);
+      width: 3px; height: 18px; background: var(--gold); border-radius: 3px; box-shadow: 0 0 8px var(--gold); }
+    .mode-pill-icon { font-size: 18px; line-height: 1; }
+    .mode-label { font-size: 9px; opacity: 0.7; }
+    .sidebar-divider { width: 36px; height: 1px; background: rgba(212,175,55,0.15); margin: 4px auto; }
+    .font-pill { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 6px;
+      border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: all 0.3s;
+      font-family: var(--font-ar-ui); background: transparent; color: var(--text-muted); width: 52px; }
+    .font-pill:hover { border-color: rgba(212,175,55,0.3); color: var(--text-primary); background: rgba(212,175,55,0.06); }
+    .font-pill:active { transform: scale(0.95); }
+    .font-pill-icon { font-size: 16px; font-weight: bold; font-family: var(--font-en-title); }
+    .font-pill-label { font-size: 8px; opacity: 0.7; }
+    @media (max-width: 768px) {
+      .mode-bar { top: auto; bottom: 12px; right: 50%; transform: translateX(50%); flex-direction: row; }
+      .mode-pill { width: auto; flex-direction: row; padding: 8px 14px; }
+      .mode-pill.active::before { display: none; }
+      .font-pill { width: auto; flex-direction: row; padding: 8px 12px; }
+      .sidebar-divider { width: 1px; height: 20px; margin: 0 4px; }
+    }
+
+    /* Animated Mode Backgrounds */
+    .mode-bg-canvas { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+
+    /* Font Controls */
+    .font-controls {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .font-btn {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      background: rgba(212,175,55,0.1);
+      border: 1px solid rgba(212,175,55,0.2);
+      color: var(--gold);
+      font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .font-btn:hover { background: rgba(212,175,55,0.2); }
+
+    /* Progress Bar */
+    .read-progress {
+      position: fixed; top: 60px; left: 0; right: 0;
+      height: 3px;
+      background: rgba(212,175,55,0.1);
+      z-index: 99;
+    }
+    .read-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--crimson));
+      width: 0%;
+      transition: width 0.1s ease-out;
+      box-shadow: 0 0 10px rgba(212,175,55,0.5);
+    }
+
+    /* Reader Layout */
+    .reader-layout {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 100px 24px 200px;
+    }
+
+    /* Reader Meta */
+    .reader-meta {
+      text-align: center;
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(212,175,55,0.15);
+    }
+    .reader-book-cover {
+      width: 100px; height: 150px;
+      object-fit: cover;
+      border-radius: 4px 10px 10px 4px;
+      margin: 0 auto 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+    .reader-book-title {
+      font-family: var(--font-ar-title);
+      font-size: 32px;
+      color: var(--rm-accent, var(--gold));
+      margin-bottom: 8px;
+    }
+    .reader-book-author {
+      font-family: var(--font-ar-ui);
+      font-size: 14px;
+      color: var(--rm-text, var(--text-muted));
+      opacity: 0.6;
+    }
+    .reader-notice {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 8px 20px;
+      background: rgba(196,30,58,0.1);
+      border: 1px solid rgba(196,30,58,0.3);
+      border-radius: 30px;
+      font-size: 12px;
+      color: var(--crimson);
+      font-family: var(--font-ar-ui);
+    }
+
+    /* Chapter Nav */
+    .chapter-nav {
+      position: sticky; top: 63px;
+      display: flex; gap: 8px;
+      padding: 12px 0;
+      background: var(--rm-bg, #0A0A0F);
+      z-index: 50;
+      overflow-x: auto;
+      border-bottom: 1px solid rgba(212,175,55,0.08);
+      margin-bottom: 40px;
+      scrollbar-width: none;
+      justify-content: center;
+    }
+    .chapter-nav::-webkit-scrollbar { display: none; }
+    .chap-btn {
+      white-space: nowrap;
+      padding: 7px 18px;
+      border-radius: 30px;
+      font-family: var(--font-ar-ui);
+      font-size: 13px;
+      color: var(--rm-text, var(--text-muted));
+      background: transparent;
+      border: 1px solid rgba(212,175,55,0.2);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .chap-btn:hover, .chap-btn.active {
+      background: rgba(212,175,55,0.12);
+      border-color: var(--rm-accent, var(--gold));
+      color: var(--rm-accent, var(--gold));
+    }
+
+    /* Chapter Content */
+    .chapter-section { display: none; animation: fadeIn 0.5s ease; }
+    .chapter-section.active { display: block; }
+
+    .chapter-header {
+      margin-bottom: 40px;
+      position: relative;
+      padding-bottom: 24px;
+    }
+    .chapter-num {
+      font-family: var(--font-en-title);
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: var(--rm-accent, var(--gold));
+      opacity: 0.6;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .chapter-title {
+      font-family: var(--font-ar-title);
+      font-size: clamp(24px, 4vw, 36px);
+      color: var(--rm-text, var(--text-primary));
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .chapter-subtitle {
+      font-family: var(--font-quote);
+      font-size: 16px;
+      color: var(--rm-accent, var(--gold));
+      font-style: italic;
+      opacity: 0.8;
+    }
+    .chapter-header::after {
+      content: '';
+      position: absolute; bottom: 0; right: 0;
+      width: 60px; height: 2px;
+      background: var(--rm-accent, var(--gold));
+      opacity: 0.4;
+    }
+
+    /* Prose */
+    .prose {
+      font-family: var(--font-ar-body);
+      font-size: var(--reader-font-size, 19px);
+      color: var(--rm-text, #E8E4D8);
+      line-height: 2;
+      transition: color 0.5s, background 0.5s, font-size 0.3s;
+    }
+    .prose p { margin-bottom: 1.6em; text-align: justify; }
+    .prose strong { color: var(--rm-accent, var(--gold)); font-weight: 700; }
+    .prose em { font-style: italic; opacity: 0.85; }
+    .prose .scene-divider {
+      text-align: center;
+      color: var(--rm-accent, var(--gold));
+      font-size: 22px;
+      margin: 40px 0;
+      opacity: 0.5;
+      letter-spacing: 12px;
+    }
+    .prose .whisper {
+      font-family: var(--font-quote);
+      font-size: 1.15em;
+      font-style: italic;
+      color: var(--rm-accent, var(--gold));
+      text-align: center;
+      display: block;
+      margin: 32px 0;
+      padding: 20px;
+      border-right: 3px solid var(--rm-accent, var(--gold));
+      background: rgba(212,175,55,0.04);
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* CTA at end */
+    .reader-cta {
+      margin-top: 80px;
+      padding: 60px 40px;
+      text-align: center;
+      background: linear-gradient(145deg, rgba(20,20,25,0.9), rgba(10,10,15,0.6));
+      border: 1px solid rgba(212,175,55,0.2);
+      border-radius: 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .reader-cta h3 {
+      font-family: var(--font-ar-title);
+      font-size: 28px;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .reader-cta p {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-family: var(--font-ar-ui);
+    }
+    .reader-cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* Sidebar TOC (large screens) */
+    @media (min-width: 1100px) {
+      .reader-outer {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 0; max-width: 1200px; margin: 0 auto;
+        padding: 80px 24px 0;
+      }
+      .reader-sidebar {
+        position: sticky; top: 100px;
+        height: fit-content;
+        padding: 24px;
+        margin-top: 20px;
+      }
+      .reader-layout { padding: 40px 40px 200px; }
+      .reader-sidebar-title {
+        font-family: var(--font-ar-title);
+        font-size: 13px; color: var(--gold);
+        margin-bottom: 16px;
+        letter-spacing: 2px;
+      }
+      .toc-link {
+        display: block;
+        font-family: var(--font-ar-ui);
+        font-size: 13px;
+        color: var(--text-muted);
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(212,175,55,0.05);
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+      .toc-link:hover, .toc-link.active { color: var(--gold); }
+    }
+    @media (max-width: 1099px) {
+      .reader-sidebar { display: none; }
+      .reader-outer { display: block; }
+    }
+  </style>
+</head>
+<body data-read-mode="dark">
+
+<div class="bg-effects">
+  <canvas id="particles-canvas"></canvas>
+</div>
+<canvas id="modeBgCanvas" class="mode-bg-canvas"></canvas>
+
+<!-- Reader Nav -->
+<nav class="reader-nav">
+  <div class="reader-nav-inner">
+    <a href="index.html" class="reader-back">← العودة</a>
+    <div class="reader-title-nav">في قلب الجحيم — مقتطفات</div>
+    <div style="display:flex;gap:12px;align-items:center">
+    </div>
+  </div>
+</nav>
+
+<!-- Mode Bar + Font Controls -->
+<div class="mode-bar">
+  <button class="mode-pill active" data-mode="dark" title="الوضع الداكن"><span class="mode-pill-icon">🌑</span><span class="mode-label">داكن</span></button>
+  <button class="mode-pill" data-mode="light" title="الوضع الفاتح"><span class="mode-pill-icon">☀️</span><span class="mode-label">فاتح</span></button>
+  <button class="mode-pill" data-mode="creamy" title="وضع الكريمي"><span class="mode-pill-icon">🍵</span><span class="mode-label">كريمي</span></button>
+  <button class="mode-pill" data-mode="night" title="المود الدموي"><span class="mode-pill-icon">🩸</span><span class="mode-label">دموي</span></button>
+  <div class="sidebar-divider"></div>
+  <button class="font-pill" id="fontPlus" title="تكبير الخط"><span class="font-pill-icon">A+</span><span class="font-pill-label">تكبير</span></button>
+  <button class="font-pill" id="fontMinus" title="تصغير الخط"><span class="font-pill-icon">A−</span><span class="font-pill-label">تصغير</span></button>
+</div>
+
+<!-- Progress Bar -->
+<div class="read-progress"><div class="read-progress-fill" id="progressFill"></div></div>
+
+<div class="reader-outer">
+  <!-- Sidebar TOC -->
+  <aside class="reader-sidebar">
+    <div class="reader-sidebar-title">محتويات المقتطف</div>
+    <a class="toc-link active" onclick="switchChapter('intro')">المقدمة — قرية الجُب</a>
+    <a class="toc-link" onclick="switchChapter('ch1')">الفصل الأول — الوصول</a>
+    <a class="toc-link" onclick="switchChapter('ch2')">الفصل الثاني — البيت الملعون</a>
+    <a class="toc-link" onclick="switchChapter('ch3')">الفصل الثالث — البئر</a>
+    <a class="toc-link" onclick="switchChapter('ch4')">الفصل الرابع — الصندوق</a>
+    <a class="toc-link" onclick="switchChapter('ch5')">الفصل الخامس — الشيخ سالم</a>
+    <a class="toc-link" onclick="switchChapter('ch6')">الفصل السادس — الطقس</a>
+    <div style="margin-top:32px;padding:16px;background:rgba(196,30,58,0.08);border:1px solid rgba(196,30,58,0.2);border-radius:12px;">
+      <p style="font-size:12px;color:var(--text-muted);line-height:1.7;font-family:var(--font-ar-ui);margin-bottom:12px">هذا مقتطف محدود. للحصول على الرواية كاملة:</p>
+      <a href="buy.html" class="btn btn-primary btn-sm" style="width:100%;justify-content:center">اشترِ الآن</a>
+    </div>
+  </aside>
+
+  <!-- Reader Content -->
+  <main class="reader-layout">
+    <!-- Book Meta -->
+    <div class="reader-meta">
+      <img src="assets/images/book-cover/Main Book Cover Image.jpeg" class="reader-book-cover" alt="غلاف الكتاب" loading="lazy">
+      <div class="reader-book-title">في قلب الجحيم</div>
+      <div class="reader-book-author">حنين سعد حايس • دار ملاذ للنشر والتوزيع • 2026</div>
+      <span class="reader-notice">⚠️ هذا مقتطف تشويقي محدود — لقراءة الرواية كاملة اشترِ نسختك</span>
+    </div>
+
+    <!-- Chapter Navigation -->
+    <nav class="chapter-nav" id="chapterNav">
+      <button class="reader-chapter-btn active" onclick="switchChapter('intro')">المقدمة</button>
+      <button class="reader-chapter-btn" onclick="switchChapter('ch1')">الفصل الأول</button>
+      <button class="reader-chapter-btn" onclick="switchChapter('ch2')">الفصل الثاني</button>
+      <button class="reader-chapter-btn" onclick="switchChapter('ch3')">الفصل الثالث</button>
+      <button class="reader-chapter-btn" onclick="switchChapter('ch4')">الفصل الرابع</button>
+      <button class="reader-chapter-btn" onclick="switchChapter('ch5')">الفصل الخامس</button>
+      <button class="reader-chapter-btn" onclick="switchChapter('ch6')">الفصل السادس</button>
+    </nav>
+
+    <!-- ══ INTRO ══ -->
+    <div class="chapter-section active" id="section-intro">
+      <div class="chapter-header">
+        <span class="chapter-num">PROLOGUE</span>
+        <h2 class="chapter-title">المقدمة — قرية الجُب</h2>
+        <div class="chapter-subtitle">«الجُب... قرية الأشباح»</div>
+      </div>
+      <div class="prose">
+        <p>لم يكن أحد يعلم من أين بدأت اللعنة. بعضهم قال إنها جاءت مع الجفاف الكبير، حين جفّت البئر القديمة ومعها جفّت قلوب الناس. وبعضهم قال إن الأمر أقدم من ذلك بكثير — أقدم من ذاكرة أكبر العجائز في قرية الجُب.</p>
+        <p>الجُب. اسم يلفظه سكانها بين الخوف والفخر في آنٍ واحد. قرية نائية تتربع في حضن الجبل الأسود، محاطة بغابة تتعالى أشجارها كأنها تفتح أذرعها لاستقبال الضيوف أو محاولة إخفائهم إلى الأبد.</p>
+        <span class="whisper">«من يدخل الجُب لا يخرج منه كما دخل — إن خرج أصلاً»</span>
+        <p>كانت هذه الجملة تُتداول بين القرى المجاورة كحقيقة مقررة لا كأسطورة. والغريب أن أحداً لم يحاول إثبات العكس. حتى جاءت <strong>سينين</strong>.</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p>في التقارير الرسمية، أُشير إليها باختصار: «المحققة سينين، وحدة التحقيق الجنائي الخاصة». في ملف القضية رقم 2026/147، كانت هي المحققة السابعة التي تُكلَّف بالتحقيق في اختفاء فتيات الجُب — وكانت أول من قَبِل المهمة دون تردد.</p>
+        <p>لم تكن تعلم يومها وهي تحزم أمتعتها أنها تتجه نحو شيء يتجاوز أي قضية جنائية واجهتها من قبل. كانت تعتقد أنها ستجد مجرماً عاقلاً استغل خرافات القرية ليخفي جرائمه. لم تكن تعلم أن الجُب نفسه سيصبح أحد أطراف القضية.</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p>ست فتيات اختفين خلال ثلاث سنوات. كل واحدة في ظروف مشابهة بشكل مريب: ليلة مطر، باب مفتوح من الداخل لا من الخارج، وعلى عتبة كل باب — ورقة مطوية مكتوب عليها كلمة واحدة بخط يد مختلف في كل مرة.</p>
+        <span class="whisper">«العهد»</span>
+        <p>المحققون الستة السابقون أرسلوا تقاريرهم وغادروا. بعضهم كتب «لا أدلة كافية». بعضهم كتب «القضية مغلقة». واحد منهم كتب فقط: «لا تُرسلوا أحداً آخر». ثم استقال في اليوم التالي.</p>
+        <p>سينين قرأت كل هذا. ولم تسأل نفسها لماذا قبلت المهمة. لأن الإجابة كانت واضحة في عينيها — في تلك النظرة التي لا يفهمها إلا من عرف الخسارة عن قرب.</p>
+      </div>
+    </div>
+
+    <!-- ══ CH1 ══ -->
+    <div class="chapter-section" id="section-ch1">
+      <div class="chapter-header">
+        <span class="chapter-num">CHAPTER ONE</span>
+        <h2 class="chapter-title">الفصل الأول — الوصول</h2>
+        <div class="chapter-subtitle">«الظلال تراقبنا من كل مكان»</div>
+      </div>
+      <div class="prose">
+        <p>وصلت سينين إلى الجُب مع غروب الشمس، وكأن التوقيت نفسه كان مقصوداً. السيارة توقفت عند بوابة القرية الحجرية القديمة — بوابة يبدو أنها لم تُفتح للغرباء منذ زمن بعيد.</p>
+        <p>رجل في الستينيات يتكئ على عصاه كان ينتظرها. عيناه الصغيرتان تدرسانها بتمعن قبل أن ينبس بكلمة. هذا كان <strong>العمدة محمود</strong>.</p>
+        <span class="whisper">«جئتِ في وقت سيء يا ابنتي... الجُب لا تُرحّب بالغرباء»</span>
+        <p>ردّت سينين بهدوء وهي ترمي حقيبتها على كتفها: «أنا لست غريبة. أنا محققة. وعندي أوراق رسمية تقول إن هذه القرية ستتعاون معي».</p>
+        <p>ابتسم محمود ابتسامة تفتقر إلى الدفء. «الأوراق الرسمية لا تُرهب اللعنة، يا مفتّشة». ثم استدار وبدأ المشي دون أن ينتظر رداً.</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p>القرية كانت بالضبط كما وصفتها ملفات القضية — وأشد قتامة مما تخيّلت. بيوت حجرية قديمة بنوافذ شبه مغلقة، كأن ساكنيها اختاروا ألّا يطلعوا على العالم الخارجي. شوارع ضيقة تلتوي كأمعاء كائن حي. وفي المركز.</p>
+        <p>الشجرة.</p>
+        <p>لا يمكن لأي وصف أن يوفيها حقها. كانت ضخمة بشكل يتجاوز المنطق، جذعها يحتاج عشرة رجال ليطوقوه، وأغصانها تمتد فوق نصف القرية كظلة مظلمة دائمة. الناس هنا يسمونها <strong>«شجرة العهد»</strong>. سينين وضعت يدها على جذعها وشعرت بشيء لم تستطع تفسيره حينئذٍ.</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p>في الساحة الرئيسية، لاحظت سينين عيون القرويين عليها. لم تكن نظرات فضول العادية — كانت نظرات من يتوقع شيئاً ما. كأنهم يعرفون مسبقاً ما سيحدث لها.</p>
+        <p>امرأة عجوز قاطعت طريقها فجأة. أمسكت يد سينين بقوة مفاجئة لسيدة في هذا العمر، وهمست:</p>
+        <span class="whisper">«ارحلي قبل أن تسمعي صوت الشجرة. لأنها حين تتكلم... لا يبقى أمامك خيار سوى أن تسمعي»</span>
+        <p>سحبت سينين يدها بلطف. «أنا هنا لأبحث عن فتيات مفقودات، لا لأستمع للأشجار».</p>
+        <p>بدت العجوز حزينة. «هذا ما قالته كلّهن أيضاً».</p>
+      </div>
+    </div>
+
+    <!-- ══ CH2 ══ -->
+    <div class="chapter-section" id="section-ch2">
+      <div class="chapter-header">
+        <span class="chapter-num">CHAPTER TWO</span>
+        <h2 class="chapter-title">الفصل الثاني — البيت الملعون</h2>
+        <div class="chapter-subtitle">«بيت العمدة محمود والظلال»</div>
+      </div>
+      <div class="prose">
+        <p>قدّم لها العمدة محمود غرفة في بيته الكبير — أكبر بيت في القرية بلا شك. كانت أرضيات الخشب تطقطق تحت قدميها وكأنها تشكو، والجدران مزيّنة بصور عائلية قديمة تنظر إليها أعين جامدة.</p>
+        <p>في منتصف الليل، استيقظت سينين على صوت خطوات فوق رأسها مباشرة. بيت من طابق واحد — لا يوجد «فوق».</p>
+        <span class="whisper">«الظلال تراقبنا من كل مكان في هذا البيت»<br>— ما قالته الخادمة العجوز قبل أن تختفي في الممر المعتم</span>
+        <p>في الصباح وجدت سينين أن ملفاتها كانت مرتّبة بشكل مختلف تماماً عن الليلة السابقة. لم تقل شيئاً. لكنها بدأت تدوّن ملاحظات خاصة في دفترها الصغير، ودفتر آخر أخفته في مكان لا يعرفه أحد.</p>
+        <p>خطأها الوحيد أنها ظنت أن أحداً لم يرَها وهي تخفيه.</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p>في اليوم الثاني، سمعت عن <strong>مالك</strong>. لا أحد أخبرها عنه بشكل مباشر — بل أشار إليه الجميع بطريقة مراوغة. «اسألي مالك». «مالك يعرف». «لا تسألي مالك».</p>
+        <p>أدركت أن مالك هو المفتاح. لم تكن تعرف بعد أنه أيضاً هو القفل والباب والغرفة المقفلة بأكملها.</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p>وجدته ليلاً. كان جالساً عند جذع شجرة العهد كأنه جزء منها. عيناه مثبتتان في السماء. لا يُبالي بما حوله. حين اقتربت، تكلّم دون أن ينظر إليها:</p>
+        <span class="whisper">«أنتِ المحققة السابعة. أعرف لماذا جئتِ. لكن سؤالي هو — هل تعرفين أنتِ لماذا جئتِ حقاً؟»</span>
+        <p>جلست بجواره. صمتت لحظة. ثم قالت: «جئت لأجد فتيات مفقودات».</p>
+        <p>ابتسم مالك ابتسامة غريبة. «الفتيات لم يختفين. الفتيات اختَرن. والفرق كبير».</p>
+        <p>لم تفهم سينين ما قاله حينها. لكنها ستفهمه لاحقاً — متأخرة جداً.</p>
+      </div>
+    </div>
+
+    <!-- ══ CH3 ══ -->
+    <div class="chapter-section" id="section-ch3">
+      <div class="chapter-header">
+        <span class="chapter-num">CHAPTER THREE</span>
+        <h2 class="chapter-title">الفصل الثالث — البئر</h2>
+        <div class="chapter-subtitle">«جثة معلقة في الظلام»</div>
+      </div>
+      <div class="prose">
+        <p>كانت البئر القديمة في طرف القرية — البئر التي جفّت منذ سبعين عاماً وفق ما يقول الناس. لا أحد يقترب منها الآن. علامات تحذيرية محلّية الصنع تطويقها من كل جانب.</p>
+        <p>سينين أزاحت التحذيرات.</p>
+        <p>لم يكن الهواء المتصاعد من البئر هواء جفاف. كان هواء رطباً، حياً تقريباً. وفيه...</p>
+        <span class="whisper">رائحة الدم لا تُخطئها مع تجربة كافية.</span>
+        <p>أضاءت مصباحها اليدوي ووجّهته إلى الأعماق. ما رأته جمّد الدم في عروقها لثانية واحدة فقط — لأن سينين لم تكن تتدرّب طوال هذه السنوات على أن تنهار أمام ما تراه.</p>
+        <p>في الأعماق، معلّق بحبل رفيع على قاطع حجري قديم، كان هيكل. ليس هيكلاً عظمياً قديماً — بل كان حديثاً بما يكفي ليشير إلى أن أحداً وضعه هناك منذ أسابيع لا سنوات.</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p>رفعت رأسها وصوّبت مصباحها. كان <strong>رجل</strong> واقفاً على حافة البئر ينظر إليها بهدوء تام. كأنه كان ينتظر هذه اللحظة.</p>
+        <p>«وجدتِها» قال ببساطة، وكأنه يتحدث عن حقيبة منسية لا عن جثة إنسان.</p>
+        <p>«<strong>مالك</strong>؟» سألت سينين، يدها اليمنى تتحرك تلقائياً نحو سلاحها.</p>
+        <p>ابتسم الرجل: «لا تفعلي هذا. ليس الوقت المناسب. الوقت المناسب سيأتي — حين تعرفين كل شيء».</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p>وقفا في صمت. الريح تعوي بين أغصان الأشجار البعيدة. ثم تكلّم مالك مجدداً:</p>
+        <p>«هذه ليست الجثة الأولى يا سينين. وليست الأخيرة. لكن هذه الجثة... هي التي ستفتح الباب الذي يجب ألّا يُفتح».</p>
+        <span class="whisper">«ما الباب؟» سألت سينين.
+«الباب الذي يُظهر لك من أنتِ حقاً. ولماذا اختارتكِ القرية — وليس العكس»</span>
+        <p>نزلت <strong>سينين</strong> إلى البئر بحبل أحضره <strong>سيف</strong> — مساعدها الذي وصل قبل ساعة واحدة من العاصمة. كان سيف قلقاً بشكل واضح، لكنه لم يعترض. كان يعرف أن الاعتراض على سينين عبث محض.</p>
+        <p>في الأسفل، وجدت أكثر من جثة. وجدت رسالة.</p>
+        <p>رسالة مكتوبة بخط يد أنيق — خط يد يشبه خط يدها.</p>
+      </div>
+    </div>
+
+    <!-- ══ CH4 ══ -->
+    <div class="chapter-section" id="section-ch4">
+      <div class="chapter-header">
+        <span class="chapter-num">CHAPTER FOUR</span>
+        <h2 class="chapter-title">الفصل الرابع — الصندوق</h2>
+        <div class="chapter-subtitle">«الصندوق يحتوي على سر الموت»</div>
+      </div>
+      <div class="prose">
+        <p>وجدت الصندوق تحت فراش غرفتها المخصصة في بيت العمدة. صندوق خشبي قديم، مقفل بقفل مزدوج، مغطّى بطلاسم مرسومة بحبر داكن اللون. حبر أو... شيء آخر.</p>
+        <p>لم يكن موجوداً هناك حين استيقظت صباح ذلك اليوم. وضعه أحد ما هناك خلال النهار — وهذا يعني أن شخصاً ما كان في غرفتها.</p>
+        <span class="whisper">«بعض الأسرار تحتاج إلى مفتاحين — واحد يفتح القفل، وآخر يفتح عقلك على احتمال أن ما تعتقده مستحيلاً... ليس كذلك»</span>
+        <p>كسرت سينين القفل بعد محاولات. داخل الصندوق كانت ثلاثة عناصر: ملفات إدارية تعود لسبعين عاماً، صورة فوتوغرافية فيها وجه مألوف، وشيء لم تكن تتوقعه أبداً.</p>
+        <p>بطاقة هويتها الشخصية.</p>
+        <p>وعليها تاريخ وفاة.</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p style="text-align:center;color:var(--rm-accent, var(--gold));font-family:var(--font-ar-title);font-size:22px;font-style:italic">
+          ماذا وجدت في الصندوق؟<br>من وضعه هناك؟<br>وما علاقة مالك بكل هذا؟
+        </p>
+        <p style="text-align:center;color:var(--text-muted);font-family:var(--font-ar-ui);font-size:14px;margin-top:16px">
+          الإجابات في الرواية كاملة...
+        </p>
+      </div>
+    </div>
+
+    <!-- ══ CH5 ══ -->
+    <div class="chapter-section" id="section-ch5">
+      <div class="chapter-header">
+        <span class="chapter-num">CHAPTER FIVE</span>
+        <h2 class="chapter-title">الفصل الخامس — الشيخ سالم</h2>
+        <div class="chapter-subtitle">«حارس شجرة العهد»</div>
+      </div>
+      <div class="prose">
+        <p>في اليوم الرابع، طلبت <strong>سينين</strong> مقابلة <strong>الشيخ سالم</strong>. كان اسمه يُهمس به الجميع بهيبة — لا بخوف، بل بذلك النوع من الاحترام الذي يُمنح لمن يعرف أشياء لا يجرؤ الآخرون على الاقتراب منها.</p>
+        <p>وجدته في منزله الصغير خلف المسجد القديم. رجل نحيل، وجهه مليء بالتجاعيد كأنها خريطة حياة عاشها على حافة شيء لا يُسمّى. عيناه كانتا... تريان أكثر مما ينبغي.</p>
+        <span class="whisper">«أنا حارس شجرة العهد، يا سينين. والحارس لا يُفشي أسرار ما يحرسه»</span>
+        <p>«لكنك تعرف ما حدث للفتيات» قالت سينين بهدوء.</p>
+        <p>صمت الشيخ سالم طويلاً. ثم قال بصوت خفيض كأنه يخشى أن تسمعه الجدران: «الفتيات لم يختفين بالمعنى الذي تعرفيه. الشجرة اختارتهن. ومن تختاره الشجرة.. لا يعود».</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p>أخرج الشيخ سالم دفتراً قديماً من تحت سجادته. دفتر أصفر الصفحات، مكتوب بخط يد دقيق. فيه أسماء — عشرات الأسماء — وبجانب كل اسم تاريخ.</p>
+        <p>«هؤلاء كلّهم اختارتهم الشجرة منذ بداية القرية. هذا ليس إجراماً يا سينين. هذا عهد».</p>
+        <p>تصفحت سينين الصفحات. كل اسم كان لفتاة تتراوح أعمارهن بين الثامنة عشرة والخامسة والعشرين. وبجانب كل اسم — رسمة صغيرة لورقة شجر.</p>
+        <span class="whisper">«وإذا رفضت الفتاة العهد؟» سألت سينين.
+نظر إليها الشيخ سالم بعينين فيهما حزن عميق.
+«لم يرفض أحد العهد. أبداً. لأن الشجرة لا تسأل»</span>
+        <p>غادرت سينين منزل الشيخ سالم وعقلها يشتعل. كل ما قاله كان يشير إلى شيء واحد: إن ما يحدث في الجُب ليس جريمة بالمفهوم القانوني. بل هو شيء أقدم. أعمق. أخطر.</p>
+        <p>ولأول مرة منذ وصولها — شعرت سينين بالخوف. ليس من القرية، بل من نفسها. من احتمال أن تكون الإجابات التي تبحث عنها مدفونة داخلها هي.</p>
+      </div>
+    </div>
+
+    <!-- ══ CH6 ══ -->
+    <div class="chapter-section" id="section-ch6">
+      <div class="chapter-header">
+        <span class="chapter-num">CHAPTER SIX</span>
+        <h2 class="chapter-title">الفصل السادس — الطقس</h2>
+        <div class="chapter-subtitle">«ليلة اكتمال القمر»</div>
+      </div>
+      <div class="prose">
+        <p>جاءت الليلة السابعة بعد وصول سينين — ليلة اكتمال القمر. كانت القرية كلها صامتة بشكل غير طبيعي. لا أطفال يلعبون، لا أصوات من البيوت، حتى الكلاب اختفت.</p>
+        <span class="whisper">«الليلة، الشجرة ستتكلم» — همس <strong>سيف</strong> لها بقلق</span>
+        <p>عند منتصف الليل، سمعت سينين صوتاً. ليس صوتاً عادياً — بل أشبه بتردد منخفض يأتي من تحت الأرض. من جذور الشجرة. من قلب القرية نفسها.</p>
+        <p>خرجت من غرفتها. كان ضوء القمر يغمر القرية بأبيض بارد. وهناك، حول شجرة العهد، رأت ما لم تكن تتخيله:</p>
+        <p>دائرة من القرويين. عشرات منهم. واقفون في صمت تام حول الشجرة، وجوههم مرفوعة نحو السماء. <strong>العمدة محمود</strong> كان في المقدمة. <strong>الشيخ سالم</strong> بجواره. حتى <strong>د. سامر</strong> المؤرخ الذي ادّعى أنه لا علاقة له بالأحداث.</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p>وفي المركز تماماً، عند جذع الشجرة — كانت تقف فتاة. شابة في لباس أبيض، عيناها مغلقتان، يداها ممدودتان نحو الشجرة كأنها تحتضنها.</p>
+        <p>كانت تبتسم.</p>
+        <span class="whisper">«لا!» صرخت سينين بلا تفكير.
+التفت الوجوه كلها نحوها. وفي عيونهم لم تجد غضباً. وجدت شفقة.
+«لقد جاء دوركِ يا سينين» — قال العمدة محمود بهدوء</span>
+        <p>جرت سينين. جرت بكل ما فيها نحو الفتاة المبتسمة. أمسكت يدها وسحبتها بعيداً عن الشجرة. الفتاة فتحت عينيها — ولم تكن عينيها كعيون البشر.</p>
+        <p>كانتا سوداوين بالكامل. بلا بياض. بلا قزحية. مثل بئرين صغيرتين مفتوحتين على العدم.</p>
+        <div class="scene-divider">✦ ✦ ✦</div>
+        <p style="text-align:center;color:var(--rm-accent, var(--gold));font-family:var(--font-ar-title);font-size:22px;font-style:italic">
+          ما العهد الحقيقي؟<br>لماذا اختارت الشجرة سينين؟<br>وما الذي يخفيه مالك عنها؟
+        </p>
+        <p style="text-align:center;color:var(--text-muted);font-family:var(--font-ar-ui);font-size:14px;margin-top:16px">
+          الإجابات في الرواية الكاملة... 📖
+        </p>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="reader-cta">
+      <h3>أريد معرفة المزيد! 🔥</h3>
+      <p>هذا مجرد مقتطف — الرواية الكاملة تضم أحداثاً ستصدمك وتجعلك لا تستطيع إيقاف القراءة</p>
+      <div class="reader-cta-btns">
+        <a href="buy.html" class="btn btn-primary btn-large">اشترِ الرواية كاملة — 153 جنيه</a>
+        <a href="characters.html" class="btn btn-outline">تعرف على الشخصيات</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/particles.js"></script>
+<script>
+  // ── Reading Mode ──
+  const body = document.body;
+  const modeBtns = document.querySelectorAll('.mode-btn, .mode-pill');
+  modeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.mode;
+      body.dataset.readMode = mode;
+      modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+      localStorage.setItem('readMode', mode);
+    });
+  });
+  const savedMode = localStorage.getItem('readMode');
+  if (savedMode) {
+    body.dataset.readMode = savedMode;
+    modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === savedMode));
+  }
+
+  // ── Font Size ──
+  let fontSize = parseInt(localStorage.getItem('fontSize')) || 19;
+  const proses = document.querySelectorAll('.prose');
+  const applyFont = () => proses.forEach(p => p.style.fontSize = fontSize + 'px');
+  applyFont();
+  document.getElementById('fontPlus').addEventListener('click', () => { if(fontSize < 26) { fontSize++; applyFont(); localStorage.setItem('fontSize', fontSize); } });
+  document.getElementById('fontMinus').addEventListener('click', () => { if(fontSize > 14) { fontSize--; applyFont(); localStorage.setItem('fontSize', fontSize); } });
+
+  // ── Progress Bar ──
+  const fill = document.getElementById('progressFill');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    fill.style.width = pct + '%';
+  });
+
+  // ── Chapter Switching ──
+  function switchChapter(id) {
+    document.querySelectorAll('.chapter-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    document.querySelectorAll('.chap-btn').forEach((b,i) => {
+      const ids = ['intro','ch1','ch2','ch3','ch4'];
+      b.classList.toggle('active', ids[i] === id);
+    });
+    document.querySelectorAll('.toc-link').forEach((l,i) => {
+      const ids = ['intro','ch1','ch2','ch3','ch4'];
+      l.classList.toggle('active', ids[i] === id);
+    });
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  // ── Per-Mode Animated Backgrounds ──
+  (function(){
+    const mc = document.getElementById('modeBgCanvas');
+    if(!mc) return;
+    const ctx = mc.getContext('2d');
+    let W,H,anim,pts=[];
+    function resize(){ W=mc.width=window.innerWidth; H=mc.height=window.innerHeight; }
+    function rnd(a,b){ return Math.random()*(b-a)+a; }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function drawStars(){
+      ctx.clearRect(0,0,W,H);
+      if(pts.length===0) for(let i=0;i<80;i++) pts.push({x:rnd(0,W),y:rnd(0,H),s:rnd(0.5,2),b:rnd(0.3,1),d:rnd(0.003,0.01)});
+      for(let p of pts){
+        p.b+=p.d; if(p.b>1||p.b<0.2) p.d*=-1;
+        ctx.save(); ctx.globalAlpha=p.b*0.7; ctx.fillStyle='#E8E4D8';
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); ctx.restore();
+      }
+      anim=requestAnimationFrame(drawStars);
+    }
+    function drawBlood(){
+      ctx.clearRect(0,0,W,H);
+      if(pts.length===0) for(let i=0;i<25;i++) pts.push({x:rnd(0,W),y:rnd(-H,0),s:rnd(2,5),vy:rnd(0.3,1.2),o:rnd(0.1,0.3)});
+      for(let p of pts){
+        p.y+=p.vy; if(p.y>H){p.y=rnd(-50,0);p.x=rnd(0,W);}
+        ctx.save(); ctx.globalAlpha=p.o; ctx.fillStyle='#C41E3A';
+        ctx.beginPath();
+        // teardrop shape
+        ctx.moveTo(p.x,p.y); ctx.bezierCurveTo(p.x-p.s,p.y+p.s*2,p.x-p.s,p.y+p.s*3,p.x,p.y+p.s*4);
+        ctx.bezierCurveTo(p.x+p.s,p.y+p.s*3,p.x+p.s,p.y+p.s*2,p.x,p.y);
+        ctx.fill(); ctx.restore();
+      }
+      anim=requestAnimationFrame(drawBlood);
+    }
+    function drawDust(){
+      ctx.clearRect(0,0,W,H);
+      if(pts.length===0) for(let i=0;i<30;i++) pts.push({x:rnd(0,W),y:rnd(0,H),vx:rnd(-0.15,0.15),vy:rnd(-0.08,0.08),s:rnd(1,3),o:rnd(0.1,0.25)});
+      for(let p of pts){
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.x<0) p.x=W; if(p.x>W) p.x=0; if(p.y<0) p.y=H; if(p.y>H) p.y=0;
+        ctx.save(); ctx.globalAlpha=p.o; ctx.fillStyle='#C8A850';
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); ctx.restore();
+      }
+      anim=requestAnimationFrame(drawDust);
+    }
+    function drawSun(){
+      ctx.clearRect(0,0,W,H);
+      if(pts.length===0) for(let i=0;i<15;i++) pts.push({x:rnd(0,W),y:rnd(0,H),a:rnd(0,Math.PI*2),s:rnd(30,80),d:rnd(0.001,0.005),o:rnd(0.02,0.06)});
+      for(let p of pts){
+        p.a+=p.d;
+        ctx.save(); ctx.globalAlpha=p.o; ctx.fillStyle='#F0D060';
+        ctx.translate(p.x,p.y); ctx.rotate(p.a);
+        ctx.fillRect(-p.s/2,-1,p.s,2); ctx.restore();
+      }
+      anim=requestAnimationFrame(drawSun);
+    }
+
+    function switchBg(mode){
+      cancelAnimationFrame(anim); pts=[]; ctx.clearRect(0,0,W,H);
+      if(mode==='dark') drawStars();
+      else if(mode==='night') drawBlood();
+      else if(mode==='creamy') drawDust();
+      else if(mode==='light') drawSun();
+    }
+    switchBg(body.dataset.readMode||'dark');
+
+    // Hook into mode buttons
+    modeBtns.forEach(btn=>{
+      btn.addEventListener('click',()=>switchBg(btn.dataset.mode));
+    });
+  })();
+</script>
+</body>
+</html>
