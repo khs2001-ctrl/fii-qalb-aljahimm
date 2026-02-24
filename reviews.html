@@ -185,258 +185,117 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDK -->
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, increment, serverTimestamp, query, orderBy, onSnapshot, getDoc } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js';
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'https://mrtbmupvvgjjmvsoeiqq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ydGJtdXB2dmdqam12c29laXFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NzQwNjMsImV4cCI6MjA4NzU1MDA2M30.USWgjw0Dvr7QK2-Q0fYmW9xAMdbfyXiFz6eHLEcD1Bk';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ═══════════════════════════════════════════════════
-// Firebase Config — fi-qalb-aljaheem
-// ═══════════════════════════════════════════════════
-const firebaseConfig = {
-  apiKey: "AIzaSyAYTSnQb63IoH6udfA5_t301hEqTLWitNM",
-  authDomain: "fi-qalb-aljaheem.firebaseapp.com",
-  databaseURL: "https://fi-qalb-aljaheem-default-rtdb.firebaseio.com",
-  projectId: "fi-qalb-aljaheem",
-  storageBucket: "fi-qalb-aljaheem.firebasestorage.app",
-  messagingSenderId: "575532731828",
-  appId: "1:575532731828:web:6ba28f12f61dc2f836b6e1",
-  measurementId: "G-6HBVCBL1WE"
-};
-// ═══════════════════════════════════════════════════
+let currentRating = 0, allReviews = [];
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let currentRating = 0;
-let allReviews = [];
-
-// ── Star Rating ──
-window.setRating = function(val) {
+function setRating(val) {
   currentRating = val;
-  document.querySelectorAll('#starRating .star').forEach((s, i) => {
-    s.classList.toggle('active', i < val);
-  });
-};
+  document.querySelectorAll('#starRating .star').forEach((s, i) => s.classList.toggle('active', i < val));
+}
 
-// ── Submit Review ──
-window.submitReview = async function(e) {
+async function submitReview(e) {
   e.preventDefault();
   const name = document.getElementById('reviewName').value.trim();
   const text = document.getElementById('reviewText').value.trim();
   if (!name || !text) return;
   if (currentRating === 0) { showToast('⭐ اختار تقييمك الأول'); return; }
-
   const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.textContent = 'جاري الإرسال...';
+  btn.disabled = true; btn.textContent = 'جاري الإرسال...';
 
-  try {
-    await addDoc(collection(db, 'reviews'), {
-      name,
-      text,
-      rating: currentRating,
-      timestamp: serverTimestamp(),
-      reactions: { fire: 0, heart: 0, clap: 0 }
-    });
+  const { error } = await sb.from('reviews').insert({ name, text, rating: currentRating });
+  if (error) { showToast('❌ ' + error.message); }
+  else {
     document.getElementById('reviewForm').reset();
     currentRating = 0;
     document.querySelectorAll('#starRating .star').forEach(s => s.classList.remove('active'));
     showToast('✅ تم إضافة رأيك بنجاح!');
-  } catch(err) {
-    console.error(err);
-    showToast('❌ حدث خطأ — تأكد من إعداد Firebase');
+    loadReviews();
   }
-  btn.disabled = false;
-  btn.textContent = 'إرسال رأيك 🔥';
-};
-
-// ── Load Reviews (Real-time) ──
-function loadReviews() {
-  const q = query(collection(db, 'reviews'), orderBy('timestamp', 'desc'));
-  onSnapshot(q, async (snapshot) => {
-    allReviews = [];
-    for (const docSnap of snapshot.docs) {
-      const data = docSnap.data();
-      // Load replies
-      const repliesSnap = await getDocs(query(collection(db, 'reviews', docSnap.id, 'replies'), orderBy('timestamp', 'asc')));
-      const replies = repliesSnap.docs.map(r => ({ id: r.id, ...r.data() }));
-      allReviews.push({ id: docSnap.id, ...data, replies });
-    }
-    renderReviews();
-    updateStats();
-  }, (err) => {
-    console.error('Firestore error:', err);
-    document.getElementById('reviewsLoading').innerHTML = '<p style="color:var(--crimson)">⚠️ تأكد من إعداد Firebase — راجع التعليمات</p>';
-  });
+  btn.disabled = false; btn.textContent = 'إرسال رأيك 🔥';
 }
 
-// ── Render Reviews ──
-function renderReviews() {
-  const container = document.getElementById('reviewsList');
-  if (!allReviews.length) {
-    container.innerHTML = `
-      <div class="empty-reviews" data-reveal>
-        <div class="empty-icon">📝</div>
-        <p>مفيش آراء لسه — كن أول من يشارك رأيه!</p>
-      </div>`;
+async function loadReviews() {
+  const { data: reviews, error } = await sb.from('reviews').select('*').order('created_at', { ascending: false });
+  if (error) {
+    document.getElementById('reviewsList').innerHTML = '<div class="empty-reviews"><p style="color:var(--crimson)">⚠️ ' + error.message + '</p></div>';
     return;
   }
+  const ids = reviews.map(r => r.id);
+  const { data: replies } = await sb.from('replies').select('*').in('review_id', ids.length ? ids : ['x']).order('created_at');
+  allReviews = reviews.map(r => ({ ...r, replies: (replies||[]).filter(rep => rep.review_id === r.id) }));
+  renderReviews(); updateStats();
+}
 
-  let html = '';
-  allReviews.forEach(r => {
-    const date = r.timestamp ? new Date(r.timestamp.seconds * 1000) : new Date();
-    const dateStr = date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' });
-    const initial = r.name.charAt(0);
-    const stars = renderStars(r.rating);
-    const reactions = r.reactions || { fire: 0, heart: 0, clap: 0 };
-    const userReactions = JSON.parse(localStorage.getItem('reactions_' + r.id) || '{}');
-
-    html += `
-    <div class="review-card" data-reveal>
-      <div class="review-header">
-        <div class="review-author">
-          <div class="review-avatar">${initial}</div>
-          <div>
-            <div class="review-name">${escapeHtml(r.name)}</div>
-            <div class="review-date">${dateStr}</div>
-          </div>
-        </div>
-        <div class="review-stars">${stars}</div>
-      </div>
-      <div class="review-text">${escapeHtml(r.text)}</div>
+function renderReviews() {
+  const c = document.getElementById('reviewsList');
+  if (!allReviews.length) { c.innerHTML = '<div class="empty-reviews"><div class="empty-icon">📝</div><p>مفيش آراء لسه — كن أول من يشارك رأيه!</p></div>'; return; }
+  c.innerHTML = allReviews.map(r => {
+    const d = new Date(r.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'short',day:'numeric'});
+    const ur = JSON.parse(localStorage.getItem('rct_'+r.id)||'{}');
+    return `<div class="review-card">
+      <div class="review-header"><div class="review-author"><div class="review-avatar">${r.name.charAt(0)}</div><div><div class="review-name">${esc(r.name)}</div><div class="review-date">${d}</div></div></div><div class="review-stars">${stars(r.rating)}</div></div>
+      <div class="review-text">${esc(r.text)}</div>
       <div class="review-actions">
-        <button class="reaction-btn ${userReactions.fire ? 'reacted' : ''}" onclick="react('${r.id}','fire')">
-          <span class="emoji">🔥</span> <span>${reactions.fire || 0}</span>
-        </button>
-        <button class="reaction-btn ${userReactions.heart ? 'reacted' : ''}" onclick="react('${r.id}','heart')">
-          <span class="emoji">❤️</span> <span>${reactions.heart || 0}</span>
-        </button>
-        <button class="reaction-btn ${userReactions.clap ? 'reacted' : ''}" onclick="react('${r.id}','clap')">
-          <span class="emoji">👏</span> <span>${reactions.clap || 0}</span>
-        </button>
-        <button class="reply-toggle" onclick="toggleReply('${r.id}')">💬 رد (${r.replies?.length || 0})</button>
+        <button class="reaction-btn ${ur.fire?'reacted':''}" onclick="react('${r.id}','fire')"><span class="emoji">🔥</span> ${r.fire||0}</button>
+        <button class="reaction-btn ${ur.heart?'reacted':''}" onclick="react('${r.id}','heart')"><span class="emoji">❤️</span> ${r.heart||0}</button>
+        <button class="reaction-btn ${ur.clap?'reacted':''}" onclick="react('${r.id}','clap')"><span class="emoji">👏</span> ${r.clap||0}</button>
+        <button class="reply-toggle" onclick="toggleReply('${r.id}')">💬 رد (${r.replies?.length||0})</button>
       </div>
-      <div class="replies-section" id="replies-${r.id}" style="display:${r.replies?.length ? 'block' : 'none'}">
-        ${renderReplies(r.replies || [])}
+      <div class="replies-section" id="replies-${r.id}" style="display:${r.replies?.length?'block':'none'}">
+        ${(r.replies||[]).map(rep=>`<div class="reply-card"><div class="reply-header"><div class="reply-avatar">${(rep.name||'?').charAt(0)}</div><span class="reply-name">${esc(rep.name||'مجهول')}</span><span class="reply-date">${new Date(rep.created_at).toLocaleDateString('ar-EG',{month:'short',day:'numeric'})}</span></div><div class="reply-text">${esc(rep.text)}</div></div>`).join('')}
         <div class="reply-form" id="replyForm-${r.id}" style="display:none">
-          <input type="text" class="form-input reply-name-input" placeholder="اسمك" id="replyName-${r.id}" maxlength="30">
-          <input type="text" class="form-input" placeholder="اكتب ردك..." id="replyText-${r.id}" maxlength="500">
+          <input type="text" class="form-input reply-name-input" placeholder="اسمك" id="rn-${r.id}" maxlength="30">
+          <input type="text" class="form-input" placeholder="اكتب ردك..." id="rt-${r.id}" maxlength="500">
           <button class="btn btn-primary btn-sm" onclick="submitReply('${r.id}')">رد</button>
         </div>
-      </div>
-    </div>`;
-  });
-
-  container.innerHTML = html;
-  // Re-trigger reveal
-  document.querySelectorAll('[data-reveal]:not(.revealed)').forEach(el => {
-    el.classList.add('revealed');
-  });
-}
-
-function renderStars(rating) {
-  let html = '';
-  for (let i = 1; i <= 5; i++) {
-    html += `<span class="${i <= rating ? 'on' : 'off'}">★</span>`;
-  }
-  return html;
-}
-
-function renderReplies(replies) {
-  if (!replies.length) return '';
-  return replies.map(r => {
-    const date = r.timestamp ? new Date(r.timestamp.seconds * 1000) : new Date();
-    const dateStr = date.toLocaleDateString('ar-EG', { month: 'short', day: 'numeric' });
-    return `
-    <div class="reply-card">
-      <div class="reply-header">
-        <div class="reply-avatar">${r.name?.charAt(0) || '?'}</div>
-        <span class="reply-name">${escapeHtml(r.name || 'مجهول')}</span>
-        <span class="reply-date">${dateStr}</span>
-      </div>
-      <div class="reply-text">${escapeHtml(r.text)}</div>
-    </div>`;
+      </div></div>`;
   }).join('');
 }
 
-// ── Reactions ──
-window.react = async function(reviewId, type) {
-  const key = 'reactions_' + reviewId;
-  const userReactions = JSON.parse(localStorage.getItem(key) || '{}');
+function stars(n){let h='';for(let i=1;i<=5;i++)h+='<span class="'+(i<=n?'on':'off')+'">★</span>';return h;}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
-  if (userReactions[type]) {
-    showToast('عملت ريأكت ده قبل كده ✨');
-    return;
-  }
-
-  try {
-    const ref = doc(db, 'reviews', reviewId);
-    await updateDoc(ref, { [`reactions.${type}`]: increment(1) });
-    userReactions[type] = true;
-    localStorage.setItem(key, JSON.stringify(userReactions));
-  } catch(err) {
-    console.error(err);
-  }
-};
-
-// ── Toggle Reply ──
-window.toggleReply = function(reviewId) {
-  const section = document.getElementById('replies-' + reviewId);
-  const form = document.getElementById('replyForm-' + reviewId);
-  section.style.display = section.style.display === 'none' ? 'block' : 'block';
-  form.style.display = form.style.display === 'none' ? 'flex' : 'none';
-};
-
-// ── Submit Reply ──
-window.submitReply = async function(reviewId) {
-  const name = document.getElementById('replyName-' + reviewId).value.trim() || 'مجهول';
-  const text = document.getElementById('replyText-' + reviewId).value.trim();
-  if (!text) return;
-
-  try {
-    await addDoc(collection(db, 'reviews', reviewId, 'replies'), {
-      name,
-      text,
-      timestamp: serverTimestamp()
-    });
-    document.getElementById('replyName-' + reviewId).value = '';
-    document.getElementById('replyText-' + reviewId).value = '';
-    showToast('✅ تم إضافة ردك');
-  } catch(err) {
-    console.error(err);
-    showToast('❌ خطأ في الإرسال');
-  }
-};
-
-// ── Update Stats ──
-function updateStats() {
-  const total = allReviews.length;
-  document.getElementById('totalReviews').textContent = total;
-  if (total > 0) {
-    const avg = (allReviews.reduce((s, r) => s + (r.rating || 0), 0) / total).toFixed(1);
-    document.getElementById('avgRating').textContent = avg;
-  }
+async function react(id,type) {
+  const k='rct_'+id, ur=JSON.parse(localStorage.getItem(k)||'{}');
+  if(ur[type]){showToast('عملت ريأكت ده قبل كده ✨');return;}
+  const r=allReviews.find(x=>x.id===id);
+  if(!r)return;
+  const upd={};upd[type]=(r[type]||0)+1;
+  await sb.from('reviews').update(upd).eq('id',id);
+  ur[type]=true;localStorage.setItem(k,JSON.stringify(ur));
+  loadReviews();
 }
 
-// ── Helpers ──
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+function toggleReply(id){
+  const f=document.getElementById('replyForm-'+id);
+  document.getElementById('replies-'+id).style.display='block';
+  f.style.display=f.style.display==='none'?'flex':'none';
 }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+async function submitReply(id){
+  const name=document.getElementById('rn-'+id).value.trim()||'مجهول';
+  const text=document.getElementById('rt-'+id).value.trim();
+  if(!text)return;
+  const{error}=await sb.from('replies').insert({review_id:id,name,text});
+  if(error){showToast('❌ '+error.message);}
+  else{document.getElementById('rn-'+id).value='';document.getElementById('rt-'+id).value='';showToast('✅ تم إضافة ردك');loadReviews();}
 }
-window.showToast = showToast;
 
-// ── Init ──
+function updateStats(){
+  const t=allReviews.length;
+  document.getElementById('totalReviews').textContent=t;
+  if(t>0)document.getElementById('avgRating').textContent=(allReviews.reduce((s,r)=>s+(r.rating||0),0)/t).toFixed(1);
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
 loadReviews();
 </script>
-
 <script src="js/particles.js"></script><script src="js/navigation.js"></script><script src="js/main.js"></script>
 </body></html>
