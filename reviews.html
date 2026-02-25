@@ -86,12 +86,49 @@
     .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:linear-gradient(145deg,#1E1E24,#141419);border:1px solid rgba(212,175,55,0.3);border-radius:var(--r-md);padding:14px 28px;font-family:var(--font-ar-ui);font-size:14px;color:var(--gold);z-index:1000;transition:transform .4s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 10px 40px rgba(0,0,0,0.5)}
     .toast.show{transform:translateX(-50%) translateY(0)}
 
+    /* Media Toolbar */
+    .media-toolbar{display:flex;gap:8px;margin-bottom:var(--sp-md);flex-wrap:wrap}
+    .media-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r-full);font-family:var(--font-ar-ui);font-size:12px;color:var(--text-muted);background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.12);cursor:pointer;transition:all .2s}
+    .media-btn:hover{color:var(--gold);border-color:rgba(212,175,55,0.4);background:rgba(212,175,55,0.12)}
+    .media-btn .ico{font-size:16px}
+
+    /* Media Preview */
+    .media-preview{margin-bottom:var(--sp-md);position:relative;display:inline-block}
+    .media-preview img{max-width:200px;max-height:150px;border-radius:var(--r-sm);border:1px solid rgba(212,175,55,0.15)}
+    .media-preview .remove-media{position:absolute;top:-8px;right:-8px;width:24px;height:24px;border-radius:50%;background:var(--crimson);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none}
+
+    /* GIF/Sticker Modal */
+    .giphy-modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:var(--sp-lg);opacity:0;pointer-events:none;transition:opacity .3s}
+    .giphy-modal.open{opacity:1;pointer-events:all}
+    .giphy-box{background:linear-gradient(145deg,#1A1A20,#12121A);border:1px solid rgba(212,175,55,0.25);border-radius:var(--r-xl);padding:var(--sp-lg);max-width:500px;width:100%;max-height:80vh;display:flex;flex-direction:column}
+    .giphy-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-md)}
+    .giphy-header h3{font-family:var(--font-ar-title);color:var(--gold);font-size:18px}
+    .giphy-close{width:32px;height:32px;border-radius:50%;background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.2);color:var(--text-muted);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .giphy-search{width:100%;padding:10px 16px;background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.15);border-radius:var(--r-sm);color:var(--text-primary);font-family:var(--font-ar-ui);font-size:14px;margin-bottom:var(--sp-md);direction:rtl}
+    .giphy-search::placeholder{color:var(--text-muted)}
+    .giphy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;overflow-y:auto;max-height:50vh;padding:4px}
+    .giphy-grid img{width:100%;height:auto;border-radius:8px;cursor:pointer;transition:transform .2s;border:2px solid transparent}
+    .giphy-grid img:hover{transform:scale(1.05);border-color:var(--gold)}
+
+    /* Review Media Display */
+    .review-media{margin:var(--sp-sm) 0}
+    .review-media img{max-width:100%;max-height:400px;border-radius:var(--r-md);border:1px solid rgba(212,175,55,0.12)}
+    .review-media .review-gif{max-width:300px}
+    .review-media .review-sticker{max-width:120px}
+
+    /* Edit/Delete Buttons */
+    .review-owner-actions{display:flex;gap:6px;margin-right:auto}
+    .owner-btn{padding:4px 12px;border-radius:var(--r-full);font-family:var(--font-ar-ui);font-size:11px;cursor:pointer;transition:all .2s;border:1px solid rgba(212,175,55,0.1);background:rgba(212,175,55,0.04);color:var(--text-muted)}
+    .owner-btn:hover{border-color:rgba(212,175,55,0.3);color:var(--gold)}
+    .owner-btn.delete-btn:hover{border-color:rgba(196,30,58,0.4);color:var(--crimson);background:rgba(196,30,58,0.08)}
+
     @media(max-width:768px){
       .review-form-card{padding:var(--sp-lg)}
       .review-header{flex-direction:column;align-items:flex-start}
       .reply-form{flex-direction:column}
       .reply-form .reply-name-input{max-width:100%}
       .reviews-stats{gap:var(--sp-md)}
+      .giphy-grid{grid-template-columns:repeat(2,1fr)}
     }
   </style>
 </head>
@@ -159,6 +196,14 @@
           <label class="form-label">رأيك في الرواية</label>
           <textarea id="reviewText" class="form-textarea" placeholder="اكتب رأيك هنا..." required maxlength="1000" style="min-height:100px"></textarea>
         </div>
+        <!-- Media Toolbar -->
+        <div class="media-toolbar">
+          <button type="button" class="media-btn" onclick="document.getElementById('imageInput').click()"><span class="ico">📷</span> صورة</button>
+          <button type="button" class="media-btn" onclick="openGiphy()"><span class="ico">🎬</span> GIF</button>
+          <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="previewImage(this)">
+        </div>
+        <!-- Media Preview -->
+        <div id="mediaPreview"></div>
         <button type="submit" class="btn btn-primary btn-large" style="width:100%;justify-content:center" id="submitBtn">
           إرسال رأيك 🔥
         </button>
@@ -193,20 +238,97 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- GIPHY Modal -->
+<div class="giphy-modal" id="giphyModal">
+  <div class="giphy-box">
+    <div class="giphy-header">
+      <h3 id="giphyTitle">اختر GIF</h3>
+      <button class="giphy-close" onclick="closeGiphy()">✕</button>
+    </div>
+    <input type="text" class="giphy-search" id="giphySearch" placeholder="ابحث عن GIF..." oninput="searchGiphy()">
+    <div class="giphy-grid" id="giphyGrid"></div>
+    <p style="text-align:center;margin-top:8px;font-size:10px;color:var(--text-muted)">Powered by GIPHY</p>
+  </div>
+</div>
+
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 const SUPABASE_URL = 'https://mrtbmupvvgjjmvsoeiqq.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ydGJtdXB2dmdqam12c29laXFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NzQwNjMsImV4cCI6MjA4NzU1MDA2M30.USWgjw0Dvr7QK2-Q0fYmW9xAMdbfyXiFz6eHLEcD1Bk';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const GIPHY_KEY = 'qasXrKFPadI3y6vhWwttqfxggE8MF687';
 
 let currentRating = 0, allReviews = [];
+let pendingImage = null, pendingGif = null;
+let giphyTimer = null;
 
+// ── Own reviews identity ──
+function getMyReviews() { return JSON.parse(localStorage.getItem('my_reviews') || '[]'); }
+function addMyReview(id) { const m = getMyReviews(); m.push(id); localStorage.setItem('my_reviews', JSON.stringify(m)); }
+function removeMyReview(id) { const m = getMyReviews().filter(x => x !== id); localStorage.setItem('my_reviews', JSON.stringify(m)); }
+function isMyReview(id) { return getMyReviews().includes(id); }
+
+// ── Rating ──
 function setRating(val) {
   currentRating = val;
   document.querySelectorAll('#starRating .star').forEach((s, i) => s.classList.toggle('active', i < val));
 }
 
+// ── Image Upload ──
+function previewImage(input) {
+  if (!input.files[0]) return;
+  const file = input.files[0];
+  if (file.size > 1024 * 1024) { showToast('⚠️ الصورة كبيرة — الحد الأقصى 1MB'); return; }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    pendingImage = e.target.result;
+    updateMediaPreview();
+  };
+  reader.readAsDataURL(file);
+}
+
+function updateMediaPreview() {
+  const c = document.getElementById('mediaPreview');
+  let html = '';
+  if (pendingImage) html += `<div class="media-preview"><img src="${pendingImage}" alt="preview"><button class="remove-media" onclick="pendingImage=null;updateMediaPreview()">✕</button></div> `;
+  if (pendingGif) html += `<div class="media-preview"><img src="${pendingGif}" alt="gif"><button class="remove-media" onclick="pendingGif=null;updateMediaPreview()">✕</button></div> `;
+  c.innerHTML = html;
+}
+
+// ── GIPHY ──
+function openGiphy() {
+  document.getElementById('giphyTitle').textContent = '🎬 اختر GIF';
+  document.getElementById('giphyModal').classList.add('open');
+  document.getElementById('giphySearch').value = '';
+  searchGiphy('horror'); // default search
+}
+
+function closeGiphy() { document.getElementById('giphyModal').classList.remove('open'); }
+
+function searchGiphy(query) {
+  clearTimeout(giphyTimer);
+  const q = query || document.getElementById('giphySearch').value.trim() || 'كتاب';
+  giphyTimer = setTimeout(async () => {
+    const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(q)}&limit=18&rating=g&lang=ar`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      const grid = document.getElementById('giphyGrid');
+      grid.innerHTML = (data.data || []).map(g =>
+        `<img src="${g.images.fixed_width_small.url}" data-full="${g.images.fixed_width.url}" alt="${g.title}" onclick="selectGiphy('${g.images.fixed_width.url}')" loading="lazy">`
+      ).join('');
+    } catch(e) { console.error(e); }
+  }, 400);
+}
+
+function selectGiphy(url) {
+  pendingGif = url;
+  updateMediaPreview();
+  closeGiphy();
+}
+
+// ── Submit Review ──
 async function submitReview(e) {
   e.preventDefault();
   const name = document.getElementById('reviewName').value.trim();
@@ -216,18 +338,25 @@ async function submitReview(e) {
   const btn = document.getElementById('submitBtn');
   btn.disabled = true; btn.textContent = 'جاري الإرسال...';
 
-  const { error } = await sb.from('reviews').insert({ name, text, rating: currentRating });
+  const payload = { name, text, rating: currentRating };
+  if (pendingImage) payload.image_url = pendingImage;
+  if (pendingGif) payload.gif_url = pendingGif;
+
+  const { data, error } = await sb.from('reviews').insert(payload).select('id');
   if (error) { showToast('❌ ' + error.message); }
   else {
+    if (data && data[0]) addMyReview(data[0].id);
     document.getElementById('reviewForm').reset();
-    currentRating = 0;
+    currentRating = 0; pendingImage = null; pendingGif = null;
     document.querySelectorAll('#starRating .star').forEach(s => s.classList.remove('active'));
+    document.getElementById('mediaPreview').innerHTML = '';
     showToast('✅ تم إضافة رأيك بنجاح!');
     loadReviews();
   }
   btn.disabled = false; btn.textContent = 'إرسال رأيك 🔥';
 }
 
+// ── Load Reviews ──
 async function loadReviews() {
   const { data: reviews, error } = await sb.from('reviews').select('*').order('created_at', { ascending: false });
   if (error) {
@@ -240,20 +369,28 @@ async function loadReviews() {
   renderReviews(); updateStats();
 }
 
+// ── Render Reviews ──
 function renderReviews() {
   const c = document.getElementById('reviewsList');
   if (!allReviews.length) { c.innerHTML = '<div class="empty-reviews"><div class="empty-icon">📝</div><p>مفيش آراء لسه — كن أول من يشارك رأيه!</p></div>'; return; }
   c.innerHTML = allReviews.map(r => {
     const d = new Date(r.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'short',day:'numeric'});
     const ur = JSON.parse(localStorage.getItem('rct_'+r.id)||'{}');
-    return `<div class="review-card">
+    const mine = isMyReview(r.id);
+    let mediaHtml = '';
+    if (r.image_url) mediaHtml += `<div class="review-media"><img src="${esc(r.image_url)}" alt="صورة مرفقة" loading="lazy"></div>`;
+    if (r.gif_url) mediaHtml += `<div class="review-media"><img src="${esc(r.gif_url)}" alt="GIF" class="review-gif" loading="lazy"></div>`;
+    if (r.sticker_url) mediaHtml += `<div class="review-media"><img src="${esc(r.sticker_url)}" alt="ملصق" class="review-sticker" loading="lazy"></div>`;
+    return `<div class="review-card" id="rc-${r.id}">
       <div class="review-header"><div class="review-author"><div class="review-avatar">${r.name.charAt(0)}</div><div><div class="review-name">${esc(r.name)}</div><div class="review-date">${d}</div></div></div><div class="review-stars">${stars(r.rating)}</div></div>
-      <div class="review-text">${esc(r.text)}</div>
+      <div class="review-text" id="rtxt-${r.id}">${esc(r.text)}</div>
+      ${mediaHtml}
       <div class="review-actions">
         <button class="reaction-btn ${ur.fire?'reacted':''}" onclick="react('${r.id}','fire')"><span class="emoji">🔥</span> ${r.fire||0}</button>
         <button class="reaction-btn ${ur.heart?'reacted':''}" onclick="react('${r.id}','heart')"><span class="emoji">❤️</span> ${r.heart||0}</button>
         <button class="reaction-btn ${ur.clap?'reacted':''}" onclick="react('${r.id}','clap')"><span class="emoji">👏</span> ${r.clap||0}</button>
         <button class="reply-toggle" onclick="toggleReply('${r.id}')">💬 رد (${r.replies?.length||0})</button>
+        ${mine ? `<div class="review-owner-actions"><button class="owner-btn" onclick="editReview('${r.id}')">✏️ تعديل</button><button class="owner-btn delete-btn" onclick="deleteReview('${r.id}')">🗑️ حذف</button></div>` : ''}
       </div>
       <div class="replies-section" id="replies-${r.id}" style="display:${r.replies?.length?'block':'none'}">
         ${(r.replies||[]).map(rep=>`<div class="reply-card"><div class="reply-header"><div class="reply-avatar">${(rep.name||'?').charAt(0)}</div><span class="reply-name">${esc(rep.name||'مجهول')}</span><span class="reply-date">${new Date(rep.created_at).toLocaleDateString('ar-EG',{month:'short',day:'numeric'})}</span></div><div class="reply-text">${esc(rep.text)}</div></div>`).join('')}
@@ -266,8 +403,29 @@ function renderReviews() {
   }).join('');
 }
 
+// ── Edit Review ──
+async function editReview(id) {
+  const r = allReviews.find(x => x.id === id);
+  if (!r) return;
+  const newText = prompt('عدّل رأيك:', r.text);
+  if (newText === null || !newText.trim()) return;
+  const { error } = await sb.from('reviews').update({ text: newText.trim() }).eq('id', id);
+  if (error) showToast('❌ ' + error.message);
+  else { showToast('✅ تم تعديل رأيك'); loadReviews(); }
+}
+
+// ── Delete Review ──
+async function deleteReview(id) {
+  if (!confirm('متأكد إنك عايز تمسح رأيك؟')) return;
+  // Delete replies first
+  await sb.from('replies').delete().eq('review_id', id);
+  const { error } = await sb.from('reviews').delete().eq('id', id);
+  if (error) showToast('❌ ' + error.message);
+  else { removeMyReview(id); showToast('✅ تم حذف رأيك'); loadReviews(); }
+}
+
 function stars(n){let h='';for(let i=1;i<=5;i++)h+='<span class="'+(i<=n?'on':'off')+'">★</span>';return h;}
-function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function esc(s){if(!s) return '';const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
 async function react(id,type) {
   const k='rct_'+id, ur=JSON.parse(localStorage.getItem(k)||'{}');

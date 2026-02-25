@@ -53,6 +53,19 @@
         }
     }
 
+    // ── Nav Scroll Hint Arrow (mobile) ──
+    if (navLinks && window.innerWidth <= 768) {
+        const hint = document.createElement('div');
+        hint.className = 'nav-scroll-hint';
+        hint.textContent = '«';
+        navLinks.parentElement.style.position = 'relative';
+        navLinks.parentElement.appendChild(hint);
+        // Auto-hide after 4s or on first scroll
+        const hideHint = () => hint.classList.add('hidden');
+        setTimeout(hideHint, 4000);
+        navLinks.addEventListener('scroll', hideHint, { once: true });
+    }
+
     // ── Mobile Bottom Navigation Bar ──
     const bottomNav = document.createElement('nav');
     bottomNav.className = 'mobile-bottom-nav';
@@ -145,19 +158,26 @@
         document.head.appendChild(schema);
     }
 
-    // ── View Transitions API (smooth page transitions) ──
-    if ('startViewTransition' in document) {
-        document.querySelectorAll('a[href]').forEach(link => {
-            const href = link.getAttribute('href');
-            if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.startViewTransition(() => {
-                    window.location.href = href;
-                });
-            });
+    // ── Smooth Page Transitions (fade-out on navigate, fade-in on load) ──
+    // Fade in on page load
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.3s ease';
+    requestAnimationFrame(() => {
+        document.body.style.opacity = '1';
+    });
+
+    // Fade out on internal link click
+    document.querySelectorAll('a[href]').forEach(link => {
+        const href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('javascript')) return;
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                window.location.href = href;
+            }, 280);
         });
-    }
+    });
 
     // ── Google Analytics Placeholder ──
     // Uncomment and replace GA_MEASUREMENT_ID with your actual GA4 ID:
