@@ -1,7 +1,16 @@
 ﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8"><link rel="icon" type="image/svg+xml" href="favicon.svg"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="manifest" href="manifest.json"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="اشترِ رواية في قلب الجحيم — متاحة الآن عبر أسير الكتب ودار ملاذ للنشر">
+  <meta name="theme-color" content="#C41E3A">
+  <meta property="og:title" content="اشترِ الرواية | في قلب الجحيم">
+  <meta property="og:description" content="اشترِ رواية في قلب الجحيم — متاحة الآن أونلاين">
+  <meta property="og:image" content="https://fii-qalb-aljahimm.vercel.app/assets/images/book-cover/Main Book Cover Image.jpeg">
+  <meta property="og:url" content="https://fii-qalb-aljahimm.vercel.app/buy.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://fii-qalb-aljahimm.vercel.app/buy.html">
   <title>اشترِ الآن | في قلب الجحيم</title>
   <link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/animations.css"><link rel="stylesheet" href="css/responsive.css">
@@ -136,7 +145,7 @@
       <div class="price-currency">جنيه مصري فقط</div>
     </div>
 
-    <a href="buy.html" class="buy-cta" target="_blank">
+    <a href="https://cdn.aseeralkotb.com/ar/books/%D9%81%D9%89-%D9%82%D9%84%D8%A8-%D8%A7%D9%84%D8%AC%D8%AD%D9%8A%D9%85" class="buy-cta" target="_blank">
       🔥 اشترِ نسختك الآن
     </a>
   </div>
@@ -182,28 +191,17 @@
   </div>
 </section>
 
-<section class="review-strip">
-  <div class="review-card" data-reveal>
-    <div class="review-stars">⭐⭐⭐⭐⭐</div>
-    <div class="review-text">"قرأتها في ليلة واحدة ولم أستطع التوقف. النهاية صدمتني تماماً!"</div>
-    <div class="review-name">— قارئ من معرض القاهرة</div>
-  </div>
-  <div class="review-card" data-reveal>
-    <div class="review-stars">⭐⭐⭐⭐⭐</div>
-    <div class="review-text">"أفضل رواية تشويق عربية قرأتها. الأجواء مرعبة والحبكة محكمة."</div>
-    <div class="review-name">— متابع على فيسبوك</div>
-  </div>
-  <div class="review-card" data-reveal>
-    <div class="review-stars">⭐⭐⭐⭐⭐</div>
-    <div class="review-text">"حنين كاتبة موهوبة. شجرة العهد ستظل في ذهني لسنوات."</div>
-    <div class="review-name">— زائر حفل التوقيع</div>
+<section style="max-width:900px;margin:var(--sp-xl) auto;padding:0 var(--sp-md)">
+  <h2 style="font-family:var(--font-ar-title);font-size:var(--fs-h3);color:var(--text-primary);text-align:center;margin-bottom:var(--sp-lg)">💬 آراء القراء الحقيقية</h2>
+  <div class="review-strip" id="buyReviewStrip">
+    <div style="text-align:center;padding:var(--sp-xl);color:var(--gold);font-family:var(--font-ar-ui);width:100%">جاري تحميل الآراء...</div>
   </div>
 </section>
 
 <section class="final-cta" data-reveal>
   <h2 style="font-family:var(--font-ar-title);font-size:var(--fs-h2);color:var(--text-primary);margin-bottom:var(--sp-sm)">هل أنت مستعد للدخول إلى الجحيم؟</h2>
   <p style="font-family:var(--font-ar-ui);color:var(--text-muted);margin-bottom:var(--sp-xl)">لا تفوّت فرصتك — الرواية متاحة الآن على أسير الكتب</p>
-  <a href="buy.html" class="buy-cta" target="_blank">
+  <a href="https://cdn.aseeralkotb.com/ar/books/%D9%81%D9%89-%D9%82%D9%84%D8%A8-%D8%A7%D9%84%D8%AC%D8%AD%D9%8A%D9%85" class="buy-cta" target="_blank">
     🛒 اطلبها الآن — 153 جنيه فقط
   </a>
 </section>
@@ -221,6 +219,8 @@
   <div class="footer-bottom"><p class="footer-copyright">© 2026 في قلب الجحيم.</p><div class="khalid-credit"><div class="credit-icon">⚡</div><span>Built by </span><a href="https://www.instagram.com/kh23alid_hassan/?__pwa=1" target="_blank" style="color:var(--gold);text-decoration:none" class="credit-name">Khalid Hassan</a></div></div>
 </div></footer>
 
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/particles.js"></script><script src="js/navigation.js"></script><script src="js/main.js"></script>
 <script>
 // Blood rain animation
@@ -236,6 +236,26 @@
     drop.style.opacity=Math.random()*0.4+0.1;
     rain.appendChild(drop);
   }
+})();
+
+// Load dynamic reviews from Supabase
+(async function(){
+  const sb = window.supabase.createClient(
+    'https://mrtbmupvvgjjmvsoeiqq.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ydGJtdXB2dmdqam12c29laXFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE5NzQwNjMsImV4cCI6MjA4NzU1MDA2M30.USWgjw0Dvr7QK2-Q0fYmW9xAMdbfyXiFz6eHLEcD1Bk'
+  );
+  const {data:reviews} = await sb.from('reviews').select('*').order('created_at',{ascending:false}).limit(10);
+  const strip = document.getElementById('buyReviewStrip');
+  if(!reviews||!reviews.length){
+    strip.innerHTML='<div style="text-align:center;padding:var(--sp-xl);color:var(--text-muted);font-family:var(--font-ar-ui);width:100%">لا توجد آراء بعد — كن أول من يشارك رأيه على <a href="reviews.html" style="color:var(--gold)">صفحة الآراء</a></div>';
+    return;
+  }
+  strip.innerHTML = reviews.map(r=>{
+    const stars = '★'.repeat(r.rating||5) + '☆'.repeat(5-(r.rating||5));
+    const d=document.createElement('div');d.textContent=r.text||'';const safeText=d.innerHTML;
+    const n=document.createElement('div');n.textContent=r.name||'قارئ';const safeName=n.innerHTML;
+    return `<div class="review-card"><div class="review-stars" style="color:var(--gold)">${stars}</div><div class="review-text">"${safeText}"</div><div class="review-name">— ${safeName}</div></div>`;
+  }).join('');
 })();
 </script>
 </body></html>

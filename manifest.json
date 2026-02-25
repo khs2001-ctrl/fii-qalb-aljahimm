@@ -1,0 +1,18 @@
+{
+  "name": "في قلب الجحيم — رواية تحقيق جنائي",
+  "short_name": "في قلب الجحيم",
+  "description": "رواية تحقيق جنائي غامضة للكاتبة حنين سعد حايس",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0F",
+  "theme_color": "#C41E3A",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

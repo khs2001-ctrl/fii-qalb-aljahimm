@@ -38,11 +38,97 @@
     }
 
     .nav-links {
+        display: flex !important;
+        gap: 6px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        flex-wrap: nowrap;
+        padding: 4px 0;
+    }
+
+    .nav-links::-webkit-scrollbar {
         display: none;
     }
 
+    .nav-links li a {
+        font-size: 10px !important;
+        padding: 6px 10px !important;
+        white-space: nowrap;
+    }
+
+    .nav-links .btn-sm {
+        padding: 5px 10px !important;
+        font-size: 10px !important;
+    }
+
+    .nav-links .nav-read-btn {
+        padding: 5px 10px !important;
+        font-size: 10px !important;
+    }
+
     .mobile-menu-toggle {
+        display: none !important;
+    }
+
+    .mobile-menu {
+        display: none !important;
+    }
+
+    /* ── Mobile Bottom Navigation Bar ── */
+    .mobile-bottom-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 9000;
+        background: rgba(10, 10, 15, 0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(212, 175, 55, 0.15);
+        padding: 6px 0 max(6px, env(safe-area-inset-bottom));
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .mobile-bottom-nav a {
         display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        text-decoration: none;
+        color: var(--text-muted);
+        font-family: var(--font-ar-ui);
+        font-size: 9px;
+        padding: 4px 6px;
+        border-radius: 8px;
+        transition: all 0.2s;
+        min-width: 44px;
+    }
+
+    .mobile-bottom-nav a .nav-icon {
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    .mobile-bottom-nav a:hover,
+    .mobile-bottom-nav a.active {
+        color: var(--gold);
+    }
+
+    .mobile-bottom-nav a.nav-buy-btn {
+        color: #fff;
+        background: linear-gradient(135deg, var(--crimson), #FF2040);
+        border-radius: 12px;
+        padding: 6px 10px;
+        box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3);
+    }
+
+    /* Add padding to body so content isn't hidden behind bottom nav */
+    body {
+        padding-bottom: 72px;
     }
 
     .nav-container {

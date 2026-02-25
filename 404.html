@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>404 — الصفحة غير موجودة | في قلب الجحيم</title>
+  <link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css"><link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .error-page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:var(--sp-2xl);position:relative}
+    .error-code{font-family:var(--font-en-title);font-size:clamp(100px,20vw,200px);font-weight:900;
+      background:linear-gradient(135deg,var(--crimson),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      line-height:1;margin-bottom:var(--sp-md);text-shadow:none;animation:float 4s ease-in-out infinite}
+    .error-title{font-family:var(--font-ar-title);font-size:clamp(24px,4vw,40px);color:var(--text-primary);margin-bottom:var(--sp-md)}
+    .error-desc{font-family:var(--font-ar-body);font-size:var(--fs-body);color:var(--text-muted);max-width:500px;line-height:1.8;margin-bottom:var(--sp-xl)}
+    .error-icon{font-size:60px;margin-bottom:var(--sp-lg);animation:pulse 2s infinite}
+  </style>
+</head>
+<body>
+<div class="bg-effects"><canvas id="particles-canvas"></canvas><div class="fog-layer"></div></div>
+<div class="error-page">
+  <div class="error-icon">🔍</div>
+  <div class="error-code">404</div>
+  <h1 class="error-title">ضللت الطريق في قرية الجُب!</h1>
+  <p class="error-desc">يبدو أنك دخلت مكاناً لا وجود له — حتى سينين لم تستطع إيجاد هذه الصفحة. ارجع للطريق الآمن قبل أن تجدك اللعنة!</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+    <a href="index.html" class="btn btn-primary">🏠 العودة للرئيسية</a>
+    <a href="read.html" class="btn btn-outline">📖 اقرأ مقتطف</a>
+  </div>
+</div>
+<script src="js/particles.js"></script>
+</body></html>

@@ -1,7 +1,16 @@
 ﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8"><link rel="icon" type="image/svg+xml" href="favicon.svg"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="manifest" href="manifest.json"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="معرض صور ومشاهد من أجواء رواية في قلب الجحيم">
+  <meta name="theme-color" content="#C41E3A">
+  <meta property="og:title" content="معرض الصور | في قلب الجحيم">
+  <meta property="og:description" content="معرض صور ومشاهد من أجواء رواية في قلب الجحيم">
+  <meta property="og:image" content="https://fii-qalb-aljahimm.vercel.app/assets/images/book-cover/Main Book Cover Image.jpeg">
+  <meta property="og:url" content="https://fii-qalb-aljahimm.vercel.app/gallery.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://fii-qalb-aljahimm.vercel.app/gallery.html">
   <title>المعرض | في قلب الجحيم</title>
   <link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/animations.css"><link rel="stylesheet" href="css/responsive.css">
@@ -14,8 +23,9 @@
     .filter-btn{padding:8px 20px;border-radius:var(--r-full);font-family:var(--font-ar-ui);font-size:13px;color:var(--text-muted);background:rgba(212,175,55,0.05);border:1px solid rgba(212,175,55,0.15);cursor:pointer;transition:all .2s}
     .filter-btn:hover,.filter-btn.active{background:rgba(212,175,55,0.15);border-color:var(--gold);color:var(--gold)}
     .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .gallery-item{border-radius:var(--r-md);overflow:hidden;border:1px solid rgba(212,175,55,0.1);transition:all var(--t-normal);cursor:pointer;position:relative;background:#111;opacity:0;transform:translateY(30px);animation:galleryReveal 0.7s ease-out forwards;}
-    .gallery-item:hover{border-color:rgba(212,175,55,0.4);transform:translateY(-6px);box-shadow:var(--shadow-xl)}
+    .gallery-item{border-radius:var(--r-md);overflow:hidden;border:1px solid rgba(212,175,55,0.1);transition:all var(--t-normal);cursor:pointer;position:relative;background:#111;opacity:0;transform:translateY(30px) perspective(800px);animation:galleryReveal 0.7s ease-out forwards;
+      transform-style:preserve-3d;}
+    .gallery-item:hover{border-color:rgba(212,175,55,0.4);transform:translateY(-6px) rotateX(3deg) rotateY(-3deg) scale(1.02);box-shadow:var(--shadow-xl),0 20px 40px rgba(212,175,55,0.1)}
     .gallery-item.tall{grid-row:span 2}
     .gallery-item.wide{grid-column:span 2}
     .gallery-item img{width:100%;height:220px;object-fit:cover;transition:transform var(--t-slow);display:block;}
@@ -66,8 +76,7 @@
   <div class="section-container">
     <!-- Filter Bar -->
     <div class="filter-bar" data-reveal>
-      <button class="filter-btn active" data-filter="all">الكل</button>
-      <button class="filter-btn" data-filter="scenes">مشاهد الرواية</button>
+      <button class="filter-btn active" data-filter="scenes">مشاهد الرواية</button>
       <button class="filter-btn" data-filter="locations">أماكن القرية</button>
       <button class="filter-btn" data-filter="covers">أغلفة الكتاب</button>
       <button class="filter-btn" data-filter="fair">لقطات المعرض</button>
@@ -237,10 +246,21 @@ document.querySelectorAll('.filter-btn').forEach(btn=>{
     document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     const f=btn.dataset.filter;
+    let delay=0;
     document.querySelectorAll('.gallery-item').forEach(item=>{
-      if(f==='all'||item.dataset.cat===f){item.style.display='';} else{item.style.display='none';}
+      if(f==='all'||item.dataset.cat===f){
+        item.style.display='';
+        item.style.animation='none';
+        item.offsetHeight; /* reflow */
+        item.style.animation=`galleryReveal 0.6s ease-out ${delay}s forwards`;
+        delay+=0.08;
+      } else {
+        item.style.display='none';
+      }
     });
   });
 });
+// Initialize: show only scenes on load
+document.querySelector('.filter-btn[data-filter="scenes"]').click();
 </script>
 </body></html>

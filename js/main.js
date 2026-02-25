@@ -40,10 +40,7 @@
             });
         }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 
-        items.forEach((el, i) => {
-            el.style.transitionDelay = (i % 4) * 80 + 'ms';
-            io.observe(el);
-        });
+        items.forEach(el => io.observe(el));
     }
 
     /* ─── Counter Animation ─── */
@@ -119,15 +116,15 @@
         start();
     }
 
-    /* ─── Tilt Cards (desktop only) ─── */
+    /* ─── Tilt Cards (desktop only, minimal) ─── */
     function initTiltCards() {
         if (window.matchMedia('(hover: none)').matches) return;
-        document.querySelectorAll('.tilt-card, .feature-card, .char-card').forEach(card => {
+        document.querySelectorAll('.tilt-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
                 const x = (e.clientX - rect.left) / rect.width - 0.5;
                 const y = (e.clientY - rect.top) / rect.height - 0.5;
-                card.style.transform = `perspective(600px) rotateY(${x * 10}deg) rotateX(${-y * 8}deg) translateY(-6px)`;
+                card.style.transform = `translateY(-4px) rotateY(${x * 6}deg) rotateX(${-y * 4}deg)`;
             });
             card.addEventListener('mouseleave', () => {
                 card.style.transform = '';
@@ -166,27 +163,9 @@
         io.observe(credit);
     }
 
-    /* ─── Cursor Glow (desktop only) ─── */
+    /* ─── Cursor Glow (disabled for performance) ─── */
     function initCursorGlow() {
-        if (window.matchMedia('(hover: none)').matches) return;
-        const glow = document.createElement('div');
-        glow.className = 'cursor-glow';
-        document.body.appendChild(glow);
-        let mx = 0, my = 0, gx = 0, gy = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mx = e.clientX; my = e.clientY;
-        });
-
-        let animId;
-        function animate() {
-            gx += (mx - gx) * 0.12;
-            gy += (my - gy) * 0.12;
-            glow.style.left = gx + 'px';
-            glow.style.top = gy + 'px';
-            animId = requestAnimationFrame(animate);
-        }
-        animate();
+        // Disabled: was running constant rAF loop
     }
 
     /* ─── Page Transition (non-blocking) ─── */
@@ -231,8 +210,32 @@
         cards.forEach(c => io.observe(c));
     }
 
+    /* ─── Image Performance Optimization ─── */
+    function initImageOptimization() {
+        // Auto lazy-load + async decode all images
+        document.querySelectorAll('img').forEach(img => {
+            if (!img.loading) img.loading = 'lazy';
+            img.decoding = 'async';
+            // Above-the-fold images (in first section) get high priority
+            const rect = img.getBoundingClientRect();
+            if (rect.top < window.innerHeight) {
+                img.loading = 'eager';
+                img.fetchPriority = 'high';
+            }
+        });
+
+        // Add content-visibility to off-screen sections for faster paint
+        document.querySelectorAll('section').forEach((sec, i) => {
+            if (i > 1) {
+                sec.style.contentVisibility = 'auto';
+                sec.style.containIntrinsicSize = '0 500px';
+            }
+        });
+    }
+
     /* ─── Main Init ─── */
     document.addEventListener('DOMContentLoaded', () => {
+        initImageOptimization();
         initReveal();
         initCounters();
         initQuotes();

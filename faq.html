@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="الأسئلة الشائعة عن رواية في قلب الجحيم — كيفية الشراء، تفاصيل الرواية، والمزيد.">
+  <meta name="keywords" content="في قلب الجحيم, أسئلة شائعة, FAQ, شراء الرواية, حنين سعد حايس">
+  <meta property="og:title" content="الأسئلة الشائعة | في قلب الجحيم">
+  <meta property="og:description" content="إجابات لأهم الأسئلة عن رواية في قلب الجحيم">
+  <meta property="og:image" content="https://fii-qalb-aljahimm.vercel.app/assets/images/book-cover/Main Book Cover Image.jpeg">
+  <meta property="og:url" content="https://fii-qalb-aljahimm.vercel.app/faq.html">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://fii-qalb-aljahimm.vercel.app/faq.html">
+  <title>الأسئلة الشائعة | في قلب الجحيم</title>
+  <link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css"><link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .faq-hero{min-height:35vh;display:flex;align-items:center;padding-top:var(--nav-height);text-align:center;
+      background:linear-gradient(180deg, rgba(10,10,15,0.6), rgba(10,10,15,0.95)), url('assets/images/scenes/Foggy Night Scene.jpg') center/cover;position:relative}
+    .faq-section{padding:var(--sp-2xl) 0}
+    .faq-item{background:linear-gradient(145deg,rgba(25,25,32,0.95),rgba(15,15,20,0.9));border:1px solid rgba(212,175,55,0.12);
+      border-radius:var(--r-md);margin-bottom:var(--sp-md);overflow:hidden;transition:all .3s}
+    .faq-item:hover{border-color:rgba(212,175,55,0.3)}
+    .faq-question{width:100%;text-align:right;padding:var(--sp-lg) var(--sp-xl);background:none;border:none;cursor:pointer;
+      display:flex;align-items:center;justify-content:space-between;gap:var(--sp-md);color:var(--text-primary);
+      font-family:var(--font-ar-title);font-size:var(--fs-h4);transition:color .2s}
+    .faq-question:hover{color:var(--gold)}
+    .faq-question .faq-icon{font-size:20px;transition:transform .3s;color:var(--gold);flex-shrink:0}
+    .faq-item.open .faq-icon{transform:rotate(45deg)}
+    .faq-answer{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+    .faq-item.open .faq-answer{max-height:500px;padding:0 var(--sp-xl) var(--sp-lg)}
+    .faq-answer p{font-family:var(--font-ar-body);font-size:var(--fs-body);color:var(--text-secondary);line-height:1.9}
+    .faq-answer a{color:var(--gold);text-decoration:underline}
+    .faq-category{font-family:var(--font-ar-title);font-size:var(--fs-h3);color:var(--gold);margin:var(--sp-xl) 0 var(--sp-md);padding-bottom:8px;
+      border-bottom:1px solid rgba(212,175,55,0.2)}
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"كيف أشتري رواية في قلب الجحيم؟","acceptedAnswer":{"@type":"Answer","text":"يمكنك شراء الرواية من دار ملاذ عبر أسير الكتب أونلاين، أو من معرض القاهرة الدولي للكتاب 2026."}},
+      {"@type":"Question","name":"ما هو نوع الرواية؟","acceptedAnswer":{"@type":"Answer","text":"رواية تحقيق جنائي تجمع بين الغموض والرعب النفسي والتشويق."}},
+      {"@type":"Question","name":"من هي الكاتبة؟","acceptedAnswer":{"@type":"Answer","text":"حنين سعد حايس، كاتبة مصرية شابة في الثامنة عشرة من عمرها."}}
+    ]
+  }
+  </script>
+</head>
+<body>
+<a href="#main-content" class="skip-to-content">تخطي إلى المحتوى</a>
+<div class="bg-effects"><canvas id="particles-canvas"></canvas><div class="fog-layer"></div></div>
+<nav class="main-nav scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">في قلب الجحيم</a>
+    <button class="mobile-menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="index.html">الرئيسية</a></li>
+      <li><a href="about-book.html">عن الكتاب</a></li>
+      <li><a href="characters.html">الشخصيات</a></li>
+      <li><a href="gallery.html">المعرض</a></li>
+      <li><a href="author.html">الكاتبة</a></li>
+      <li><a href="activities.html">فعاليات</a></li><li><a href="reviews.html">آراء القراء</a></li>
+      <li><a href="read.html" class="nav-read-btn">📖 اقرأ مقتطف</a></li>
+      <li><a href="buy.html" class="btn btn-primary btn-sm" target="_blank">اشترِ الآن</a></li>
+    </ul>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu"><a href="index.html">الرئيسية</a><a href="about-book.html">عن الكتاب</a><a href="characters.html">الشخصيات</a><a href="gallery.html">المعرض</a><a href="author.html">الكاتبة</a><a href="read.html">اقرأ مقتطف</a><a href="reviews.html">آراء القراء</a><a href="buy.html" target="_blank">اشترِ الآن</a></div>
+
+<main id="main-content">
+<section class="faq-hero">
+  <div class="section-container"><div data-reveal>
+    <span class="section-label">❓ الأسئلة الشائعة</span>
+    <h1 style="font-family:var(--font-ar-title);font-size:var(--fs-h1);color:var(--text-primary);margin-bottom:var(--sp-sm)">كل ما تريد معرفته</h1>
+    <p style="color:var(--text-muted);font-family:var(--font-ar-ui)">إجابات لأهم الأسئلة عن الرواية، الشراء، والكاتبة</p>
+  </div></div>
+</section>
+
+<section class="faq-section">
+<div class="section-container">
+<div style="max-width:800px;margin:0 auto">
+
+  <h2 class="faq-category" data-reveal>📚 عن الرواية</h2>
+
+  <div class="faq-item" data-reveal>
+    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+      <span>ما هو نوع رواية «في قلب الجحيم»؟</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer"><p>«في قلب الجحيم» هي رواية تحقيق جنائي تجمع بين الغموض، الرعب النفسي، والتشويق. تدور أحداثها في قرية نائية تُعرف بـ«الجُب»، وتتناول قضية جرائم غامضة مرتبطة بخرافات وأساطير قديمة.</p></div>
+  </div>
+
+  <div class="faq-item" data-reveal>
+    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+      <span>هل الرواية مناسبة لكل الأعمار؟</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer"><p>الرواية تناسب القراء من سن 15 عاماً وما فوق. تحتوي على عناصر تشويق ورعب نفسي لكنها لا تتضمن محتوى صريحاً غير لائق.</p></div>
+  </div>
+
+  <div class="faq-item" data-reveal>
+    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+      <span>كم عدد صفحات الرواية؟</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer"><p>أكثر من 250 صفحة من التشويق والأحداث المتشابكة.</p></div>
+  </div>
+
+  <div class="faq-item" data-reveal>
+    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+      <span>هل يمكنني قراءة جزء من الرواية مجاناً؟</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer"><p>نعم! يمكنك قراءة المقدمة وأول فصول من الرواية مجاناً من <a href="read.html">صفحة القراءة</a>.</p></div>
+  </div>
+
+  <h2 class="faq-category" data-reveal>🛒 الشراء والتوصيل</h2>
+
+  <div class="faq-item" data-reveal>
+    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+      <span>كيف أشتري الرواية؟</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer"><p>يمكنك شراء الرواية مباشرة من <a href="buy.html">صفحة الشراء</a> عبر موقع أسير الكتب (BookBuzz) التابع لدار ملاذ للنشر. كما تتوفر في معرض القاهرة الدولي للكتاب 2026.</p></div>
+  </div>
+
+  <div class="faq-item" data-reveal>
+    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+      <span>هل يتم التوصيل لكل المحافظات؟</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer"><p>نعم، التوصيل متاح لجميع محافظات مصر عبر شركات الشحن المعتمدة من دار ملاذ. التفاصيل متاحة عند إتمام الطلب على موقع الدار.</p></div>
+  </div>
+
+  <h2 class="faq-category" data-reveal>✍️ عن الكاتبة</h2>
+
+  <div class="faq-item" data-reveal>
+    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+      <span>من هي حنين سعد حايس؟</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer"><p>كاتبة مصرية شابة في الثامنة عشرة من عمرها. «في قلب الجحيم» هي روايتها الأولى التي صدرت عن دار ملاذ للنشر في معرض القاهرة الدولي للكتاب 2026. تعرف عليها أكثر في <a href="author.html">صفحة الكاتبة</a>.</p></div>
+  </div>
+
+  <div class="faq-item" data-reveal>
+    <button class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+      <span>كيف أتواصل مع الكاتبة؟</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-answer"><p>يمكنك متابعة حنين على <a href="https://www.facebook.com/hanean.hayes" target="_blank">فيسبوك</a> أو <a href="https://www.instagram.com/hanean_saad_hayes" target="_blank">إنستاجرام</a>، أو التواصل عبر <a href="contact.html">صفحة التواصل</a>.</p></div>
+  </div>
+
+  <!-- CTA -->
+  <div style="text-align:center;margin-top:var(--sp-2xl);padding:var(--sp-xl);background:linear-gradient(145deg,rgba(25,25,32,0.95),rgba(15,15,20,0.9));border:1px solid rgba(212,175,55,0.15);border-radius:var(--r-xl)" data-reveal>
+    <h3 style="font-family:var(--font-ar-title);font-size:var(--fs-h3);color:var(--text-primary);margin-bottom:var(--sp-sm)">لم تجد إجابة سؤالك؟</h3>
+    <p style="font-family:var(--font-ar-ui);font-size:var(--fs-sm);color:var(--text-muted);margin-bottom:var(--sp-md)">تواصل معنا مباشرة وسنرد عليك في أقرب وقت</p>
+    <a href="contact.html" class="btn btn-primary">📩 تواصل معنا</a>
+  </div>
+
+</div>
+</div>
+</section>
+</main>
+
+<footer class="main-footer"><div class="section-container">
+  <div class="footer-grid">
+    <div><h3 class="footer-logo">في قلب الجحيم</h3><p class="footer-description">رواية تحقيق جنائي</p></div>
+    <div><h4 class="footer-heading">الصفحات</h4><ul class="footer-links-list"><li><a href="index.html">الرئيسية</a></li><li><a href="read.html">اقرأ مقتطفاً</a></li><li><a href="buy.html">اشترِ الآن</a></li></ul></div>
+    <div><h4 class="footer-heading">المزيد</h4><ul class="footer-links-list"><li><a href="author.html">الكاتبة</a></li><li><a href="characters.html">الشخصيات</a></li><li><a href="contact.html">التواصل</a></li></ul></div>
+    <div><h4 class="footer-heading">تواصل</h4><div class="social-links"><a href="https://www.facebook.com/hanean.hayes" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a></div></div>
+  </div>
+  <div class="gold-line-h"></div>
+  <div class="footer-bottom"><p class="footer-copyright">© 2026 في قلب الجحيم.</p><div class="khalid-credit"><div class="credit-icon">⚡</div><span>Built by </span><a href="https://www.instagram.com/kh23alid_hassan/?__pwa=1" target="_blank" style="color:var(--gold);text-decoration:none" class="credit-name">Khalid Hassan</a></div></div>
+</div></footer>
+
+<script src="js/particles.js"></script><script src="js/navigation.js"></script><script src="js/main.js"></script>
+</body></html>

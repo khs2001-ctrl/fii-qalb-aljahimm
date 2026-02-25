@@ -152,7 +152,7 @@
             ctx.globalAlpha = p.opacity * theme.opacity;
             ctx.fillStyle = p.color;
 
-            if (theme.glow) {
+            if (false && theme.glow) {
                 ctx.shadowBlur = 8;
                 ctx.shadowColor = p.color;
             }

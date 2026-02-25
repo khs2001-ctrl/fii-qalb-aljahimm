@@ -1,8 +1,17 @@
 ﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8"><link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta charset="UTF-8"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="manifest" href="manifest.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="تعرف على شخصيات رواية في قلب الجحيم — سينين، سيف، العمدة محمود والمزيد">
+  <meta name="theme-color" content="#C41E3A">
+  <meta property="og:title" content="شخصيات الرواية | في قلب الجحيم">
+  <meta property="og:description" content="تعرف على شخصيات رواية في قلب الجحيم — سينين، سيف، العمدة محمود والمزيد">
+  <meta property="og:image" content="https://fii-qalb-aljahimm.vercel.app/assets/images/book-cover/Main Book Cover Image.jpeg">
+  <meta property="og:url" content="https://fii-qalb-aljahimm.vercel.app/characters.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://fii-qalb-aljahimm.vercel.app/characters.html">
   <title>الشخصيات | في قلب الجحيم</title>
   <meta name="description" content="خريطة الشخصيات الغامضة في رواية في قلب الجحيم — اكتشفهم بدون حرق أحداث">
   <link rel="stylesheet" href="css/variables.css">
@@ -108,7 +117,34 @@
     .relation-item { display:flex; gap:8px; font-size:13px; color:var(--text-muted); font-family:var(--font-ar-ui); margin-bottom:8px; align-items:center; }
     .relation-item::before { content:'↔'; color:var(--gold); }
 
-    @media (max-width: 768px) { .chars-grid { grid-template-columns: 1fr 1fr; } .mystery-map { min-height: 400px; } }
+    /* Hero Character Cards - Saif & Sineen */
+    .char-card.char-hero-featured {
+      grid-column: span 2;
+    }
+    .char-card.char-hero-featured .char-card-visual {
+      height: 340px;
+    }
+    .char-card.char-hero-featured .char-card-title {
+      font-size: 24px;
+    }
+    .char-card.char-hero-featured .char-card-desc {
+      font-size: 15px;
+    }
+    .char-card.char-hero-featured::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: var(--r-lg);
+      background: linear-gradient(135deg, rgba(212,175,55,0.3), transparent 40%, rgba(196,30,58,0.3));
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .char-card.char-hero-featured:hover::after {
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) { .chars-grid { grid-template-columns: 1fr 1fr; } .mystery-map { min-height: 400px; } .char-card.char-hero-featured { grid-column: span 1; .char-card-visual { height: 240px; } } }
     @media (max-width: 480px) { .chars-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -204,24 +240,24 @@
         <div class="char-role-badge">حارس الأسرار القديمة</div>
       </div>
 
-      <!-- Bottom Left: الدكتور سامر -->
-      <div class="char-node" data-role="suspect" data-char="samer" style="left:14%;top:68%;transform:translate(-50%,-50%)" onclick="openModal('samer')">
+      <!-- Bottom Left: العمدة محمود -->
+      <div class="char-node" data-role="suspect" data-char="omda" style="left:14%;top:68%;transform:translate(-50%,-50%)" onclick="openModal('omda')">
         <div class="char-avatar">
-          <img src="assets/images/characters/Dr. Samer– The Historian.jpg" alt="الدكتور سامر" loading="lazy">
-          <div class="mystery-badge" style="background:rgba(74,144,164,0.6)">📜</div>
+          <img src="assets/images/characters/omda_mahmoud.jpg" alt="العمدة محمود" loading="lazy">
+          <div class="mystery-badge" style="background:rgba(196,30,58,0.7)">⚠️</div>
         </div>
-        <div class="char-label">الدكتور سامر</div>
-        <div class="char-role-badge">المؤرخ الغامض</div>
+        <div class="char-label">العمدة محمود</div>
+        <div class="char-role-badge">يخفي أكثر مما يُظهر</div>
       </div>
 
-      <!-- Bottom Right: العمدة -->
-      <div class="char-node" data-role="villain" data-char="elder" style="left:84%;top:68%;transform:translate(-50%,-50%)" onclick="openModal('elder')">
-        <div class="char-avatar">
-          <img src="assets/images/characters/The_Shadow.jpg" alt="الأكبر الغامض" loading="lazy">
-          <div class="mystery-badge" style="background:rgba(196,30,58,0.8)">⚠️</div>
+      <!-- Bottom Right: القاتل -->
+      <div class="char-node" data-role="villain" data-char="killer" style="left:84%;top:68%;transform:translate(-50%,-50%)" onclick="openModal('killer')">
+        <div class="char-avatar" style="border-color:rgba(196,30,58,0.7)">
+          <img src="assets/images/characters/The_Killer.jpg" alt="القاتل" loading="lazy">
+          <div class="mystery-badge" style="background:rgba(196,30,58,0.9)">💀</div>
         </div>
-        <div class="char-label">الأكبر الغامض</div>
-        <div class="char-role-badge">يعرف أكثر مما يقول</div>
+        <div class="char-label">القاتل</div>
+        <div class="char-role-badge">ظلٌ يختبئ خلف الخرافة</div>
       </div>
 
       <!-- Bottom Center: سكان القرية -->
@@ -243,7 +279,7 @@
 
     <div class="chars-grid">
       <!-- سينين -->
-      <div class="char-card" data-role="hero" data-reveal onclick="openModal('sinin')">
+      <div class="char-card char-hero-featured" data-role="hero" data-reveal onclick="openModal('sinin')">
         <div class="char-card-visual">
           <img src="assets/images/characters/sineen– The Investigator.jpg" alt="سينين" loading="lazy">
           <div class="char-reveal-overlay"></div>
@@ -261,7 +297,7 @@
       </div>
 
       <!-- سيف -->
-      <div class="char-card" data-role="ally" data-reveal onclick="openModal('saif')">
+      <div class="char-card char-hero-featured" data-role="ally" data-reveal onclick="openModal('saif')">
         <div class="char-card-visual">
           <img src="assets/images/characters/saif– The Assistant.jpg" alt="سيف" loading="lazy">
           <div class="char-reveal-overlay"></div>
@@ -296,37 +332,37 @@
         </div>
       </div>
 
-      <!-- الدكتور سامر -->
-      <div class="char-card" data-role="suspect" data-reveal onclick="openModal('samer')">
+      <!-- العمدة محمود -->
+      <div class="char-card" data-role="suspect" data-reveal onclick="openModal('omda')">
         <div class="char-card-visual">
-          <img src="assets/images/characters/Dr. Samer– The Historian.jpg" alt="الدكتور سامر" loading="lazy">
+          <img src="assets/images/characters/omda_mahmoud.jpg" alt="العمدة محمود" loading="lazy">
           <div class="char-reveal-overlay"></div>
         </div>
         <div class="char-card-body">
-          <div class="char-role-tag">شاهد غامض</div>
-          <h3 class="char-card-title">الدكتور سامر</h3>
-          <p class="char-card-desc">المؤرخ الغامض المتخصص في الأساطير وتاريخ القرى. جاء للجُب بحثاً عن شجرة العهد، لكن توقيت وصوله يثير كل الشكوك. هل يبحث عن التاريخ فعلاً؟</p>
+          <div class="char-role-tag">المشتبه الأول</div>
+          <h3 class="char-card-title">العمدة محمود</h3>
+          <p class="char-card-desc">عمدة القرية الذي يرفض الحديث أمام الناس ويطلب مقابلة سينين بعيداً عن الأعين. يعرف عن شجرة العهد والبئر أكثر مما يعترف به. عيناه تخفيان سراً ثقيلاً، وكل إجاباته تثير أسئلة أكثر.</p>
           <div class="mystery-meter">
             <span class="mystery-label">الغموض:</span>
-            <div class="mystery-track"><div class="mystery-level" style="width:65%;background:linear-gradient(90deg,var(--ice),var(--copper))"></div></div>
-            <span class="mystery-label">●●●○○</span>
+            <div class="mystery-track"><div class="mystery-level" style="width:90%;background:linear-gradient(90deg,var(--crimson),#FF4060)"></div></div>
+            <span class="mystery-label">●●●●●</span>
           </div>
         </div>
       </div>
 
-      <!-- الأكبر الغامض -->
-      <div class="char-card" data-role="villain" data-reveal onclick="openModal('elder')">
+      <!-- القاتل -->
+      <div class="char-card" data-role="villain" data-reveal onclick="openModal('killer')">
         <div class="char-card-visual">
-          <img src="assets/images/characters/The_Shadow.jpg" alt="الأكبر الغامض" loading="lazy">
+          <img src="assets/images/characters/The_Killer.jpg" alt="القاتل" loading="lazy">
           <div class="char-reveal-overlay"></div>
         </div>
         <div class="char-card-body">
-          <div class="char-role-tag">الشخصية المحورية</div>
-          <h3 class="char-card-title">الأكبر الغامض</h3>
-          <p class="char-card-desc">الشيخ الغامض الذي يظهر ويختفي كالظل. لا أحد يعرف من أين جاء. يعلم بكل شيء يحدث في القرية — وكأنه كان هنا دائماً.</p>
+          <div class="char-role-tag">الظل الخفي</div>
+          <h3 class="char-card-title">القاتل</h3>
+          <p class="char-card-desc">شخص يعيش بين أهل القرية ويعرفهم جميعاً. استغل خرافة «اللعنة» وشجرة العهد ليغطي جرائمه الحقيقية. حفر على صدر ضحاياه رموزاً قديمة ليُقنع الجميع أن اللعنة هي القاتل — لا هو. هل ستكشفه سينين؟</p>
           <div class="mystery-meter">
             <span class="mystery-label">الغموض:</span>
-            <div class="mystery-track"><div class="mystery-level" style="width:95%;background:linear-gradient(90deg,var(--crimson),#FF4060)"></div></div>
+            <div class="mystery-track"><div class="mystery-level" style="width:100%;background:linear-gradient(90deg,var(--crimson),#FF0030)"></div></div>
             <span class="mystery-label">●●●●●</span>
           </div>
         </div>
@@ -403,15 +439,15 @@ const charData = {
     desc:'شيخ القرية القديم الذي يحرس أسرار شجرة العهد منذ عقود. يعرف تاريخ كل عائلة وكل حادثة. يحذر سينين من الاقتراب أكثر — تحذيراته ليست مجرد خرافات.',
     relations:['سينين — العلاقة: يحذرها من البحث عن الحقيقة','شجرة العهد — العلاقة: الحارس الوحيد','الأكبر الغامض — العلاقة: ماذا يعرف عنه؟']
   },
-  samer: {
-    img:'assets/images/characters/Dr. Samer– The Historian.jpg', name:'الدكتور سامر', role:'المؤرخ الغامض',
-    desc:'أكاديمي متخصص في تاريخ القرى المهجورة والأساطير الشعبية. جاء إلى قرية الجُب لدراسة شجرة العهد وأسطورتها — لكن توقيت وصوله المتزامن مع الجرائم يثير الشكوك.',
-    relations:['سينين — العلاقة: يقدم معلومات تاريخية مفيدة','الشيخ سالم — العلاقة: صراع حول تفسير الأساطير','شجرة العهد — العلاقة: موضوع بحثه الرئيسي']
+  omda: {
+    img:'assets/images/characters/omda_mahmoud.jpg', name:'العمدة محمود', role:'المشتبه الأول',
+    desc:'عمدة قرية الجُب. رفض التحدث أمام الناس وأصرّ على مقابلة سينين بعيداً عن الأعين. يعرف أسرار شجرة العهد والبئر أكثر مما يعترف به. عيناه الغائرتان تحمل ثقل سرٍ لا يجرؤ على البوح به. هل يخفي جريمة أم يحمي أحداً؟',
+    relations:['سينين — يطلب مقابلتها سراً ويحذرها','الشيخ سالم — يتنازل له عن المنصب','شجرة العهد — يعرف حكايتها كاملة']
   },
-  elder: {
-    img:'assets/images/characters/The_Shadow.jpg', name:'الأكبر الغامض', role:'الغموض المتجسد',
-    desc:'لا أحد يعرف من أين جاء أو متى. يظهر في اللحظات الحرجة ويختفي قبل أن تستطيع تحديد أفعاله. والغريب أنه يبدو عالماً بكل شيء يحدث في القرية.',
-    relations:['سينين — رآها عند البئر ولم يهرب','الضحايا — الجميع يلمح إلى صلة','الشيخ سالم — علاقة قديمة ومعقدة']
+  killer: {
+    img:'assets/images/characters/The_Killer.jpg', name:'القاتل', role:'الظل الخفي',
+    desc:'شخص يعيش بين أهل القرية ويعرفهم جميعاً. استغل أجواء الخرافة واللعنة وشجرة العهد ليُخفي جرائمه الحقيقية. حفر رموزاً غامضة على صدور ضحاياه ليُقنع الجميع أن اللعنة هي القاتل — لا هو. هويته هي اللغز الأكبر في الرواية.',
+    relations:['الضحايا — ضحاياه ليسوا عشوائيين','شجرة العهد — يستخدمها كغطاء','سينين — هل ستكشفه قبل فوات الأوان؟']
   },
   people: {
     img:'assets/images/characters/Old_village_man.jpeg', name:'سكان الجُب', role:'مشتبه بهم جماعيون',

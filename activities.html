@@ -1,7 +1,16 @@
 ﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8"><link rel="icon" type="image/svg+xml" href="favicon.svg"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="manifest" href="manifest.json"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ألعاب وألغاز وتجارب تفاعلية من أجواء رواية في قلب الجحيم">
+  <meta name="theme-color" content="#C41E3A">
+  <meta property="og:title" content="فعاليات تفاعلية | في قلب الجحيم">
+  <meta property="og:description" content="ألعاب وألغاز وتجارب تفاعلية من أجواء رواية في قلب الجحيم">
+  <meta property="og:image" content="https://fii-qalb-aljahimm.vercel.app/assets/images/book-cover/Main Book Cover Image.jpeg">
+  <meta property="og:url" content="https://fii-qalb-aljahimm.vercel.app/activities.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://fii-qalb-aljahimm.vercel.app/activities.html">
   <title>فعاليات تفاعلية | في قلب الجحيم</title>
   <link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/animations.css"><link rel="stylesheet" href="css/responsive.css">
@@ -130,9 +139,9 @@
   <!-- 1. QUIZ -->
   <div class="act-card" data-reveal>
     <div class="act-card-icon">🧠</div>
-    <div class="act-card-title">اختبر معلوماتك عن الرواية</div>
-    <div class="act-card-desc">هل تعرف قرية الجُب كما تعرفها سينين؟ اختبر نفسك في 5 أسئلة من أحداث الرواية!</div>
-    <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ اضغط "ابدأ الاختبار" ثم اختر الإجابة الصحيحة من بين 4 خيارات</div>
+    <div class="act-card-title">هل أنت مستعد لدخول الجُب؟</div>
+    <div class="act-card-desc">اختبار شخصية ممتع — اكتشف أي شخصية من الرواية تشبهك وما مدى جرأتك لمواجهة أسرار القرية!</div>
+    <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ اختر الإجابة الأقرب لشخصيتك — لا حاجة لقراءة الرواية!</div>
     <button class="act-btn act-btn-primary" onclick="startQuiz()">ابدأ الاختبار 🔥</button>
     <div class="quiz-area" id="quizArea"></div>
   </div>
@@ -141,7 +150,7 @@
   <div class="act-card" data-reveal>
     <div class="act-card-icon">🔍</div>
     <div class="act-card-title">اكشف المشهد المخفي</div>
-    <div class="act-card-desc">اضغط لإزالة الضباب عن مشهد سري من أحداث الرواية... هل تجرؤ؟</div>
+    <div class="act-card-desc">اضغط لإزالة الضباب عن مشهد سري من أجواء الرواية... هل تجرؤ؟</div>
     <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ اضغط على الصورة الضبابية لإزالة الغموض وكشف المشهد السري</div>
     <div class="mystery-reveal" id="mysteryReveal" onclick="revealMystery()">
       <img src="assets/images/scenes/Secret Meeting.jpg" alt="مشهد مخفي" class="mystery-img">
@@ -150,11 +159,11 @@
   </div>
 
   <div class="act-card" data-reveal>
-    <div class="act-card-icon">�️</div>
-    <div class="act-card-title">خريطة الأدلة</div>
-    <div class="act-card-desc">وصّل كل دليل بالمكان الصحيح في القرية — هل ستكتشف الروابط الخفية؟</div>
-    <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ اضغط على دليل ثم اختر المكان المناسب له. وصّل كل الأدلة لتكشف السر!</div>
-    <button class="act-btn act-btn-primary" onclick="startEvidence()" id="evidBtn">ابدأ التحقيق �</button>
+    <div class="act-card-icon">🗺️</div>
+    <div class="act-card-title">استكشف أماكن القرية</div>
+    <div class="act-card-desc">اختر مكاناً في القرية واكتشف ما يخبئه — كل مكان يحمل سراً من أسرار الجُب!</div>
+    <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ اضغط على أي مكان وشاهد ما يختبئ وراء أسواره</div>
+    <button class="act-btn act-btn-primary" onclick="startEvidence()" id="evidBtn">ابدأ الاستكشاف 🗺</button>
     <div id="evidenceArea" style="margin-top:var(--sp-md)"></div>
   </div>
 
@@ -162,7 +171,7 @@
   <div class="act-card" data-reveal>
     <div class="act-card-icon">🔦</div>
     <div class="act-card-title">استكشف بالمصباح</div>
-    <div class="act-card-desc">حرّك الماوس فوق الصورة المظلمة لتكشف المشهد بضوء المصباح اليدوي — تماماً كسينين في البئر!</div>
+    <div class="act-card-desc">حرّك الماوس فوق الصورة المظلمة لتكشف المشهد بضوء المصباح اليدوي — تماماً كالمحققين في القرية!</div>
     <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ حرّك الماوس فوق المنطقة السوداء لتكشف الصورة بضوء المصباح</div>
     <div class="torch-area" id="torchArea" onmousemove="moveTorch(event)">
       <img src="assets/images/scenes/Night Investigation.jpg" class="torch-img" alt="البحث في الظلام">
@@ -174,7 +183,7 @@
   <div class="act-card" data-reveal>
     <div class="act-card-icon">🔤</div>
     <div class="act-card-title">فكّ الشفرة</div>
-    <div class="act-card-desc">كلمات مشفّرة من الرواية — أعد ترتيب الحروف لتكتشف الكلمة الصحيحة!</div>
+    <div class="act-card-desc">كلمات مشفّرة من عالم الرواية — أعد ترتيب الحروف لتكتشف الكلمة الصحيحة!</div>
     <div style="font-size:11px;color:var(--gold);margin-bottom:12px;font-family:var(--font-ar-ui);opacity:0.7">ℹ️ اضغط "ابدأ التحدي" ثم اكتب الكلمة الصحيحة باستخدام التلميح المعطى</div>
     <button class="act-btn act-btn-primary" onclick="startScramble()" id="scrBtn">ابدأ التحدي 🔓</button>
     <div id="scrambleArea" style="margin-top:var(--sp-md)"></div>
@@ -217,11 +226,11 @@
 <script>
 // ══ QUIZ ══
 const quizData=[
-  {q:'ما اسم القرية التي تدور فيها الأحداث؟',opts:['قرية الصحراء','قرية الجُب','قرية النيل','قرية الظلام'],ans:1},
-  {q:'ما اسم الشجرة الغامضة في وسط القرية؟',opts:['شجرة الأمل','شجرة الخلود','شجرة العهد','شجرة الموت'],ans:2},
-  {q:'ما مهنة سينين؟',opts:['صحفية','طبيبة','محققة جنائية','محامية'],ans:2},
-  {q:'ما اسم مساعد سينين في التحقيق؟',opts:['مالك','سيف','أحمد','خالد'],ans:1},
-  {q:'أين وجدت سينين الجثة؟',opts:['في الغابة','في القصر','في البئر','في الكهف'],ans:2}
+  {q:'لو دخلت قرية مهجورة ليلاً، أول حاجة هتعملها إيه؟',opts:['أشعّل مصباح وأستكشف','أدوّر على حد أسأله','أنتظر الصبح','أرجع فوراً'],ans:0},
+  {q:'لو سمعت صوت غريب من بئر قديم، هتعمل إيه؟',opts:['أقرب وأبص','أجري بعيد','أنادي حد يجي معايا','أسجل الصوت على الموبايل'],ans:0},
+  {q:'إيه أكتر حاجة ممكن تخوّفك؟',opts:['الظلام الدامس','صوت خطوات ورايا','باب مفتوح لوحده','سكوت مفاجئ'],ans:3},
+  {q:'لو لقيت رسالة غامضة على جدار قديم، أول رد فعلك إيه؟',opts:['أصوّرها وأحاول أفهمها','أمسحها','أسيبها وأمشي','أسأل أهل المنطقة عنها'],ans:0},
+  {q:'أنسب صاحب ليك في مغامرة زي دي هيكون إيه؟',opts:['شخص شجاع ومغامر','شخص ذكي وهادي','شخص يعرف المنطقة','أروح لوحدي أحسن'],ans:1}
 ];
 let qIdx=0,score=0;
 function startQuiz(){qIdx=0;score=0;showQ();}
