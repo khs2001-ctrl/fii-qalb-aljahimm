@@ -2,24 +2,60 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="apple-touch-icon" href="favicon.svg">
-  <link rel="manifest" href="manifest.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="اقرأ أول فصول رواية في قلب الجحيم مجاناً — تشويق وغموض من الصفحة الأولى">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <title>اقرأ مقتطفاً | في قلب الجحيم – حنين سعد حابس</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- SEO Meta -->
+  <meta name="description" content="اقرأ أول فصول رواية في قلب الجحيم مجاناً — تشويق وغموض من الصفحة الأولى. رواية تحقيق جنائي للكاتبة حنين سعد حايس">
+  <meta name="author" content="حنين سعد حايس">
   <meta name="theme-color" content="#C41E3A">
+  <link rel="canonical" href="https://fii-qalb-aljahimm.vercel.app/read.html">
+
+  <!-- Open Graph -->
   <meta property="og:title" content="اقرأ مقتطف مجاني | في قلب الجحيم">
-  <meta property="og:description" content="اقرأ أول فصول رواية في قلب الجحيم مجاناً">
+  <meta property="og:description" content="اقرأ أول فصول رواية في قلب الجحيم مجاناً — تشويق وغموض من الصفحة الأولى">
   <meta property="og:image" content="https://fii-qalb-aljahimm.vercel.app/assets/images/book-cover/Main Book Cover Image.jpeg">
   <meta property="og:url" content="https://fii-qalb-aljahimm.vercel.app/read.html">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="في قلب الجحيم">
+  <meta property="og:locale" content="ar_AR">
+
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://fii-qalb-aljahimm.vercel.app/read.html">
-  <title>اقرأ مقتطفاً | في قلب الجحيم – حنين سعد حابس</title>
+  <meta name="twitter:title" content="اقرأ مقتطف مجاني | في قلب الجحيم">
+  <meta name="twitter:description" content="اقرأ أول فصول رواية في قلب الجحيم مجاناً">
+  <meta name="twitter:image" content="https://fii-qalb-aljahimm.vercel.app/assets/images/book-cover/Main Book Cover Image.jpeg">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "الرئيسية", "item": "https://fii-qalb-aljahimm.vercel.app/" },
+      { "@type": "ListItem", "position": 2, "name": "اقرأ مقتطفاً", "item": "https://fii-qalb-aljahimm.vercel.app/read.html" }
+    ]
+  }
+  </script>
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/gsap-enhancements.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js" defer></script>
   <style>
     /* ── Reader Specific ── */
     body { background: var(--rm-bg, #0A0A0F); transition: background 0.5s ease, color 0.5s ease; }
@@ -732,5 +768,6 @@
     });
   })();
 </script>
+<script src="js/gsap-enhancements.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,287 @@
+/* ============================================
+   GSAP Enhancements — في قلب الجحيم
+   Additive styles for GSAP animations
+   ============================================ */
+
+/* ─── Scroll Progress Bar ─── */
+.gsap-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 9990;
+    pointer-events: none;
+}
+
+.gsap-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--crimson), var(--gold), var(--crimson));
+    background-size: 200% 100%;
+    animation: progressShimmer 3s ease infinite;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5), 0 0 20px rgba(196, 30, 58, 0.3);
+    transform-origin: left;
+}
+
+@keyframes progressShimmer {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* ─── Glitch Text Effect ─── */
+.glitch-text {
+    position: relative;
+    display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.glitch-text.glitching::before {
+    animation: glitch1 0.3s ease both;
+    color: var(--crimson);
+    -webkit-text-fill-color: var(--crimson);
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch-text.glitching::after {
+    animation: glitch2 0.3s ease both;
+    color: var(--gold);
+    -webkit-text-fill-color: var(--gold);
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+@keyframes glitch1 {
+    0% {
+        opacity: 0;
+        transform: translate(0);
+    }
+
+    20% {
+        opacity: 0.8;
+        transform: translate(-5px, -3px);
+    }
+
+    40% {
+        opacity: 0.8;
+        transform: translate(5px, 2px);
+    }
+
+    60% {
+        opacity: 0.8;
+        transform: translate(-3px, 3px);
+    }
+
+    80% {
+        opacity: 0.4;
+        transform: translate(3px, -2px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(0);
+    }
+}
+
+@keyframes glitch2 {
+    0% {
+        opacity: 0;
+        transform: translate(0);
+    }
+
+    20% {
+        opacity: 0.8;
+        transform: translate(5px, 3px);
+    }
+
+    40% {
+        opacity: 0.8;
+        transform: translate(-5px, -2px);
+    }
+
+    60% {
+        opacity: 0.8;
+        transform: translate(3px, -3px);
+    }
+
+    80% {
+        opacity: 0.4;
+        transform: translate(-3px, 2px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(0);
+    }
+}
+
+/* ─── Split Character Styling ─── */
+.split-char {
+    display: inline-block;
+    will-change: transform, opacity;
+}
+
+/* ─── Particle Burst Container ─── */
+.particle-burst {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.particle-burst .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* ─── Magnetic Button Enhancement ─── */
+.btn-magnetic {
+    will-change: transform;
+}
+
+/* ─── CTA Glow Effect ─── */
+.cta-ambient-glow {
+    position: relative;
+}
+
+.cta-ambient-glow::before {
+    content: '';
+    position: absolute;
+    inset: -40px;
+    background: radial-gradient(ellipse at center, rgba(196, 30, 58, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.cta-ambient-glow:hover::before {
+    opacity: 1;
+}
+
+/* ─── Curtain Reveal ─── */
+.curtain-reveal {
+    position: relative;
+    overflow: hidden;
+}
+
+.curtain-reveal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--bg-primary);
+    transform-origin: right;
+}
+
+/* ─── Typewriter Cursor ─── */
+.typewriter-cursor::after {
+    content: '|';
+    animation: blink 0.7s infinite;
+    color: var(--gold);
+    font-weight: 300;
+    margin-right: 2px;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* ─── 3D Book Mouse Tracking ─── */
+.book-track-mouse {
+    transition: transform 0.1s ease-out;
+    transform-style: preserve-3d;
+}
+
+/* ─── Ripple Effect on Buttons ─── */
+.btn-ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-ripple .ripple-wave {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0);
+    pointer-events: none;
+}
+
+/* ─── Enhanced Input Focus ─── */
+.form-input-enhanced:focus,
+.form-textarea-enhanced:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15), 0 0 20px rgba(212, 175, 55, 0.1) !important;
+}
+
+/* ─── Review Card Hover Lift ─── */
+.review-card-lift {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.review-card-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 175, 55, 0.08);
+}
+
+/* ─── Spring Modal ─── */
+.spring-modal {
+    opacity: 0;
+    transform: scale(0.85) translateY(30px);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.spring-modal.open {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+/* ─── Page Transition ─── */
+.page-transitioning {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+
+    .gsap-progress-fill,
+    .glitch-text::before,
+    .glitch-text::after,
+    .split-char,
+    .particle-burst .particle,
+    .typewriter-cursor::after,
+    .btn-ripple .ripple-wave {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .gsap-progress-fill {
+        animation: none;
+    }
+}
