@@ -302,89 +302,9 @@
         const introGate = document.getElementById('introGate');
         if (!introGate) return;
 
-        // Enhanced Intro Gate Animation
-        const titleEl = introGate.querySelector('.intro-gate-title');
-        if (titleEl) {
-            const fullText = titleEl.textContent.trim();
-            const part1 = 'في قلب ';
-            const part2 = 'الجحيم';
+        // Intro gate animations are now handled by pure CSS — no GSAP interference
 
-            titleEl.innerHTML = '';
-
-            // Create spans for part1
-            const chars1Frag = document.createDocumentFragment();
-            part1.split('').forEach(char => {
-                const span = document.createElement('span');
-                span.textContent = char === ' ' ? '\u00A0' : char;
-                span.style.display = 'inline-block';
-                span.style.opacity = '0';
-                span.classList.add('split-char');
-                chars1Frag.appendChild(span);
-            });
-
-            // Create glitch span for part2
-            const glitchSpan = document.createElement('span');
-            glitchSpan.textContent = part2;
-            glitchSpan.classList.add('glitch-text');
-            glitchSpan.dataset.text = part2;
-            glitchSpan.style.opacity = '0';
-            glitchSpan.style.display = 'inline-block';
-
-            titleEl.appendChild(chars1Frag);
-            titleEl.appendChild(glitchSpan);
-
-            // Timeline for intro
-            const introTl = gsap.timeline({ delay: 0.5 });
-
-            // Part 1: letters appear one by one
-            introTl.fromTo(titleEl.querySelectorAll('.split-char'),
-                { opacity: 0, y: 20, rotateX: -30 },
-                { opacity: 1, y: 0, rotateX: 0, stagger: 0.08, duration: 0.5, ease: 'back.out(1.4)' }
-            );
-
-            // Part 2: "الجحيم" explodes with glitch
-            introTl.to(glitchSpan, {
-                opacity: 1,
-                scale: 1,
-                duration: 0.1,
-                onStart: () => glitchSpan.classList.add('glitching')
-            }, '+=0.2');
-
-            introTl.fromTo(glitchSpan,
-                { opacity: 0, scale: 1.5, filter: 'blur(8px)' },
-                {
-                    opacity: 1, scale: 1, filter: 'blur(0px)',
-                    duration: 0.8,
-                    ease: 'power4.out',
-                    onComplete: () => {
-                        setTimeout(() => glitchSpan.classList.remove('glitching'), 300);
-                    }
-                },
-                '<'
-            );
-
-            // Subtitle fade in
-            const subEl = introGate.querySelector('.intro-gate-sub');
-            if (subEl) {
-                introTl.fromTo(subEl,
-                    { opacity: 0, y: 15 },
-                    { opacity: 1, y: 0, duration: 0.6 },
-                    '-=0.3'
-                );
-            }
-
-            // Button appear
-            const btnEl = introGate.querySelector('.intro-gate-btn');
-            if (btnEl) {
-                introTl.fromTo(btnEl,
-                    { opacity: 0, y: 20, scale: 0.9 },
-                    { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(1.6)' },
-                    '-=0.2'
-                );
-            }
-        }
-
-        // Hero split text
+        // Hero split text — wait for intro dismissal
         const heroTitle = document.querySelector('.hero-title .title-main');
         const heroAccent = document.querySelector('.hero-title .title-accent');
 
@@ -423,18 +343,17 @@
     function animateHero(titleMain, titleAccent) {
         const tl = gsap.timeline();
 
-        // Split title-main for char-by-char
-        const mainChars = splitText(titleMain);
-        tl.fromTo(mainChars,
-            { opacity: 0, x: 30, rotateY: -20 },
-            { opacity: 1, x: 0, rotateY: 0, stagger: 0.04, duration: 0.5, ease: 'power3.out' }
+        // Animate the whole title-main as a block (don't split Arabic text — breaks letter connections)
+        tl.fromTo(titleMain,
+            { opacity: 0, x: 40, filter: 'blur(6px)' },
+            { opacity: 1, x: 0, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' }
         );
 
         // Title accent appears with scale + glow
         tl.fromTo(titleAccent,
             { opacity: 0, scale: 0.8, filter: 'blur(6px)' },
             { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.8, ease: 'power4.out' },
-            '-=0.2'
+            '-=0.3'
         );
 
         // Animate about section parallax

@@ -113,7 +113,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js" defer></script>
   <style>
-    /* ── Intro Gate ── */
+    /* ── Intro Gate — Rebuilt from scratch ── */
     .intro-gate {
       position: fixed; inset: 0;
       z-index: 9999;
@@ -128,22 +128,55 @@
       transform: scale(1.15);
       pointer-events: none;
     }
+
+    /* Horror background layers */
     .intro-gate-bg {
-      position: absolute; inset: 0;
+      position: absolute; inset: 0; pointer-events: none;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 60%, rgba(196,30,58,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 40% at 30% 30%, rgba(212,175,55,0.06) 0%, transparent 60%);
+        radial-gradient(ellipse 80% 60% at 50% 60%, rgba(196,30,58,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 70% 40%, rgba(139,0,0,0.1) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 30% 70%, rgba(212,175,55,0.05) 0%, transparent 60%);
     }
-    .intro-gate canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .intro-gate-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent, transparent 2px,
+        rgba(196,30,58,0.03) 2px, rgba(196,30,58,0.03) 4px
+      );
+      animation: scanlines 8s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(4px); }
+    }
+    .intro-gate-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(5,0,8,0.6) 100%);
+      pointer-events: none;
+    }
+
+    /* Floating horror particles */
+    .intro-gate canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+    }
+
+    /* Content container */
     .intro-gate-content {
       position: relative; z-index: 2;
       text-align: center;
-      animation: introFadeIn 2s ease-out;
+      padding: 0 20px;
     }
-    @keyframes introFadeIn { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+
+    /* Title */
     .intro-gate-title {
       font-family: var(--font-ar-title);
-      font-size: clamp(36px, 8vw, 80px);
+      font-size: clamp(40px, 10vw, 90px);
       font-weight: 900;
       background: linear-gradient(135deg, #8B0000 0%, #C41E3A 30%, #D4AF37 60%, #C41E3A 100%);
       -webkit-background-clip: text;
@@ -151,15 +184,34 @@
       background-clip: text;
       filter: drop-shadow(0 0 40px rgba(196,30,58,0.6)) drop-shadow(0 0 80px rgba(212,175,55,0.3));
       margin-bottom: 16px;
-      line-height: 1.2;
+      line-height: 1.3;
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+      animation: introTitleIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
     }
+    @keyframes introTitleIn {
+      0% { opacity: 0; transform: translateY(30px) scale(0.95); filter: drop-shadow(0 0 0 transparent) blur(8px); }
+      60% { opacity: 1; transform: translateY(-5px) scale(1.02); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: drop-shadow(0 0 40px rgba(196,30,58,0.6)) drop-shadow(0 0 80px rgba(212,175,55,0.3)); }
+    }
+
+    /* Subtitle */
     .intro-gate-sub {
       font-family: var(--font-quote);
-      font-size: clamp(14px, 2vw, 20px);
-      color: rgba(212,175,55,0.6);
-      margin-bottom: 60px;
+      font-size: clamp(14px, 2.5vw, 22px);
+      color: rgba(212,175,55,0.7);
+      margin-bottom: 50px;
       font-style: italic;
+      letter-spacing: 1px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: introSubIn 1s ease-out 1.4s forwards;
     }
+    @keyframes introSubIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Button */
     .intro-gate-btn {
       position: relative;
       font-family: var(--font-ar-title);
@@ -171,6 +223,7 @@
       padding: 20px 60px;
       border-radius: 16px;
       cursor: pointer;
+      z-index: 10;
       box-shadow:
         0 8px 0 #5a0012,
         0 15px 40px rgba(196,30,58,0.5),
@@ -178,19 +231,24 @@
         inset 0 2px 0 rgba(255,255,255,0.1);
       transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
       overflow: hidden;
-      animation: btnPulse 3s ease-in-out infinite;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: introBtnIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 2s forwards, btnPulse 3s ease-in-out 3s infinite;
+    }
+    @keyframes introBtnIn {
+      to { opacity: 1; transform: translateY(0); }
     }
     @keyframes btnPulse {
       0%,100% { box-shadow: 0 8px 0 #5a0012, 0 15px 40px rgba(196,30,58,0.5), 0 0 60px rgba(196,30,58,0.2), inset 0 2px 0 rgba(255,255,255,0.1); }
       50% { box-shadow: 0 8px 0 #5a0012, 0 15px 40px rgba(196,30,58,0.7), 0 0 100px rgba(196,30,58,0.35), inset 0 2px 0 rgba(255,255,255,0.1); }
     }
     .intro-gate-btn:hover {
-      transform: translateY(-4px);
+      transform: translateY(-4px) !important;
       box-shadow: 0 12px 0 #5a0012, 0 20px 50px rgba(196,30,58,0.7), 0 0 80px rgba(212,175,55,0.3), inset 0 2px 0 rgba(255,255,255,0.15);
       border-color: var(--gold);
     }
     .intro-gate-btn:active {
-      transform: translateY(4px);
+      transform: translateY(4px) !important;
       box-shadow: 0 3px 0 #5a0012, 0 5px 15px rgba(196,30,58,0.3);
     }
     .intro-gate-btn::before {
